@@ -1,0 +1,16 @@
+{
+  "0": "ask_how_are_you",
+  "1": "atualizar_notas",
+  "2": "atualizar_valores",
+  "3": "calcular_media",
+  "4": "destacar_aprovados_reprovados",
+  "5": "fallback",
+  "6": "gerar_graficos",
+  "7": "greet",
+  "8": "guardar_ficheiro",
+  "9": "helper",
+  "10": "identificar_melhoria",
+  "11": "inserir_colunas",
+  "12": "operacoes_matematicas",
+  "13": "respond_how_am_i"
+}

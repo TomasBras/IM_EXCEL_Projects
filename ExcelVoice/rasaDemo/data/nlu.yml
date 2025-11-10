@@ -1,0 +1,138 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - Olá Assistente
+    - Oi Assistente
+    - Bom dia
+    - Boa tarde
+    - Boa noite
+    - Olá, tudo bem?
+    - Olá, pronto para trabalhar no Excel?
+    - Como estás hoje?
+
+- intent: calcular_media
+  examples: |
+    - Calcula a média da turma
+    - Faz a média de todos os alunos
+    - Cria a fórmula de média
+    - Calcula a média do aluno [João](aluno)
+    - Calcula a média da [Maria](aluno)
+    - Quero saber a média de [Ana](aluno)
+    - Adiciona a fórmula de média à folha
+    - Atualiza as médias da turma
+    - Faz o cálculo das médias
+
+- intent: destacar_aprovados_reprovados
+  examples: |
+    - Destaca os alunos aprovados e reprovados
+    - Mostra quem passou e quem reprovou
+    - Pinta os aprovados a verde e os reprovados a vermelho
+    - Formata a coluna da média com cores
+    - Aplica formatação condicional para notas
+    - Marca em verde os alunos com média acima de 10
+    - Realça os reprovados com vermelho
+
+- intent: identificar_melhoria
+  examples: |
+    - Identifica os alunos com melhoria significativa
+    - Mostra quem melhorou mais de 20%
+    - Analisa a evolução entre os testes
+    - Quem teve maior progresso?
+    - Calcula a variação entre as avaliações
+    - Quais alunos apresentaram maior melhoria?
+    - Verifica quem melhorou mais
+
+- intent: inserir_colunas
+  examples: |
+    - Insere a coluna Situação
+    - Cria uma nova coluna chamada Situação
+    - Adiciona uma coluna para Aprovado ou Reprovado
+    - Cria coluna com o estado de cada aluno
+    - Adiciona uma coluna com “Aprovado” e “Reprovado”
+    - Insere coluna extra com resultados finais
+
+- intent: gerar_graficos
+  examples: |
+    - Gera gráficos de desempenho
+    - Cria gráfico de linhas para cada aluno
+    - Cria gráfico de barras com as médias
+    - Mostra a evolução dos alunos
+    - Faz um gráfico da turma
+    - Cria gráfico de evolução entre testes
+    - Gera um gráfico comparativo de médias
+    - Quero ver um gráfico com a média de cada aluno
+
+- intent: atualizar_notas
+  examples: |
+    - Atualiza as notas do aluno [Maria](aluno) para [14, 16 e 18](valores)
+    - Muda as notas do [João](aluno) para [12, 13 e 15](valores)
+    - Define as notas do [Pedro](aluno) como [10, 11 e 9](valores)
+    - Substitui as notas da [Ana](aluno) por [17, 18 e 19](valores)
+    - Altera as notas de [Rita](aluno) para [15, 14 e 16](valores)
+
+- intent: guardar_ficheiro
+  examples: |
+    - Guarda o ficheiro como [Relatório_Final.xlsx](nome_ficheiro)
+    - Salva o documento com o nome [Relatório_Final.xlsx](nome_ficheiro)
+    - Grava o ficheiro como [Notas_Turma.xlsx](nome_ficheiro)
+    - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
+    - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
+
+- intent: operacoes_matematicas
+  examples: |
+    - Conta o número de alunos aprovados
+    - Conta os reprovados
+    - Conta quantos alunos têm nota acima de 16
+    - Calcula a percentagem de aprovação
+    - Mostra quantos alunos tiraram mais de 18 valores
+    - Faz a soma das médias
+    - Calcula a percentagem de alunos com média positiva
+    - Quantos alunos ficaram abaixo de 10?
+
+- intent: atualizar_valores
+  examples: |
+    - Atualiza a cotação da [pergunta 2](pergunta) para o aluno [João](aluno)
+    - Muda a cotação da [pergunta 3](pergunta) para [Maria](aluno)
+    - Atualiza o valor da [pergunta 1](pergunta) para toda a turma
+    - Altera o valor da [pergunta 5](pergunta) para o aluno [Pedro](aluno)
+    - Atualiza a pontuação da [pergunta 4](pergunta) para a turma inteira
+    - Modifica o valor da [pergunta 2](pergunta) para todos os alunos
+
+- intent: helper
+  examples: |
+    - Que comandos posso usar?
+    - Mostra-me as opções disponíveis
+    - O que posso pedir?
+    - Ajuda-me
+    - Mostra a lista de comandos
+    - Quais são as tuas funcionalidades?
+    - Diz-me o que sabes fazer
+
+- intent: ask_how_are_you
+  examples: |
+    - Como estás?
+    - Tudo bem contigo?
+    - Estás bem?
+    - Como vai?
+    - Está tudo bem?
+
+- intent: respond_how_am_i
+  examples: |
+    - Estou bem
+    - Estou ótimo
+    - Estou cansado
+    - Estou feliz
+    - Estou mais ou menos
+    - Estou excelente
+    - Tudo ótimo comigo
+
+- intent: fallback
+  examples: |
+    - Não entendi
+    - Repete por favor
+    - O que disseste?
+    - Não percebi
+    - Podes repetir?
+    - Não faz sentido o que disseste

@@ -1,0 +1,155 @@
+version: '3.1'
+
+intents:
+  - calcular_media
+  - destacar_aprovados_reprovados
+  - identificar_melhoria
+  - inserir_colunas
+  - gerar_graficos
+  - atualizar_notas
+  - guardar_ficheiro
+  - operacoes_matematicas
+  - atualizar_valores
+  - greet
+  - ask_how_are_you
+  - respond_how_am_i
+  - helper
+  - fallback
+
+entities:
+  - aluno
+  - valores
+  - nome_ficheiro
+  - operacao
+  - coluna
+  - valor_novo
+  - pergunta
+
+slots:
+  aluno:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: aluno
+
+  valores:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: valores
+
+  nome_ficheiro:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: nome_ficheiro
+
+  operacao:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: operacao
+
+  coluna:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna
+
+  valor_novo:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: valor_novo
+
+  pergunta:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: pergunta
+
+responses:
+  utter_calcular_media:
+    - text: "A calcular a média da turma..."
+    - text: "A criar a fórmula de média para o aluno {aluno}."
+
+  utter_destacar_aprovados_reprovados:
+    - text: "A aplicar formatação condicional: verde para aprovados e vermelho para reprovados."
+
+  utter_identificar_melhoria:
+    - text: "A analisar as melhorias de desempenho entre os testes..."
+    - text: "Cinco alunos tiveram melhoria superior a 20%."
+
+  utter_inserir_colunas:
+    - text: "A criar a coluna 'Situação' com o estado de cada aluno."
+
+  utter_gerar_graficos:
+    - text: "A gerar o gráfico de evolução dos alunos..."
+    - text: "Gráfico de barras com médias criado. O desempenho médio aumentou 12%."
+
+  utter_atualizar_notas:
+    - text: "A atualizar as notas do aluno {aluno} para {valores}."
+
+  utter_guardar_ficheiro:
+    - text: "A guardar o ficheiro como {nome_ficheiro}."
+
+  utter_operacoes_matematicas:
+    - text: "A realizar a operação pedida..."
+    - text: "Há cinco alunos com nota superior a 16."
+    - text: "Percentagem de aprovação calculada."
+
+  utter_atualizar_valores:
+    - text: "A atualizar o valor da pergunta {pergunta} para o aluno {aluno}."
+    - text: "A atualizar o valor da pergunta {pergunta} para toda a turma."
+
+  utter_greet:
+    - text: "Olá! Pronto para trabalhar no Excel?"
+    - text: "Bom dia! Quer começar a calcular médias?"
+    - text: "Olá! Como posso ajudá-lo com os dados do Excel?"
+
+  utter_ask_how_are_you:
+    - text: "Estou ótimo, pronto para manipular dados! E você?"
+    - text: "Tudo bem comigo, e por aí?"
+
+  utter_respond_how_am_i:
+    - text: "Que bom ouvir isso! Vamos trabalhar no ficheiro?"
+    - text: "Espero que melhore logo. Posso ajudar com o Excel?"
+    - text: "Perfeito! Vamos continuar com as operações."
+
+  utter_helper:
+    - text: |
+        Aqui estão os comandos que pode usar:
+        - "Calcular média" para criar fórmulas de média por turma ou aluno.
+        - "Destacar aprovados e reprovados" para aplicar formatação condicional.
+        - "Identificar alunos com melhoria" para comparar testes.
+        - "Inserir colunas" para adicionar 'Situação' automaticamente.
+        - "Gerar gráficos" para visualizar o desempenho.
+        - "Atualizar notas da Maria para 14, 16 e 18" para editar células.
+        - "Guardar ficheiro como Relatório_Final.xlsx" para gravar o documento.
+        - "Calcular percentagem de aprovação" ou "Contar alunos com nota acima de 16" para estatísticas.
+        - "Atualizar cotação da pergunta 2 para o João" para editar valores específicos.
+
+  utter_default:
+    - text: "Desculpe, não percebi o comando. Pode repetir?"
+
+actions:
+  - action_calcular_media
+  - action_destacar_aprovados_reprovados
+  - action_identificar_melhoria
+  - action_inserir_colunas
+  - action_gerar_graficos
+  - action_atualizar_notas
+  - action_guardar_ficheiro
+  - action_operacoes_matematicas
+  - action_atualizar_valores
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
