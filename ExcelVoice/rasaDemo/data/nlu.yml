@@ -1,6 +1,64 @@
 version: "3.1"
 
+##############################################
+# ENTIDADES
+##############################################
+entities:
+  - aluno
+  - valores
+  - nome_ficheiro
+  - pergunta   # já existia nos teus intents
+  - grafico
+
+
+##############################################
+# LOOKUP: ALUNOS MAIS COMUNS
+##############################################
+lookup:
+  aluno:
+    - João
+    - Maria
+    - Pedro
+    - Ana
+    - Rita
+    - Tiago
+    - Sofia
+    - Beatriz
+    - Carlos
+    - Miguel
+    - Bruno
+    - Mariana
+    - Daniela
+    - Paulo
+    - Inês
+    - Catarina
+    - Vasco
+    - Hugo
+    - Sandra
+    # nomes compostos comuns
+    - João Silva
+    - Maria de Fátima
+    - Pedro Miguel
+    - Ana Rita
+    - Catarina Sousa
+    - Bruno Fernandes
+    - Miguel Costa
+
+regex:
+  aluno: "[0-9]{4,12}"
+  valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
+  grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
+  pergunta: "(pergunta|questao|q)[ ]?[1-5]|teste ?1|teste ?2"
+
+
+
+##############################################
+# INTENTS
+##############################################
+
 nlu:
+
+# ----------------------------------------------------
 - intent: greet
   examples: |
     - Olá Assistente
@@ -12,6 +70,7 @@ nlu:
     - Olá, pronto para trabalhar no Excel?
     - Como estás hoje?
 
+# ----------------------------------------------------
 - intent: calcular_media
   examples: |
     - Calcula a média da turma
@@ -24,6 +83,7 @@ nlu:
     - Atualiza as médias da turma
     - Faz o cálculo das médias
 
+# ----------------------------------------------------
 - intent: destacar_aprovados_reprovados
   examples: |
     - Destaca os alunos aprovados e reprovados
@@ -34,6 +94,7 @@ nlu:
     - Marca em verde os alunos com média acima de 10
     - Realça os reprovados com vermelho
 
+# ----------------------------------------------------
 - intent: identificar_melhoria
   examples: |
     - Identifica os alunos com melhoria significativa
@@ -44,6 +105,7 @@ nlu:
     - Quais alunos apresentaram maior melhoria?
     - Verifica quem melhorou mais
 
+# ----------------------------------------------------
 - intent: inserir_colunas
   examples: |
     - Insere a coluna Situação
@@ -53,25 +115,62 @@ nlu:
     - Adiciona uma coluna com “Aprovado” e “Reprovado”
     - Insere coluna extra com resultados finais
 
-- intent: gerar_graficos
+# ----------------------------------------------------
+- intent: gerar_grafico_turma
   examples: |
-    - Gera gráficos de desempenho
-    - Cria gráfico de linhas para cada aluno
-    - Cria gráfico de barras com as médias
-    - Mostra a evolução dos alunos
+    - Gera gráfico da turma
     - Faz um gráfico da turma
-    - Cria gráfico de evolução entre testes
-    - Gera um gráfico comparativo de médias
-    - Quero ver um gráfico com a média de cada aluno
+    - Mostra a evolução da turma
+    - Cria gráfico de desempenho da turma
+    - Gera gráfico de evolução entre testes
+    - Faz gráfico de linhas da turma
+    - Gráfico de desempenho geral
+    - Quero ver a evolução geral da turma
+    - Mostra evolução das médias
+    - Cria gráfico com as médias
+
+# ----------------------------------------------------
+- intent: gerar_grafico_barras_aluno
+  examples: |
+    - Faz gráfico de barras para o aluno número [113475](aluno)
+    - Cria gráfico para o número mecanográfico [298451](aluno)
+    - Mostra gráfico do aluno com número [140233](aluno)
+    - Gera gráfico de barras do aluno [256789](aluno)
+    - Quero ver o gráfico do aluno número [987654](aluno)
+    - Mostra as notas do aluno [123456](aluno) em barras
+    - Gráfico de barras do aluno número [778899](aluno)
+    - Faz gráfico do aluno de mecanográfico [445566](aluno)
+
+
+# ----------------------------------------------------
+
+- intent: apagar_grafico
+  examples: |
+    - Apaga o gráfico do [João](aluno)
+    - Apaga o gráfico da [Maria](aluno)
+    - Elimina o gráfico do [Pedro](aluno)
+    - Remove o gráfico das médias
+    - Apaga o gráfico das médias da turma
+    - Eliminar gráfico das médias
+
+- intent: apagar_todos_graficos
+  examples: |
+    - Apaga todos os gráficos
+    - Limpa os gráficos
+    - Remove todos os gráficos da folha
+    - Elimina todos os gráficos
 
 - intent: atualizar_notas
   examples: |
-    - Atualiza as notas do aluno [Maria](aluno) para [14, 16 e 18](valores)
-    - Muda as notas do [João](aluno) para [12, 13 e 15](valores)
-    - Define as notas do [Pedro](aluno) como [10, 11 e 9](valores)
-    - Substitui as notas da [Ana](aluno) por [17, 18 e 19](valores)
-    - Altera as notas de [Rita](aluno) para [15, 14 e 16](valores)
+    - Atualiza a [pergunta 1](pergunta) do aluno número [107447](aluno) para [3](valores)
+    - Muda a [pergunta 3](pergunta) do aluno [108370](aluno) para [4.5](valores)
+    - Atualiza o [teste 1](pergunta) do aluno [94716](aluno) para [12](valores)
+    - Define o [teste 2](pergunta) do aluno número [108522](aluno) como [15](valores)
+    - Atualiza todas as perguntas do teste 2 do aluno [107447](aluno) para [2 3 4 5 1](valores)
+    - Altera a [questão 4](pergunta) do aluno [109830](aluno) para [2.5](valores)
+    - Muda a nota da [pergunta 2](pergunta) para o aluno [107447](aluno)
 
+# ----------------------------------------------------
 - intent: guardar_ficheiro
   examples: |
     - Guarda o ficheiro como [Relatório_Final.xlsx](nome_ficheiro)
@@ -80,17 +179,19 @@ nlu:
     - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
     - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
 
+# ----------------------------------------------------
 - intent: operacoes_matematicas
   examples: |
     - Conta o número de alunos aprovados
     - Conta os reprovados
-    - Conta quantos alunos têm nota acima de 16
+    - Quantos alunos têm nota acima de 16?
     - Calcula a percentagem de aprovação
-    - Mostra quantos alunos tiraram mais de 18 valores
+    - Quantos tiraram mais de 18 valores?
     - Faz a soma das médias
-    - Calcula a percentagem de alunos com média positiva
-    - Quantos alunos ficaram abaixo de 10?
+    - Percentagem de alunos com média positiva
+    - Quantos ficaram abaixo de 10?
 
+# ----------------------------------------------------
 - intent: atualizar_valores
   examples: |
     - Atualiza a cotação da [pergunta 2](pergunta) para o aluno [João](aluno)
@@ -100,6 +201,7 @@ nlu:
     - Atualiza a pontuação da [pergunta 4](pergunta) para a turma inteira
     - Modifica o valor da [pergunta 2](pergunta) para todos os alunos
 
+# ----------------------------------------------------
 - intent: helper
   examples: |
     - Que comandos posso usar?
@@ -110,6 +212,7 @@ nlu:
     - Quais são as tuas funcionalidades?
     - Diz-me o que sabes fazer
 
+# ----------------------------------------------------
 - intent: ask_how_are_you
   examples: |
     - Como estás?
@@ -118,6 +221,7 @@ nlu:
     - Como vai?
     - Está tudo bem?
 
+# ----------------------------------------------------
 - intent: respond_how_am_i
   examples: |
     - Estou bem
@@ -128,6 +232,7 @@ nlu:
     - Estou excelente
     - Tudo ótimo comigo
 
+# ----------------------------------------------------
 - intent: fallback
   examples: |
     - Não entendi

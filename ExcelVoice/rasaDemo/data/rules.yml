@@ -1,6 +1,7 @@
 ﻿version: "3.1"
 
 rules:
+
   - rule: Calcular média
     steps:
       - intent: calcular_media
@@ -25,11 +26,15 @@ rules:
       - action: utter_inserir_colunas
       - action: action_inserir_colunas
 
-  - rule: Gerar gráficos
+  - rule: Gerar gráfico da turma
     steps:
-      - intent: gerar_graficos
-      - action: utter_gerar_graficos
-      - action: action_gerar_graficos
+      - intent: gerar_grafico_turma
+      - action: action_gerar_grafico_turma
+
+  - rule: Gerar gráfico de barras de aluno
+    steps:
+      - intent: gerar_grafico_barras_aluno
+      - action: action_gerar_grafico_barras_aluno
 
   - rule: Atualizar notas
     steps:
@@ -55,6 +60,16 @@ rules:
       - action: utter_atualizar_valores
       - action: action_atualizar_valores
 
+  - rule: Apagar gráfico
+    steps:
+      - intent: apagar_grafico
+      - action: action_apagar_grafico
+
+  - rule: Apagar todos os gráficos
+    steps:
+      - intent: apagar_todos_graficos
+      - action: action_apagar_todos_graficos
+
   - rule: Saudação
     steps:
       - intent: greet
@@ -77,5 +92,5 @@ rules:
 
   - rule: Fallback
     steps:
-      - intent: fallback
+      - intent: nlu_fallback
       - action: utter_default

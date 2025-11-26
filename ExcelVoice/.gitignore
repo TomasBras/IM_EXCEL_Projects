@@ -1,0 +1,9 @@
+# Ignorar FusionEngine inteiro
+FusionEngine/
+
+# Ignorar conteúdos do rasaDemo
+rasaDemo/.rasa/
+rasaDemo/models/
+
+# Ignorar mmiframeworkV2 inteiro
+mmiframeworkV2/

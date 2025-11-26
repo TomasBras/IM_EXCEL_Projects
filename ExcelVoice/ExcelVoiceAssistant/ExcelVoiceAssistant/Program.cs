@@ -24,7 +24,7 @@ namespace ExcelVoiceAssistant
         {
             string host = "localhost";
             string path = "/IM/USER1/APP";
-            string uri = $"wss://{host}:8005{path}"; 
+            string uri = $"wss://{host}:8005{path}";
 
             Console.WriteLine(" Conectando ao IM via WebSocket...");
 
@@ -55,7 +55,7 @@ namespace ExcelVoiceAssistant
             InicializarExcel();
 
             Console.WriteLine("💬 Aguardando mensagens do IM...");
-            await Task.Delay(-1); 
+            await Task.Delay(-1);
         }
 
         // =========================================================
@@ -68,8 +68,10 @@ namespace ExcelVoiceAssistant
                 _excelApp = new Application();
                 _excelApp.Visible = true;
 
-                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM\IM_EXCEL_NODEPENDENCIES\dados_turma.xlsx";
-                excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM\IM_EXCEL_NODEPENDENCIES\Relatorio_Final.xlsx";
+                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
+                excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
+                // excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\ETP.xlsx";
+                //excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\Relatorio_Final.xlsx";
 
                 if (!File.Exists(excelPathBase))
                 {
@@ -142,18 +144,32 @@ namespace ExcelVoiceAssistant
                     case "identificar_melhoria":
                         ExcelController.IdentificarMelhoria();
                         return "Alunos com melhoria identificados.";
-
-                    case "inserir_coluna_situacao":
+                    case "operacoes_matematicas":
+                        ExcelController.OperacoesMatematicas(json);
+                        return "Operações matemáticas calculadas com sucesso.";
+                    case "inserir_colunas":
                         ExcelController.InserirSituacao();
                         return "Coluna situação inserida.";
+                    case "gerar_grafico_turma":
+                        ExcelController.GerarGraficoTurma(json);
+                        return "Gráfico da turma gerado com sucesso.";
+                    case "gerar_grafico_barras_aluno":
+                        ExcelController.GerarGraficoBarras(json);
+                        return "Gráfico de barras do aluno gerado com sucesso.";
 
-                    case "gerar_grafico":
-                        ExcelController.GerarGrafico();
-                        return "Gráfico gerado com sucesso.";
-
-                    case "guardar_relatorio":
+                    case "apagar_grafico":
+                        ExcelController.ApagarGrafico(json);
+                        return "Gráfico apagado.";
+                    case "apagar_todos_graficos":
+                        ExcelController.ApagarTodosGraficos();
+                        return "Gráficos apagados.";
+                    case "guardar_ficheiro":
                         ExcelController.GuardarRelatorio();
                         return "Relatório guardado.";
+                    case "atualizar_notas":
+                        ExcelController.AtualizarNotas(json);
+                        return "Notas atualizadas com sucesso.";
+
 
                     default:
                         return "Comando não reconhecido.";
