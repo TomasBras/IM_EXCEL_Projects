@@ -1,0 +1,71 @@
+﻿version: "3.1"
+
+stories:
+
+  - story: Calcular média da turma
+    steps:
+      - intent: calcular_media
+      - action: utter_calcular_media
+      - action: action_calcular_media
+
+  - story: Destacar aprovados e reprovados
+    steps:
+      - intent: destacar_aprovados_reprovados
+      - action: utter_destacar_aprovados_reprovados
+      - action: action_destacar_aprovados_reprovados
+
+  - story: Identificar alunos com melhoria significativa
+    steps:
+      - intent: identificar_melhoria
+      - action: utter_identificar_melhoria
+      - action: action_identificar_melhoria
+
+  - story: Inserir coluna Situação
+    steps:
+      - intent: inserir_colunas
+      - action: utter_inserir_colunas
+      - action: action_inserir_colunas
+
+  - story: Gerar gráfico da turma
+    steps:
+      - intent: gerar_grafico_turma
+      - action: action_gerar_grafico_turma
+
+  - story: Gerar gráfico de barras de um aluno
+    steps:
+      - intent: gerar_grafico_barras_aluno
+      - action: action_gerar_grafico_barras_aluno
+
+  - story: Atualizar notas de um aluno
+    steps:
+      - intent: atualizar_notas
+      - action: utter_atualizar_notas
+      - action: action_atualizar_notas
+
+  - story: Guardar ficheiro Excel
+    steps:
+      - intent: guardar_ficheiro
+      - action: utter_guardar_ficheiro
+      - action: action_guardar_ficheiro
+
+  - story: Realizar operações matemáticas
+    steps:
+      - intent: operacoes_matematicas
+      - action: utter_operacoes_matematicas
+      - action: action_operacoes_matematicas
+
+  - story: Atualizar valores específicos
+    steps:
+      - intent: atualizar_valores
+      - action: utter_atualizar_valores
+      - action: action_atualizar_valores
+
+  - story: Apagar gráfico
+    steps:
+      - intent: apagar_grafico
+      - action: action_apagar_grafico
+
+  - story: Apagar todos os gráficos
+    steps:
+      - intent: apagar_todos_graficos
+      - action: action_apagar_todos_graficos

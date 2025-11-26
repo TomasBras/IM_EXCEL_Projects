@@ -1,0 +1,243 @@
+version: "3.1"
+
+##############################################
+# ENTIDADES
+##############################################
+entities:
+  - aluno
+  - valores
+  - nome_ficheiro
+  - pergunta   # já existia nos teus intents
+  - grafico
+
+
+##############################################
+# LOOKUP: ALUNOS MAIS COMUNS
+##############################################
+lookup:
+  aluno:
+    - João
+    - Maria
+    - Pedro
+    - Ana
+    - Rita
+    - Tiago
+    - Sofia
+    - Beatriz
+    - Carlos
+    - Miguel
+    - Bruno
+    - Mariana
+    - Daniela
+    - Paulo
+    - Inês
+    - Catarina
+    - Vasco
+    - Hugo
+    - Sandra
+    # nomes compostos comuns
+    - João Silva
+    - Maria de Fátima
+    - Pedro Miguel
+    - Ana Rita
+    - Catarina Sousa
+    - Bruno Fernandes
+    - Miguel Costa
+
+regex:
+  aluno: "[0-9]{4,12}"
+  valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
+  grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
+  pergunta: "(pergunta|questao|q)[ ]?[1-5]|teste ?1|teste ?2"
+
+
+
+##############################################
+# INTENTS
+##############################################
+
+nlu:
+
+# ----------------------------------------------------
+- intent: greet
+  examples: |
+    - Olá Assistente
+    - Oi Assistente
+    - Bom dia
+    - Boa tarde
+    - Boa noite
+    - Olá, tudo bem?
+    - Olá, pronto para trabalhar no Excel?
+    - Como estás hoje?
+
+# ----------------------------------------------------
+- intent: calcular_media
+  examples: |
+    - Calcula a média da turma
+    - Faz a média de todos os alunos
+    - Cria a fórmula de média
+    - Calcula a média do aluno [João](aluno)
+    - Calcula a média da [Maria](aluno)
+    - Quero saber a média de [Ana](aluno)
+    - Adiciona a fórmula de média à folha
+    - Atualiza as médias da turma
+    - Faz o cálculo das médias
+
+# ----------------------------------------------------
+- intent: destacar_aprovados_reprovados
+  examples: |
+    - Destaca os alunos aprovados e reprovados
+    - Mostra quem passou e quem reprovou
+    - Pinta os aprovados a verde e os reprovados a vermelho
+    - Formata a coluna da média com cores
+    - Aplica formatação condicional para notas
+    - Marca em verde os alunos com média acima de 10
+    - Realça os reprovados com vermelho
+
+# ----------------------------------------------------
+- intent: identificar_melhoria
+  examples: |
+    - Identifica os alunos com melhoria significativa
+    - Mostra quem melhorou mais de 20%
+    - Analisa a evolução entre os testes
+    - Quem teve maior progresso?
+    - Calcula a variação entre as avaliações
+    - Quais alunos apresentaram maior melhoria?
+    - Verifica quem melhorou mais
+
+# ----------------------------------------------------
+- intent: inserir_colunas
+  examples: |
+    - Insere a coluna Situação
+    - Cria uma nova coluna chamada Situação
+    - Adiciona uma coluna para Aprovado ou Reprovado
+    - Cria coluna com o estado de cada aluno
+    - Adiciona uma coluna com “Aprovado” e “Reprovado”
+    - Insere coluna extra com resultados finais
+
+# ----------------------------------------------------
+- intent: gerar_grafico_turma
+  examples: |
+    - Gera gráfico da turma
+    - Faz um gráfico da turma
+    - Mostra a evolução da turma
+    - Cria gráfico de desempenho da turma
+    - Gera gráfico de evolução entre testes
+    - Faz gráfico de linhas da turma
+    - Gráfico de desempenho geral
+    - Quero ver a evolução geral da turma
+    - Mostra evolução das médias
+    - Cria gráfico com as médias
+
+# ----------------------------------------------------
+- intent: gerar_grafico_barras_aluno
+  examples: |
+    - Faz gráfico de barras para o aluno número [113475](aluno)
+    - Cria gráfico para o número mecanográfico [298451](aluno)
+    - Mostra gráfico do aluno com número [140233](aluno)
+    - Gera gráfico de barras do aluno [256789](aluno)
+    - Quero ver o gráfico do aluno número [987654](aluno)
+    - Mostra as notas do aluno [123456](aluno) em barras
+    - Gráfico de barras do aluno número [778899](aluno)
+    - Faz gráfico do aluno de mecanográfico [445566](aluno)
+
+
+# ----------------------------------------------------
+
+- intent: apagar_grafico
+  examples: |
+    - Apaga o gráfico do [João](aluno)
+    - Apaga o gráfico da [Maria](aluno)
+    - Elimina o gráfico do [Pedro](aluno)
+    - Remove o gráfico das médias
+    - Apaga o gráfico das médias da turma
+    - Eliminar gráfico das médias
+
+- intent: apagar_todos_graficos
+  examples: |
+    - Apaga todos os gráficos
+    - Limpa os gráficos
+    - Remove todos os gráficos da folha
+    - Elimina todos os gráficos
+
+- intent: atualizar_notas
+  examples: |
+    - Atualiza a [pergunta 1](pergunta) do aluno número [107447](aluno) para [3](valores)
+    - Muda a [pergunta 3](pergunta) do aluno [108370](aluno) para [4.5](valores)
+    - Atualiza o [teste 1](pergunta) do aluno [94716](aluno) para [12](valores)
+    - Define o [teste 2](pergunta) do aluno número [108522](aluno) como [15](valores)
+    - Atualiza todas as perguntas do teste 2 do aluno [107447](aluno) para [2 3 4 5 1](valores)
+    - Altera a [questão 4](pergunta) do aluno [109830](aluno) para [2.5](valores)
+    - Muda a nota da [pergunta 2](pergunta) para o aluno [107447](aluno)
+
+# ----------------------------------------------------
+- intent: guardar_ficheiro
+  examples: |
+    - Guarda o ficheiro como [Relatório_Final.xlsx](nome_ficheiro)
+    - Salva o documento com o nome [Relatório_Final.xlsx](nome_ficheiro)
+    - Grava o ficheiro como [Notas_Turma.xlsx](nome_ficheiro)
+    - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
+    - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
+
+# ----------------------------------------------------
+- intent: operacoes_matematicas
+  examples: |
+    - Conta o número de alunos aprovados
+    - Conta os reprovados
+    - Quantos alunos têm nota acima de 16?
+    - Calcula a percentagem de aprovação
+    - Quantos tiraram mais de 18 valores?
+    - Faz a soma das médias
+    - Percentagem de alunos com média positiva
+    - Quantos ficaram abaixo de 10?
+
+# ----------------------------------------------------
+- intent: atualizar_valores
+  examples: |
+    - Atualiza a cotação da [pergunta 2](pergunta) para o aluno [João](aluno)
+    - Muda a cotação da [pergunta 3](pergunta) para [Maria](aluno)
+    - Atualiza o valor da [pergunta 1](pergunta) para toda a turma
+    - Altera o valor da [pergunta 5](pergunta) para o aluno [Pedro](aluno)
+    - Atualiza a pontuação da [pergunta 4](pergunta) para a turma inteira
+    - Modifica o valor da [pergunta 2](pergunta) para todos os alunos
+
+# ----------------------------------------------------
+- intent: helper
+  examples: |
+    - Que comandos posso usar?
+    - Mostra-me as opções disponíveis
+    - O que posso pedir?
+    - Ajuda-me
+    - Mostra a lista de comandos
+    - Quais são as tuas funcionalidades?
+    - Diz-me o que sabes fazer
+
+# ----------------------------------------------------
+- intent: ask_how_are_you
+  examples: |
+    - Como estás?
+    - Tudo bem contigo?
+    - Estás bem?
+    - Como vai?
+    - Está tudo bem?
+
+# ----------------------------------------------------
+- intent: respond_how_am_i
+  examples: |
+    - Estou bem
+    - Estou ótimo
+    - Estou cansado
+    - Estou feliz
+    - Estou mais ou menos
+    - Estou excelente
+    - Tudo ótimo comigo
+
+# ----------------------------------------------------
+- intent: fallback
+  examples: |
+    - Não entendi
+    - Repete por favor
+    - O que disseste?
+    - Não percebi
+    - Podes repetir?
+    - Não faz sentido o que disseste

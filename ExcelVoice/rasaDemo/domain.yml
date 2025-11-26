@@ -1,0 +1,190 @@
+version: "3.1"
+
+############################################
+#              INTENTS                    #
+############################################
+intents:
+  - greet
+  - ask_how_are_you
+  - respond_how_am_i
+  - helper
+  - calcular_media
+  - destacar_aprovados_reprovados
+  - identificar_melhoria
+  - inserir_colunas
+  - gerar_grafico_turma
+  - gerar_grafico_barras_aluno
+  - atualizar_notas
+  - guardar_ficheiro
+  - operacoes_matematicas
+  - atualizar_valores
+  - apagar_grafico
+  - apagar_todos_graficos
+  - fallback
+
+
+############################################
+#                ENTIDADES                #
+############################################
+entities:
+  - aluno
+  - valores
+  - nome_ficheiro
+  - operacao
+  - coluna
+  - valor_novo
+  - pergunta
+  - grafico
+
+
+############################################
+#                  SLOTS                  #
+############################################
+slots:
+
+  aluno:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: aluno
+        intent: atualizar_notas
+      - type: from_entity
+        entity: aluno
+        intent: atualizar_valores
+      - type: from_entity
+        entity: aluno
+        intent: gerar_grafico_barras_aluno
+
+  valores:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: valores
+        intent: atualizar_notas
+
+  nome_ficheiro:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: nome_ficheiro
+        intent: guardar_ficheiro
+
+  operacao:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: operacao
+        intent: operacoes_matematicas
+
+  coluna:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna
+        intent: operacoes_matematicas
+
+  valor_novo:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: valor_novo
+        intent: atualizar_valores
+
+  pergunta:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: pergunta
+        intent: atualizar_valores
+
+
+############################################
+#              RESPONSES                  #
+############################################
+responses:
+
+  utter_greet:
+    - text: "Olá! Pronto para trabalhar no Excel?"
+    - text: "Bom dia! O que deseja fazer na folha de cálculo?"
+    - text: "Olá! Vamos manipular alguns dados?"
+
+  utter_ask_how_are_you:
+    - text: "Estou ótimo e pronto para organizar dados! E você?"
+    - text: "Tudo bem comigo! Como posso ajudar hoje?"
+
+  utter_respond_how_am_i:
+    - text: "Perfeito! Vamos continuar com o trabalho."
+    - text: "Ótimo saber disso! O que quer fazer a seguir?"
+
+  utter_helper:
+    - text: |
+        Aqui estão os comandos que pode usar:
+        • Calcular média
+        • Destacar aprovados
+        • Identificar melhoria
+        • Inserir coluna Situação
+        • Criar gráfico da turma
+        • Criar gráfico de barras de um aluno
+        • Atualizar notas
+        • Guardar ficheiro
+        • Operações matemáticas
+
+  utter_calcular_media:
+    - text: "A calcular a média da turma..."
+
+  utter_destacar_aprovados_reprovados:
+    - text: "Destacando aprovados e reprovados..."
+
+  utter_identificar_melhoria:
+    - text: "A identificar melhorias..."
+
+  utter_inserir_colunas:
+    - text: "A inserir coluna Situação..."
+
+  utter_atualizar_notas:
+    - text: "A atualizar as notas do aluno {aluno}..."
+
+  utter_guardar_ficheiro:
+    - text: "A guardar o ficheiro como {nome_ficheiro}."
+
+  utter_operacoes_matematicas:
+    - text: "A executar a operação pedida..."
+
+  utter_atualizar_valores:
+    - text: "A atualizar o valor da pergunta {pergunta}."
+
+  utter_default:
+    - text: "Não percebi, pode repetir?"
+
+
+############################################
+#               ACTIONS                   #
+############################################
+actions:
+  - action_calcular_media
+  - action_destacar_aprovados_reprovados
+  - action_identificar_melhoria
+  - action_inserir_colunas
+  - action_gerar_grafico_turma
+  - action_gerar_grafico_barras_aluno
+  - action_atualizar_notas
+  - action_guardar_ficheiro
+  - action_operacoes_matematicas
+  - action_atualizar_valores
+  - action_apagar_grafico
+  - action_apagar_todos_graficos
+
+
+############################################
+#             SESSION CONFIG              #
+############################################
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
