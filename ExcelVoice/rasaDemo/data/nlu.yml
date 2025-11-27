@@ -4,18 +4,18 @@ version: "3.1"
 # ENTIDADES
 ##############################################
 entities:
-  - aluno
+  - aluno_nome
+  - aluno_numero
   - valores
-  - nome_ficheiro
-  - pergunta   # já existia nos teus intents
+  - pergunta
   - grafico
-
+  - nome_ficheiro
 
 ##############################################
 # LOOKUP: ALUNOS MAIS COMUNS
 ##############################################
 lookup:
-  aluno:
+  aluno_nome:
     - João
     - Maria
     - Pedro
@@ -35,7 +35,6 @@ lookup:
     - Vasco
     - Hugo
     - Sandra
-    # nomes compostos comuns
     - João Silva
     - Maria de Fátima
     - Pedro Miguel
@@ -44,18 +43,18 @@ lookup:
     - Bruno Fernandes
     - Miguel Costa
 
+##############################################
+# REGEX ENTIDADES
+##############################################
 regex:
-  aluno: "[0-9]{4,12}"
+  aluno_numero: "[0-9]{4,12}"
   valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
   grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
   pergunta: "(pergunta|questao|q)[ ]?[1-5]|teste ?1|teste ?2"
 
-
-
 ##############################################
 # INTENTS
 ##############################################
-
 nlu:
 
 # ----------------------------------------------------
@@ -76,12 +75,19 @@ nlu:
     - Calcula a média da turma
     - Faz a média de todos os alunos
     - Cria a fórmula de média
-    - Calcula a média do aluno [João](aluno)
-    - Calcula a média da [Maria](aluno)
-    - Quero saber a média de [Ana](aluno)
+    - Calcula a média do aluno [João](aluno_nome)
+    - Calcula a média da aluna [Maria](aluno_nome)
+    - Quero saber a média da [Ana](aluno_nome)
+    - Calcula a média do aluno número [123456](aluno_numero)
     - Adiciona a fórmula de média à folha
     - Atualiza as médias da turma
     - Faz o cálculo das médias
+    - Calcula a média da aluna [Daniela](aluno_nome)
+    - Calcula a média da aluna [Daniela Inês](aluno_nome)
+    - Calcula a média da aluna [Daniela Inês Ferreira Teles](aluno_nome)
+    - Faz a média para a aluna [Daniela](aluno_nome)
+    - Média da aluna [Daniela](aluno_nome)
+    - A média da aluna [Daniela](aluno_nome)
 
 # ----------------------------------------------------
 - intent: destacar_aprovados_reprovados
@@ -132,27 +138,26 @@ nlu:
 # ----------------------------------------------------
 - intent: gerar_grafico_barras_aluno
   examples: |
-    - Faz gráfico de barras para o aluno número [113475](aluno)
-    - Cria gráfico para o número mecanográfico [298451](aluno)
-    - Mostra gráfico do aluno com número [140233](aluno)
-    - Gera gráfico de barras do aluno [256789](aluno)
-    - Quero ver o gráfico do aluno número [987654](aluno)
-    - Mostra as notas do aluno [123456](aluno) em barras
-    - Gráfico de barras do aluno número [778899](aluno)
-    - Faz gráfico do aluno de mecanográfico [445566](aluno)
-
+    - Faz gráfico de barras para o aluno número [113475](aluno_numero)
+    - Cria gráfico para o número mecanográfico [298451](aluno_numero)
+    - Mostra gráfico do aluno com número [140233](aluno_numero)
+    - Gera gráfico de barras do aluno [256789](aluno_numero)
+    - Quero ver o gráfico do aluno número [987654](aluno_numero)
+    - Mostra as notas do aluno [123456](aluno_numero) em barras
+    - Gráfico de barras do aluno número [778899](aluno_numero)
+    - Faz gráfico do aluno de mecanográfico [445566](aluno_numero)
 
 # ----------------------------------------------------
-
 - intent: apagar_grafico
   examples: |
-    - Apaga o gráfico do [João](aluno)
-    - Apaga o gráfico da [Maria](aluno)
-    - Elimina o gráfico do [Pedro](aluno)
+    - Apaga o gráfico do [João](aluno_nome)
+    - Apaga o gráfico da [Maria](aluno_nome)
+    - Elimina o gráfico do [Pedro](aluno_nome)
     - Remove o gráfico das médias
     - Apaga o gráfico das médias da turma
     - Eliminar gráfico das médias
 
+# ----------------------------------------------------
 - intent: apagar_todos_graficos
   examples: |
     - Apaga todos os gráficos
@@ -160,15 +165,16 @@ nlu:
     - Remove todos os gráficos da folha
     - Elimina todos os gráficos
 
+# ----------------------------------------------------
 - intent: atualizar_notas
   examples: |
-    - Atualiza a [pergunta 1](pergunta) do aluno número [107447](aluno) para [3](valores)
-    - Muda a [pergunta 3](pergunta) do aluno [108370](aluno) para [4.5](valores)
-    - Atualiza o [teste 1](pergunta) do aluno [94716](aluno) para [12](valores)
-    - Define o [teste 2](pergunta) do aluno número [108522](aluno) como [15](valores)
-    - Atualiza todas as perguntas do teste 2 do aluno [107447](aluno) para [2 3 4 5 1](valores)
-    - Altera a [questão 4](pergunta) do aluno [109830](aluno) para [2.5](valores)
-    - Muda a nota da [pergunta 2](pergunta) para o aluno [107447](aluno)
+    - Atualiza a [pergunta 1](pergunta) do aluno número [107447](aluno_numero) para [3](valores)
+    - Muda a [pergunta 3](pergunta) do aluno [108370](aluno_numero) para [4.5](valores)
+    - Atualiza o [teste 1](pergunta) do aluno [94716](aluno_numero) para [12](valores)
+    - Define o [teste 2](pergunta) do aluno número [108522](aluno_numero) como [15](valores)
+    - Atualiza todas as perguntas do teste 2 do aluno [107447](aluno_numero) para [2 3 4 5 1](valores)
+    - Altera a [questão 4](pergunta) do aluno [109830](aluno_numero) para [2.5](valores)
+    - Muda a nota da [pergunta 2](pergunta) para o aluno [107447](aluno_numero)
 
 # ----------------------------------------------------
 - intent: guardar_ficheiro
@@ -194,10 +200,10 @@ nlu:
 # ----------------------------------------------------
 - intent: atualizar_valores
   examples: |
-    - Atualiza a cotação da [pergunta 2](pergunta) para o aluno [João](aluno)
-    - Muda a cotação da [pergunta 3](pergunta) para [Maria](aluno)
+    - Atualiza a cotação da [pergunta 2](pergunta) para o aluno [João](aluno_nome)
+    - Muda a cotação da [pergunta 3](pergunta) para [Maria](aluno_nome)
     - Atualiza o valor da [pergunta 1](pergunta) para toda a turma
-    - Altera o valor da [pergunta 5](pergunta) para o aluno [Pedro](aluno)
+    - Altera o valor da [pergunta 5](pergunta) para o aluno [Pedro](aluno_nome)
     - Atualiza a pontuação da [pergunta 4](pergunta) para a turma inteira
     - Modifica o valor da [pergunta 2](pergunta) para todos os alunos
 

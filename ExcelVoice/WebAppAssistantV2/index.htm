@@ -475,76 +475,92 @@
 
                 switch (data.intent.name) {
 
-                    // ✅ 1. Calcular média da turma
-                    case ('calcular_media'):
-                        message = { 'intent': 'calcular_media' };
+                    // 1. Calcular média
+                    case 'calcular_media':
+                        message = {
+                            intent: 'calcular_media',
+                            entities: data.entities   // <-- ENSA ENVIAR AS ENTIDADES!
+                        };
                         break;
 
-                    // ✅ 2. Destacar aprovados / reprovados
-                    case ('destacar_aprovados_reprovados'):
-                        message = { 'intent': 'destacar_aprovados_reprovados' };
+
+                    // 2. Destacar aprovados
+                    case 'destacar_aprovados_reprovados':
+                        message = { intent: 'destacar_aprovados_reprovados' };
                         break;
 
-                    // ✅ 3. Identificar alunos com melhoria significativa
-                    case ('identificar_melhoria'):
-                        message = { 'intent': 'identificar_melhoria' };
+                    // 3. Identificar melhorias
+                    case 'identificar_melhoria':
+                        message = { intent: 'identificar_melhoria' };
                         break;
 
-                    // ✅ 4. Inserir coluna "Situação"
-                    case ('inserir_colunas'):
-                        message = { 'intent': 'inserir_colunas' };
+                    // 4. Inserir colunas
+                    case 'inserir_colunas':
+                        message = { intent: 'inserir_colunas' };
                         break;
 
-                    // ✅ 5. Gerar gráficos de desempenho
-                    case ('gerar_graficos'):
-                        message = { 'intent': 'gerar_graficos' };
+                    // 5. GRÁFICO DA TURMA (NOVO)
+                    case 'gerar_grafico_turma':
+                        message = { intent: 'gerar_grafico_turma' };
                         break;
 
-                    // ✅ 6. Atualizar notas de um aluno específico
-                    case ('atualizar_notas'):
-                        var aluno = '';
-                        var notas = [];
-                        for (let i = 0; i < data.entities.length; i++) {
-                            if (data.entities[i].entity === 'aluno')
-                                aluno = data.entities[i].value;
-                            if (data.entities[i].entity === 'nota')
-                                notas.push(data.entities[i].value);
+                    // 6. GRÁFICO DE BARRAS DO ALUNO (NOVO)
+                    case 'gerar_grafico_barras_aluno':
+                        let aluno_barras = '';
+                        for (let e of data.entities)
+                            if (e.entity === 'aluno') aluno_barras = e.value;
+
+                        message = {
+                            intent: 'gerar_grafico_barras_aluno',
+                            aluno: aluno_barras
+                        };
+                        break;
+
+                    // 7. Gráfico das perguntas do Teste 2
+                    case 'gerar_grafico_perguntas_t2':
+                        message = { intent: 'gerar_grafico_perguntas_t2' };
+                        break;
+
+                    // 8. Atualizar notas
+                    case 'atualizar_notas':
+                        let aluno = '';
+                        let notas = [];
+                        for (let e of data.entities) {
+                            if (e.entity === 'aluno') aluno = e.value;
+                            if (e.entity === 'valores') notas.push(e.value);
                         }
-                        message = { 'intent': 'atualizar_notas', 'aluno': aluno, 'notas': notas };
+                        message = { intent: 'atualizar_notas', aluno, notas };
                         break;
 
-                    // ✅ 7. Guardar ficheiro Excel
-                    case ('guardar_ficheiro'):
-                        message = { 'intent': 'guardar_ficheiro' };
+                    // 9. Guardar ficheiro
+                    case 'guardar_ficheiro':
+                        message = { intent: 'guardar_ficheiro' };
                         break;
 
-                    // ✅ 8. Operações matemáticas genéricas
-                    case ('operacoes_matematicas'):
-                        message = { 'intent': 'operacoes_matematicas' };
+                    // 10. Operações matemáticas
+                    case 'operacoes_matematicas':
+                        message = { intent: 'operacoes_matematicas' };
                         break;
 
-                    // ✅ 9. Atualizar valores específicos
-                    case ('atualizar_valores'):
-                        message = { 'intent': 'atualizar_valores' };
+                    // 11. Atualizar valores
+                    case 'atualizar_valores':
+                        message = { intent: 'atualizar_valores' };
                         break;
 
-                    // ✅ 10. Cumprimentos e frases gerais
-                    case ('greet'):
-                        message = { 'intent': 'greet' };
+                    // 12. Apagar todos gráficos
+                    case 'apagar_todos_graficos':
+                        message = { intent: 'apagar_todos_graficos' };
                         break;
 
-                    case ('ask_how_are_you'):
-                        message = { 'intent': 'ask_how_are_you' };
+                    // 13. Cumprimentos / ajuda
+                    case 'greet':
+                    case 'ask_how_are_you':
+                    case 'respond_how_am_i':
+                    case 'helper':
+                        message = { intent: data.intent.name };
                         break;
 
-                    case ('respond_how_am_i'):
-                        message = { 'intent': 'respond_how_am_i' };
-                        break;
-
-                    case ('helper'):
-                        message = { 'intent': 'helper' };
-                        break;
-
+                    // 14. FALLBACK
                     default:
                         console.warn("Intent não reconhecida: ", data.intent.name);
                         return;

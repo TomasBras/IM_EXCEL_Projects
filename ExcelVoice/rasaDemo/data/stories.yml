@@ -29,11 +29,13 @@ stories:
   - story: Gerar gráfico da turma
     steps:
       - intent: gerar_grafico_turma
+      - action: utter_gerar_grafico_turma
       - action: action_gerar_grafico_turma
 
   - story: Gerar gráfico de barras de um aluno
     steps:
       - intent: gerar_grafico_barras_aluno
+      - action: utter_gerar_grafico_barras_aluno
       - action: action_gerar_grafico_barras_aluno
 
   - story: Atualizar notas de um aluno

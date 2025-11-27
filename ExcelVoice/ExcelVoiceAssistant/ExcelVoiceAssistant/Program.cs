@@ -68,7 +68,7 @@ namespace ExcelVoiceAssistant
                 _excelApp = new Application();
                 _excelApp.Visible = true;
 
-                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
+                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
                 excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
                 // excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\ETP.xlsx";
                 //excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\Relatorio_Final.xlsx";
@@ -134,42 +134,36 @@ namespace ExcelVoiceAssistant
                 switch (intent)
                 {
                     case "calcular_media":
-                        ExcelController.CalcularMedia();
-                        return "Médias calculadas com sucesso.";
-
+                        return ExcelController.CalcularMedia(json);
                     case "destacar_aprovados_reprovados":
-                        ExcelController.DestacarAprovados();
-                        return "Aprovados e reprovados destacados.";
+                        return ExcelController.DestacarAprovados();
+
+                    case "inserir_colunas":
+                        return ExcelController.InserirSituacao();
 
                     case "identificar_melhoria":
-                        ExcelController.IdentificarMelhoria();
-                        return "Alunos com melhoria identificados.";
+                        return ExcelController.IdentificarMelhoria();
+
                     case "operacoes_matematicas":
-                        ExcelController.OperacoesMatematicas(json);
-                        return "Operações matemáticas calculadas com sucesso.";
-                    case "inserir_colunas":
-                        ExcelController.InserirSituacao();
-                        return "Coluna situação inserida.";
+                        return ExcelController.OperacoesMatematicas(json);
+
                     case "gerar_grafico_turma":
-                        ExcelController.GerarGraficoTurma(json);
-                        return "Gráfico da turma gerado com sucesso.";
+                        return ExcelController.GerarGraficoTurma(json);
+
                     case "gerar_grafico_barras_aluno":
-                        ExcelController.GerarGraficoBarras(json);
-                        return "Gráfico de barras do aluno gerado com sucesso.";
+                        return ExcelController.GerarGraficoBarras(json);
 
                     case "apagar_grafico":
-                        ExcelController.ApagarGrafico(json);
-                        return "Gráfico apagado.";
-                    case "apagar_todos_graficos":
-                        ExcelController.ApagarTodosGraficos();
-                        return "Gráficos apagados.";
-                    case "guardar_ficheiro":
-                        ExcelController.GuardarRelatorio();
-                        return "Relatório guardado.";
-                    case "atualizar_notas":
-                        ExcelController.AtualizarNotas(json);
-                        return "Notas atualizadas com sucesso.";
+                        return ExcelController.ApagarGrafico(json);
 
+                    case "apagar_todos_graficos":
+                        return ExcelController.ApagarTodosGraficos();
+
+                    case "guardar_ficheiro":
+                        return ExcelController.GuardarRelatorio();
+
+                    case "atualizar_notas":
+                        return ExcelController.AtualizarNotas(json);
 
                     default:
                         return "Comando não reconhecido.";

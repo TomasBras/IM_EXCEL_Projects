@@ -14,7 +14,7 @@ rules:
       - action: utter_destacar_aprovados_reprovados
       - action: action_destacar_aprovados_reprovados
 
-  - rule: Identificar alunos com melhoria significativa
+  - rule: Identificar melhoria
     steps:
       - intent: identificar_melhoria
       - action: utter_identificar_melhoria
@@ -29,11 +29,13 @@ rules:
   - rule: Gerar gráfico da turma
     steps:
       - intent: gerar_grafico_turma
+      - action: utter_gerar_grafico_turma
       - action: action_gerar_grafico_turma
 
   - rule: Gerar gráfico de barras de aluno
     steps:
       - intent: gerar_grafico_barras_aluno
+      - action: utter_gerar_grafico_barras_aluno
       - action: action_gerar_grafico_barras_aluno
 
   - rule: Atualizar notas
@@ -48,13 +50,13 @@ rules:
       - action: utter_guardar_ficheiro
       - action: action_guardar_ficheiro
 
-  - rule: Realizar operações matemáticas
+  - rule: Operações matemáticas
     steps:
       - intent: operacoes_matematicas
       - action: utter_operacoes_matematicas
       - action: action_operacoes_matematicas
 
-  - rule: Atualizar valores da tabela
+  - rule: Atualizar valores
     steps:
       - intent: atualizar_valores
       - action: utter_atualizar_valores
@@ -75,7 +77,7 @@ rules:
       - intent: greet
       - action: utter_greet
 
-  - rule: Perguntar como está
+  - rule: Perguntar como estou
     steps:
       - intent: ask_how_are_you
       - action: utter_ask_how_are_you
@@ -85,12 +87,13 @@ rules:
       - intent: respond_how_am_i
       - action: utter_respond_how_am_i
 
-  - rule: Mostrar ajuda
+  - rule: Ajuda
     steps:
       - intent: helper
       - action: utter_helper
 
   - rule: Fallback
     steps:
-      - intent: nlu_fallback
+      - intent: fallback
       - action: utter_default
+      - action: action_default_fallback

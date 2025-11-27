@@ -21,8 +21,8 @@ C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\bin\Debug\Newtonsoft.Json.xml
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\bin\Debug\websocket-sharp.xml
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoiceAssistant.csproj.AssemblyReference.cache
-C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoiceAssistant.exe.config
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoiceAssistant.csproj.CoreCompileInputs.cache
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoi.E3B39EE6.Up2Date
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoiceAssistant.exe
 C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoiceAssistant.pdb
+C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\ExcelVoiceAssistant\ExcelVoiceAssistant\obj\Debug\ExcelVoiceAssistant.exe.config

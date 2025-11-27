@@ -20,3 +20,5 @@ Ação: Calcular Média - Início
 Erro em Calcular Média: [Errno 2] No such file or directory: 'C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\dados_turma.xlsx'
 Ação: Calcular Média - Início
 Ação: Calcular Média - Sucesso
+Ação: Calcular Média - Início
+Erro em Calcular Média: [Errno 2] No such file or directory: 'C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\dados_turma.xlsx'

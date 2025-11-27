@@ -1,7 +1,7 @@
 version: "3.1"
 
 ############################################
-#              INTENTS                    #
+#              INTENTS                    
 ############################################
 intents:
   - greet
@@ -22,39 +22,49 @@ intents:
   - apagar_todos_graficos
   - fallback
 
-
 ############################################
-#                ENTIDADES                #
+#                ENTIDADES                
 ############################################
 entities:
-  - aluno
+  - aluno_nome
+  - aluno_numero
   - valores
   - nome_ficheiro
-  - operacao
-  - coluna
-  - valor_novo
   - pergunta
   - grafico
 
-
 ############################################
-#                  SLOTS                  #
+#                  SLOTS                  
 ############################################
 slots:
 
-  aluno:
+  aluno_nome:
     type: text
     influence_conversation: false
     mappings:
       - type: from_entity
-        entity: aluno
-        intent: atualizar_notas
+        entity: aluno_nome
+        intent: calcular_media
       - type: from_entity
-        entity: aluno
+        entity: aluno_nome
         intent: atualizar_valores
       - type: from_entity
-        entity: aluno
+        entity: aluno_nome
+        intent: apagar_grafico
+
+  aluno_numero:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: aluno_numero
+        intent: atualizar_notas
+      - type: from_entity
+        entity: aluno_numero
         intent: gerar_grafico_barras_aluno
+      - type: from_entity
+        entity: aluno_numero
+        intent: calcular_media
 
   valores:
     type: text
@@ -72,41 +82,19 @@ slots:
         entity: nome_ficheiro
         intent: guardar_ficheiro
 
-  operacao:
-    type: text
-    influence_conversation: false
-    mappings:
-      - type: from_entity
-        entity: operacao
-        intent: operacoes_matematicas
-
-  coluna:
-    type: text
-    influence_conversation: false
-    mappings:
-      - type: from_entity
-        entity: coluna
-        intent: operacoes_matematicas
-
-  valor_novo:
-    type: text
-    influence_conversation: false
-    mappings:
-      - type: from_entity
-        entity: valor_novo
-        intent: atualizar_valores
-
   pergunta:
     type: text
     influence_conversation: false
     mappings:
       - type: from_entity
         entity: pergunta
+        intent: atualizar_notas
+      - type: from_entity
+        entity: pergunta
         intent: atualizar_valores
 
-
 ############################################
-#              RESPONSES                  #
+#              RESPONSES                  
 ############################################
 responses:
 
@@ -137,35 +125,46 @@ responses:
         • Operações matemáticas
 
   utter_calcular_media:
-    - text: "A calcular a média da turma..."
+    - text: "A calcular a média..."
 
   utter_destacar_aprovados_reprovados:
     - text: "Destacando aprovados e reprovados..."
 
   utter_identificar_melhoria:
-    - text: "A identificar melhorias..."
+    - text: "A identificar melhorias significativas..."
 
   utter_inserir_colunas:
     - text: "A inserir coluna Situação..."
 
+  utter_gerar_grafico_turma:
+    - text: "A gerar o gráfico da turma..."
+
+  utter_gerar_grafico_barras_aluno:
+    - text: "A gerar o gráfico de barras do aluno {aluno_numero}..."
+
   utter_atualizar_notas:
-    - text: "A atualizar as notas do aluno {aluno}..."
+    - text: "A atualizar as notas do aluno {aluno_numero}..."
 
   utter_guardar_ficheiro:
-    - text: "A guardar o ficheiro como {nome_ficheiro}."
+    - text: "A guardar o ficheiro como {nome_ficheiro}..."
 
   utter_operacoes_matematicas:
     - text: "A executar a operação pedida..."
 
   utter_atualizar_valores:
-    - text: "A atualizar o valor da pergunta {pergunta}."
+    - text: "A atualizar o valor da pergunta {pergunta}..."
+
+  utter_apagar_grafico:
+    - text: "A apagar o gráfico solicitado..."
+
+  utter_apagar_todos_graficos:
+    - text: "A apagar todos os gráficos da folha..."
 
   utter_default:
     - text: "Não percebi, pode repetir?"
 
-
 ############################################
-#               ACTIONS                   #
+#               ACTIONS                   
 ############################################
 actions:
   - action_calcular_media
@@ -180,10 +179,10 @@ actions:
   - action_atualizar_valores
   - action_apagar_grafico
   - action_apagar_todos_graficos
-
+  - action_default_fallback
 
 ############################################
-#             SESSION CONFIG              #
+#             SESSION CONFIG              
 ############################################
 session_config:
   session_expiration_time: 60

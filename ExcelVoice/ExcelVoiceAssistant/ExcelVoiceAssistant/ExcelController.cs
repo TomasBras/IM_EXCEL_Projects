@@ -15,7 +15,7 @@ namespace ExcelVoiceAssistant
         private static Excel.Workbook workbook;
         private static Excel.Worksheet sheet;
 
-        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
+        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
         private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
 
         //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\ETP.xlsx";
@@ -80,83 +80,236 @@ namespace ExcelVoiceAssistant
                 for (int c = firstCol; c <= lastCol; c++)
                 {
                     var valor = sheet.Cells[r, c].Value;
-
                     if (valor != null && IgualIgnorandoAcentos(valor.ToString(), "nome"))
                         return (r, c);
                 }
             }
 
-            throw new Exception("Cabeçalho 'Nome' não encontrado.");
+            throw new Exception("Cabeçalho Nome não encontrado.");
         }
+
 
         // =====================================================
         // CALCULAR MÉDIA DINAMICAMENTE
-        public static void CalcularMedia()
+
+        public static string CalcularMedia(dynamic json)
+        {
+            if (json.nlu.entities == null)
+                return CalcularMediaTurma();
+
+            string nome = null;
+            string numero = null;
+
+            foreach (var e in json.nlu.entities)
+            {
+                if (e.entity == "aluno_nome") nome = e.value.ToString();
+                if (e.entity == "aluno_numero") numero = e.value.ToString();
+            }
+
+            if (!string.IsNullOrEmpty(nome)) return CalcularMediaAluno(nome);
+            if (!string.IsNullOrEmpty(numero)) return CalcularMediaAlunoNumero(numero);
+
+            return CalcularMediaTurma();
+        }
+
+
+        public static string CalcularMediaTurma()
         {
             try
             {
                 var (headerRow, headerCol) = EncontrarCabecalho();
-
                 Excel.Range used = sheet.UsedRange;
+
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                int colT1 = -1;
-                int colT2 = -1;
+                List<int> testes = new List<int>();
                 int colMedia = -1;
 
-                // 1️⃣ Encontrar colunas pelo nome EXACTO do cabeçalho
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    var titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
                     if (titulo == null) continue;
 
-                    if (IgualIgnorandoAcentos(titulo, "Teste 1")) colT1 = c;
-                    if (IgualIgnorandoAcentos(titulo, "Teste 2")) colT2 = c;
-                    if (IgualIgnorandoAcentos(titulo, "Média")) colMedia = c;
+                    if (titulo.ToLower().StartsWith("teste")) testes.Add(c);
+                    if (IgualIgnorandoAcentos(titulo, "média")) colMedia = c;
                 }
 
-                if (colT1 == -1 || colT2 == -1)
-                {
-                    Console.WriteLine("❌ Não encontrei Teste 1 e Teste 2.");
-                    return;
-                }
+                if (testes.Count == 0)
+                    return "Nenhuma coluna de teste encontrada.";
 
-                // 2️⃣ Criar coluna Média se não existir
+                testes.Sort();
+
                 if (colMedia == -1)
                 {
-                    colMedia = colT2 + 1;
+                    colMedia = testes.Last() + 1;
                     sheet.Cells[headerRow, colMedia].Value2 = "Média";
                 }
 
-                // 3️⃣ Preencher média SOMENTE entre Teste1 e Teste2
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerCol].Value != null)
                 {
-                    string letraT1 = ColunaParaLetra(colT1);
-                    string letraT2 = ColunaParaLetra(colT2);
+                    string formula = "=MÉDIA(" +
+                        string.Join(";", testes.Select(col => $"{ColunaParaLetra(col)}{row}")) +
+                        ")";
 
-                    // ⚠️ AQUI ESTÁ A CORREÇÃO: MÉDIA DE DOIS VALORES, NÃO INTERVALO
-                    sheet.Cells[row, colMedia].FormulaLocal =
-                        $"=MÉDIA({letraT1}{row};{letraT2}{row})";
-
+                    sheet.Cells[row, colMedia].FormulaLocal = formula;
                     row++;
                 }
 
                 workbook.Save();
-                Console.WriteLine("📊 Média corrigida (apenas Teste 1 + Teste 2) calculada com sucesso!");
+                return "Média turma calculada.";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro ao calcular média: " + ex.Message);
+                return "Erro ao calcular média turma.";
             }
         }
 
-        // =====================================================
-        // INSERIR COLUNA SITUAÇÃO APÓS MÉDIA
-        // =====================================================
-        public static void InserirSituacao()
+
+        public static string CalcularMediaAluno(string nomeAluno)
+        {
+            try
+            {
+                var (headerRow, headerCol) = EncontrarCabecalho();
+                Excel.Range used = sheet.UsedRange;
+
+                int firstCol = used.Column;
+                int lastCol = firstCol + used.Columns.Count - 1;
+
+                List<int> colTestes = new List<int>();
+                int colMedia = -1;
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo == null) continue;
+
+                    if (titulo.Trim().ToLower().StartsWith("teste")) colTestes.Add(c);
+                    if (IgualIgnorandoAcentos(titulo, "média")) colMedia = c;
+                }
+
+                if (colTestes.Count == 0)
+                    return "Sem testes.";
+
+                if (colMedia == -1)
+                {
+                    colMedia = colTestes.Last() + 1;
+                    sheet.Cells[headerRow, colMedia].Value2 = "Média";
+                }
+
+                int rowAluno = -1;
+                int row = headerRow + 1;
+
+
+                var partes = nomeAluno.ToLower()
+                    .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                while (sheet.Cells[row, headerCol].Value != null)
+                {
+                    string excelNome = sheet.Cells[row, headerCol].Value.ToString().ToLower();
+
+                    if (partes.All(p => excelNome.Contains(p)))
+                    {
+                        rowAluno = row;
+                        break;
+                    }
+
+                    row++;
+                }
+
+                if (rowAluno == -1)
+                    return $"Aluno {nomeAluno} não encontrado.";
+
+                string formula = "=MÉDIA(" +
+                    string.Join(";", colTestes.Select(c => $"{ColunaParaLetra(c)}{rowAluno}")) + ")";
+
+                sheet.Cells[rowAluno, colMedia].FormulaLocal = formula;
+
+                workbook.Save();
+                return $"Média calculada para {nomeAluno}.";
+            }
+            catch
+            {
+                return "Erro ao calcular média.";
+            }
+        }
+
+
+        public static string CalcularMediaAlunoNumero(string numeroMec)
+        {
+            try
+            {
+                var (headerRow, headerColNome) = EncontrarCabecalho();
+                Excel.Range used = sheet.UsedRange;
+
+                int firstCol = used.Column;
+                int lastCol = firstCol + used.Columns.Count - 1;
+
+                int colMec = -1;
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string raw = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (raw != null && IgualIgnorandoAcentos(raw, "Número mecanográfico"))
+                    {
+                        colMec = c;
+                        break;
+                    }
+                }
+
+                if (colMec == -1)
+                    return "Coluna mec não encontrada.";
+
+                int rowAluno = -1;
+                int r = headerRow + 1;
+
+                while (sheet.Cells[r, colMec].Value != null)
+                {
+                    if (sheet.Cells[r, colMec].Value.ToString() == numeroMec)
+                    {
+                        rowAluno = r;
+                        break;
+                    }
+                    r++;
+                }
+
+                if (rowAluno == -1)
+                    return "Aluno não encontrado.";
+
+                List<int> colTestes = new List<int>();
+                int colMedia = -1;
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo == null) continue;
+
+                    if (titulo.ToLower().StartsWith("teste")) colTestes.Add(c);
+                    if (IgualIgnorandoAcentos(titulo, "média")) colMedia = c;
+                }
+
+                if (colMedia == -1)
+                {
+                    colMedia = colTestes.Last() + 1;
+                    sheet.Cells[headerRow, colMedia].Value2 = "Média";
+                }
+
+                string formula = "=MÉDIA(" +
+                    string.Join(";", colTestes.Select(c => $"{ColunaParaLetra(c)}{rowAluno}")) + ")";
+
+                sheet.Cells[rowAluno, colMedia].FormulaLocal = formula;
+
+                workbook.Save();
+                return $"Média calculada para {numeroMec}.";
+            }
+            catch
+            {
+                return "Erro ao calcular média.";
+            }
+        }
+        public static string InserirSituacao()
         {
             try
             {
@@ -168,11 +321,10 @@ namespace ExcelVoiceAssistant
 
                 int colMedia = -1;
 
-                // Encontrar coluna "Média"
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    var valor = sheet.Cells[headerRow, c].Value;
-                    if (valor != null && IgualIgnorandoAcentos(valor.ToString(), "media"))
+                    var v = sheet.Cells[headerRow, c].Value;
+                    if (v != null && IgualIgnorandoAcentos(v.ToString(), "média"))
                     {
                         colMedia = c;
                         break;
@@ -180,35 +332,27 @@ namespace ExcelVoiceAssistant
                 }
 
                 if (colMedia == -1)
-                {
-                    Console.WriteLine("⚠ Calcule a média primeiro.");
-                    return;
-                }
+                    return "Calcule a média primeiro.";
 
-                int colSituacao = colMedia + 1;
-                sheet.Cells[headerRow, colSituacao] = "Situação";
+                int colSit = colMedia + 1;
+                sheet.Cells[headerRow, colSit].Value2 = "Situação";
 
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerCol].Value != null)
                 {
-                    sheet.Cells[row, colSituacao].Value2 = "";
+                    sheet.Cells[row, colSit].Value2 = "";
                     row++;
                 }
 
-                Console.WriteLine("📗 Coluna 'Situação' criada.");
+                return "Coluna situação criada.";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro ao inserir coluna situação: " + ex.Message);
+                return "Erro ao criar Situação.";
             }
         }
-
-
-        // =====================================================
-        // DESTACAR APROVADOS
-        // =====================================================
-        public static void DestacarAprovados()
+        public static string DestacarAprovados()
         {
             try
             {
@@ -219,27 +363,29 @@ namespace ExcelVoiceAssistant
                 int lastCol = firstCol + used.Columns.Count - 1;
 
                 int colMedia = -1;
-                int colSituacao = -1;
+                int colSit = -1;
 
-                // Encontrar colunas
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    var valor = sheet.Cells[headerRow, c].Value;
-                    if (valor == null) continue;
+                    var v = sheet.Cells[headerRow, c].Value;
+                    if (v == null) continue;
 
-                    if (IgualIgnorandoAcentos(valor.ToString(), "media"))
+                    if (IgualIgnorandoAcentos(v.ToString(), "média"))
                         colMedia = c;
 
-                    if (IgualIgnorandoAcentos(valor.ToString(), "situacao"))
-                        colSituacao = c;
+                    if (IgualIgnorandoAcentos(v.ToString(), "situação"))
+                        colSit = c;
                 }
 
-                if (colMedia == -1 || colSituacao == -1)
-                {
-                    Console.WriteLine("⚠ Calcule a média e adicione Situação primeiro.");
-                    return;
-                }
+                // 🔥 PRIMEIRA VERIFICAÇÃO: Falta coluna Situação
+                if (colSit == -1)
+                    return "Criar coluna situação primeiro.";
 
+                // 🔥 SEGUNDA VERIFICAÇÃO: Falta coluna Média
+                if (colMedia == -1)
+                    return "Calcular média primeiro.";
+
+                // ⭐ Ambas existem → processar normalmente
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerCol].Value != null)
@@ -248,65 +394,137 @@ namespace ExcelVoiceAssistant
 
                     if (media >= 10)
                     {
-                        sheet.Cells[row, colSituacao].Value2 = "Aprovado";
-                        sheet.Cells[row, colSituacao].Interior.Color =
-                            ColorTranslator.ToOle(Color.LightGreen);
+                        sheet.Cells[row, colSit].Value2 = "Aprovado";
+                        sheet.Cells[row, colSit].Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
                     }
                     else
                     {
-                        sheet.Cells[row, colSituacao].Value2 = "Reprovado";
-                        sheet.Cells[row, colSituacao].Interior.Color =
-                            ColorTranslator.ToOle(Color.LightCoral);
+                        sheet.Cells[row, colSit].Value2 = "Reprovado";
+                        sheet.Cells[row, colSit].Interior.Color = ColorTranslator.ToOle(Color.LightCoral);
                     }
 
                     row++;
                 }
 
-                Console.WriteLine("🎨 Situação preenchida com sucesso!");
+                return "Situação atualizada com sucesso";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro: " + ex.Message);
+                return "Erro ao destacar.";
             }
         }
 
-        // =====================================================
-        // IDENTIFICAR MELHORIA ≥20%
-        // =====================================================
-        public static void IdentificarMelhoria()
+        public static string IdentificarMelhoria()
         {
             try
             {
                 var (headerRow, headerCol) = EncontrarCabecalho();
+                Excel.Range used = sheet.UsedRange;
 
-                int colT1 = headerCol + 6;
-                int colT2 = headerCol + 13;
+                int firstCol = used.Column;
+                int lastCol = firstCol + used.Columns.Count - 1;
 
+                // 1️⃣ Encontrar dinamicamente todas as colunas Teste X
+                List<(int col, int num)> testes = new List<(int col, int num)>();
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo == null) continue;
+
+                    var match = Regex.Match(titulo.ToLower().Replace(" ", ""), @"teste(\d+)");
+                    if (match.Success)
+                    {
+                        testes.Add((c, int.Parse(match.Groups[1].Value)));
+                    }
+                }
+
+                if (testes.Count < 1)
+                    return "Nenhum teste encontrado.";
+
+                // Ordenar Teste 1, Teste 2, Teste 3, ...
+                testes = testes.OrderBy(t => t.num).ToList();
+
+                int numTestes = testes.Count;
+                int colUltimoTeste = testes.Last().col;
+
+                // 2️⃣ Encontrar coluna Média
+                int colMedia = -1;
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string v = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (v != null && IgualIgnorandoAcentos(v.ToString(), "média"))
+                    {
+                        colMedia = c;
+                        break;
+                    }
+                }
+
+                if (colMedia == -1)
+                    return "Calcule a média primeiro.";
+
+                // 3️⃣ Criar coluna Melhoria se necessário
+                int colMelhoria = -1;
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string raw = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (raw != null && IgualIgnorandoAcentos(raw, "melhoria"))
+                    {
+                        colMelhoria = c;
+                        break;
+                    }
+                }
+
+                if (colMelhoria == -1)
+                {
+                    colMelhoria = lastCol + 1;
+                    sheet.Cells[headerRow, colMelhoria].Value2 = "Melhoria";
+                }
+
+                // 4️⃣ Calcular MP linha a linha
                 int row = headerRow + 1;
-
                 while (sheet.Cells[row, headerCol].Value != null)
                 {
-                    double t1 = sheet.Cells[row, colT1].Value ?? 0;
-                    double t2 = sheet.Cells[row, colT2].Value ?? 0;
+                    double mediaAtual = sheet.Cells[row, colMedia].Value2 ?? 0;
 
-                    if (t1 > 0 && (t2 - t1) / t1 >= 0.2)
-                        sheet.Rows[row].Interior.Color = ColorTranslator.ToOle(Color.Yellow);
+                    if (mediaAtual >= 10)
+                    {
+                        sheet.Cells[row, colMelhoria].Value2 = "";
+                        row++;
+                        continue;
+                    }
+
+                    // somar todos os testes exceto o último
+                    double somaAnteriores = 0;
+
+                    foreach (var t in testes.Take(testes.Count - 1))
+                    {
+                        somaAnteriores += Convert.ToDouble(sheet.Cells[row, t.col].Value2 ?? 0);
+                    }
+
+                    // 5️⃣ Nota necessária no último teste para atingir média 10
+                    double notaNecessaria =
+                        10 * numTestes - somaAnteriores;
+
+                    // 6️⃣ Se a nota necessária for possível (<=20) → MP
+                    if (notaNecessaria <= 20)
+                        sheet.Cells[row, colMelhoria].Value2 = "MP";
+                    else
+                        sheet.Cells[row, colMelhoria].Value2 = "";
 
                     row++;
                 }
 
-                Console.WriteLine("📈 Melhorias destacadas!");
+                return $"Melhoria calculada usando todos os {numTestes} testes.";
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ Erro: " + ex.Message);
+                return "Erro ao identificar melhoria: " + ex.Message;
             }
         }
 
-        // =====================================================
-        // GERAR GRÁFICO (VERSÃO FINAL — APENAS 2 TIPOS)
-        // =====================================================
-        public static void GerarGraficoTurma(dynamic json)
+
+        public static string GerarGraficoTurma(dynamic json)
         {
             try
             {
@@ -318,36 +536,27 @@ namespace ExcelVoiceAssistant
 
                 int colT1 = -1, colT2 = -1, colMedia = -1;
 
-                // Encontrar colunas corretas
                 for (int c = firstCol; c <= lastCol; c++)
                 {
                     string titulo = sheet.Cells[headerRow, c].Value?.ToString();
                     if (titulo == null) continue;
 
-                    if (IgualIgnorandoAcentos(titulo, "Teste 1")) colT1 = c;
-                    if (IgualIgnorandoAcentos(titulo, "Teste 2")) colT2 = c;
-                    if (IgualIgnorandoAcentos(titulo, "Média")) colMedia = c;
+                    if (IgualIgnorandoAcentos(titulo, "teste 1")) colT1 = c;
+                    if (IgualIgnorandoAcentos(titulo, "teste 2")) colT2 = c;
+                    if (IgualIgnorandoAcentos(titulo, "média")) colMedia = c;
                 }
 
                 if (colT1 == -1 || colT2 == -1 || colMedia == -1)
-                {
-                    Console.WriteLine("❌ Não encontrei colunas de teste.");
-                    return;
-                }
+                    return "Colunas T1, T2 ou média não encontradas.";
 
-                // Descobrir última linha
                 int lastRow = headerRow + 1;
                 while (sheet.Cells[lastRow, headerCol].Value != null)
                     lastRow++;
 
                 int count = lastRow - headerRow - 1;
                 if (count <= 0)
-                {
-                    Console.WriteLine("❌ Não há alunos.");
-                    return;
-                }
+                    return "Sem alunos.";
 
-                // Calcular médias reais
                 double somaT1 = 0, somaT2 = 0, somaM = 0;
 
                 for (int r = headerRow + 1; r < lastRow; r++)
@@ -357,178 +566,157 @@ namespace ExcelVoiceAssistant
                     somaM += Convert.ToDouble(sheet.Cells[r, colMedia].Value2 ?? 0);
                 }
 
-                double mediaT1 = somaT1 / count;
-                double mediaT2 = somaT2 / count;
-                double mediaMF = somaM / count;
+                double mT1 = somaT1 / count;
+                double mT2 = somaT2 / count;
+                double mMF = somaM / count;
 
-                // Criar gráfico
                 Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
 
                 double posY = charts.Count == 0
-                    ? sheet.Rows[lastRow].Top + sheet.Rows[lastRow].Height + 30
-                    : charts.Item(charts.Count).Top + charts.Item(charts.Count).Height + 40;
+                    ? sheet.Rows[lastRow].Top + 20
+                    : charts.Item(charts.Count).Top + charts.Item(charts.Count).Height + 30;
 
-                Excel.ChartObject chartObj = charts.Add(50, posY, 650, 380);
+                Excel.ChartObject chartObj = charts.Add(40, posY, 650, 360);
                 Excel.Chart chart = chartObj.Chart;
 
                 chart.ChartType = Excel.XlChartType.xlColumnClustered;
                 chart.HasTitle = true;
-                chart.ChartTitle.Text = "Médias da Turma — T1, T2 e Final";
+                chart.ChartTitle.Text = "Médias da Turma";
 
-                Excel.SeriesCollection sc = chart.SeriesCollection();
-
-                Excel.Series s = sc.NewSeries();
-                s.Name = "Média da Turma";
-                s.Values = new double[] { mediaT1, mediaT2, mediaMF };
-                s.XValues = new string[] { "Teste 1", "Teste 2", "Média Final" };
+                Excel.Series s = chart.SeriesCollection().NewSeries();
+                s.Name = "Médias";
+                s.Values = new double[] { mT1, mT2, mMF };
+                s.XValues = new string[] { "Teste 1", "Teste 2", "Média" };
 
                 chart.Axes(Excel.XlAxisType.xlValue).MinimumScale = 0;
                 chart.Axes(Excel.XlAxisType.xlValue).MaximumScale = 20;
 
-                Console.WriteLine("📊 Gráfico de médias criado com sucesso!");
+                return "Gráfico criado.";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro ao criar gráfico: " + ex.Message);
+                return "Erro ao criar gráfico.";
             }
         }
+        private static (string nome, string numero) ExtrairAluno(dynamic json)
+        {
+            string nome = null;
+            string numero = null;
 
+            if (json?.nlu?.entities != null)
+            {
+                foreach (var ent in json.nlu.entities)
+                {
+                    if (ent.entity == "aluno_nome")
+                        nome = ent.value.ToString();
 
-        public static void GerarGraficoBarras(dynamic json)
+                    if (ent.entity == "aluno_numero")
+                        numero = ent.value.ToString();
+                }
+            }
+
+            return (nome, numero);
+        }
+        public static string GerarGraficoBarras(dynamic json)
         {
             try
             {
-                // Agora o "aluno" vem como número mecanográfico
-                string numeroMec = json.nlu.aluno != null ? json.nlu.aluno.ToString() : "";
-                if (string.IsNullOrEmpty(numeroMec))
-                {
-                    Console.WriteLine("❌ Nenhum número mecanográfico encontrado.");
-                    return;
-                }
+                var aluno = ExtrairAluno(json);
+                string numero = aluno.numero;
 
+                if (string.IsNullOrEmpty(numero))
+                    return "Número mec não encontrado.";
+
+                var (headerRow, colNome) = EncontrarCabecalho();
                 Excel.Range used = sheet.UsedRange;
 
-                // 1️⃣ Encontrar cabeçalho da coluna Nome (já existente)
-                var (headerRowNome, colNome) = EncontrarCabecalho();
-
-                // 2️⃣ Encontrar coluna do número mecanográfico
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                int colNumeroMec = -1;
+                int colMec = -1;
+                int colT1 = -1, colT2 = -1;
 
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    var titulo = sheet.Cells[headerRowNome, c].Value?.ToString();
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
                     if (titulo == null) continue;
 
-                    if (IgualIgnorandoAcentos(titulo, "Número Mecanográfico"))
-                    {
-                        colNumeroMec = c;
-                        break;
-                    }
+                    if (IgualIgnorandoAcentos(titulo, "número mecanográfico")) colMec = c;
+                    if (IgualIgnorandoAcentos(titulo, "teste 1")) colT1 = c;
+                    if (IgualIgnorandoAcentos(titulo, "teste 2")) colT2 = c;
                 }
 
-                if (colNumeroMec == -1)
-                {
-                    Console.WriteLine("❌ Coluna 'Número Mecanográfico' não encontrada.");
-                    return;
-                }
+                if (colMec == -1 || colT1 == -1 || colT2 == -1)
+                    return "Colunas do aluno não encontradas.";
 
-                // 3️⃣ Encontrar colunas Teste 1 e Teste 2
-                int colT1 = -1;
-                int colT2 = -1;
-
-                for (int c = firstCol; c <= lastCol; c++)
-                {
-                    var titulo = sheet.Cells[headerRowNome, c].Value?.ToString();
-                    if (titulo == null) continue;
-
-                    if (IgualIgnorandoAcentos(titulo, "Teste 1")) colT1 = c;
-                    if (IgualIgnorandoAcentos(titulo, "Teste 2")) colT2 = c;
-                }
-
-                if (colT1 == -1 || colT2 == -1)
-                {
-                    Console.WriteLine("❌ Não encontrei Teste 1 / Teste 2.");
-                    return;
-                }
-
-                // 4️⃣ Descobrir última linha
-                int lastRow = headerRowNome + 1;
-                while (sheet.Cells[lastRow, colNome].Value != null)
-                    lastRow++;
-
-                // 5️⃣ Procurar o aluno pelo número mecanográfico
+                int row = headerRow + 1;
                 int rowAluno = -1;
-                for (int r = headerRowNome + 1; r < lastRow; r++)
+
+                while (sheet.Cells[row, colNome].Value != null)
                 {
-                    var valor = sheet.Cells[r, colNumeroMec].Value?.ToString().Trim();
-                    if (valor != null && valor == numeroMec)
+                    string val = sheet.Cells[row, colMec].Value?.ToString();
+                    if (val == numero)
                     {
-                        rowAluno = r;
+                        rowAluno = row;
                         break;
                     }
+                    row++;
                 }
 
                 if (rowAluno == -1)
-                {
-                    Console.WriteLine($"❌ Número mecanográfico {numeroMec} não encontrado.");
-                    return;
-                }
+                    return "Aluno não encontrado.";
 
-                // 6️⃣ Obter o nome verdadeiro do aluno
-                string nomeAluno = sheet.Cells[rowAluno, colNome].Value?.ToString() ?? "(Sem nome)";
+                string nomeReal = sheet.Cells[rowAluno, colNome].Value?.ToString();
 
-                // 7️⃣ Criar gráfico
                 Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
 
                 double posY = charts.Count == 0
-                    ? sheet.Rows[lastRow].Top + 30
-                    : charts.Item(charts.Count).Top + charts.Item(charts.Count).Height + 40;
+                    ? sheet.Rows[row].Top + 20
+                    : charts.Item(charts.Count).Top + charts.Item(charts.Count).Height + 30;
 
-                Excel.ChartObject chartObj = charts.Add(50, posY, 700, 380);
+                Excel.ChartObject chartObj = charts.Add(40, posY, 700, 360);
                 Excel.Chart chart = chartObj.Chart;
 
                 chart.ChartType = Excel.XlChartType.xlColumnClustered;
                 chart.HasTitle = true;
-                chart.ChartTitle.Text = $"Notas de {nomeAluno} (NMec {numeroMec})";
+                chart.ChartTitle.Text = $"Notas de {nomeReal}";
 
-                Excel.SeriesCollection sc = (Excel.SeriesCollection)chart.SeriesCollection();
+                Excel.SeriesCollection sc = chart.SeriesCollection();
 
-                Excel.Series s1 = sc.NewSeries();
+                var s1 = sc.NewSeries();
                 s1.Name = "Teste 1";
                 s1.Values = sheet.Range[$"{ColunaParaLetra(colT1)}{rowAluno}"];
-                s1.XValues = $"\"Teste 1\"";
+                s1.XValues = "\"Teste 1\"";
 
-                Excel.Series s2 = sc.NewSeries();
+                var s2 = sc.NewSeries();
                 s2.Name = "Teste 2";
                 s2.Values = sheet.Range[$"{ColunaParaLetra(colT2)}{rowAluno}"];
-                s2.XValues = $"\"Teste 2\"";
+                s2.XValues = "\"Teste 2\"";
 
                 chart.Axes(Excel.XlAxisType.xlValue).MinimumScale = 0;
                 chart.Axes(Excel.XlAxisType.xlValue).MaximumScale = 20;
 
-                Console.WriteLine($"📊 Gráfico de barras criado para o aluno {nomeAluno} (NMec {numeroMec})!");
+                return "Gráfico do aluno criado.";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro ao criar gráfico de barras: " + ex.Message);
+                return "Erro no gráfico.";
             }
         }
 
-        public static void AtualizarNotas(dynamic json)
+
+        public static string AtualizarNotas(dynamic json)
         {
             try
             {
                 // 1️⃣ ALUNO (número mecanográfico)
-                string numeroMec = json.nlu.aluno != null ? json.nlu.aluno.ToString() : "";
+                var alunoInfo = ExtrairAluno(json);
+                string numeroMec = alunoInfo.numero;
                 if (string.IsNullOrEmpty(numeroMec))
                 {
                     Console.WriteLine("❌ Número mecanográfico não encontrado.");
-                    return;
+                    return "";
                 }
-
                 // 2️⃣ TEXTO BASE64 → frase original
                 string base64 = json.text.ToString();
                 string frase = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
@@ -612,7 +800,7 @@ namespace ExcelVoiceAssistant
                 if (matches.Count == 0)
                 {
                     Console.WriteLine("❌ Nenhum valor encontrado.");
-                    return;
+                    return "";
                 }
 
                 notas = matches
@@ -660,7 +848,7 @@ namespace ExcelVoiceAssistant
                 if (notas.Length == 0)
                 {
                     Console.WriteLine("❌ Não foram encontradas notas válidas.");
-                    return;
+                    return "";
                 }
 
                 Console.WriteLine("📌 Notas finais filtradas: " + string.Join(", ", notas));
@@ -703,7 +891,7 @@ namespace ExcelVoiceAssistant
                 if (colNumeroMec == -1)
                 {
                     Console.WriteLine("❌ Coluna 'Número mecanográfico' não encontrada.");
-                    return;
+                    return "";
                 }
 
                 // Procurar linha do aluno
@@ -724,7 +912,7 @@ namespace ExcelVoiceAssistant
                 if (alunoRow == -1)
                 {
                     Console.WriteLine($"❌ Número mecanográfico {numeroMec} não encontrado.");
-                    return;
+                    return "";
                 }
 
                 // 6️⃣ LOCALIZAR TODAS AS COLUNAS DE TESTES E PERGUNTAS
@@ -746,7 +934,7 @@ namespace ExcelVoiceAssistant
                 if (!string.IsNullOrEmpty(colunaAlvo) && !mapaColunas.ContainsKey(colunaAlvo))
                 {
                     Console.WriteLine($"❌ Coluna '{colunaAlvo}' não encontrada.");
-                    return;
+                    return "";
                 }
 
                 // 7️⃣ Atualizar Pergunta específica
@@ -825,62 +1013,51 @@ namespace ExcelVoiceAssistant
 
                 workbook.Save();
                 Console.WriteLine("✅ Atualização concluída!");
+                return "Notas atualizadas com sucesso.";
             }
             catch (Exception ex)
             {
                 Console.WriteLine("❌ Erro ao atualizar notas: " + ex.Message);
+                return "Erro ao atualizar notas: " + ex.Message;
             }
         }
-
-
-
-
-        public static void ApagarGrafico(dynamic json)
+        public static string ApagarGrafico(dynamic json)
         {
             try
             {
-                string aluno = json.nlu.aluno != null ? json.nlu.aluno.ToString().ToLower() : "";
+                var info = ExtrairAluno(json);
+                string alvo = (info.nome ?? info.numero ?? "").ToLower();
 
                 Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
 
                 for (int i = charts.Count; i >= 1; i--)
                 {
-                    Excel.Chart chart = charts.Item(i).Chart;
+                    var chart = charts.Item(i).Chart;
+                    string titulo = chart.ChartTitle?.Text?.ToLower() ?? "";
 
-                    if (!chart.HasTitle) continue;
-
-                    string caption = (chart.ChartTitle.Caption ?? "").ToLower();
-                    string titulo = (chart.ChartTitle.Text ?? "").ToLower();
-
-                    // Apagar gráfico do aluno
-                    if (!string.IsNullOrEmpty(aluno) &&
-                        (caption.Contains($"#tag#aluno#{aluno}") || titulo.Contains(aluno)))
+                    if (!string.IsNullOrEmpty(alvo) && titulo.Contains(alvo))
                     {
                         charts.Item(i).Delete();
-                        Console.WriteLine($"🗑 Gráfico do aluno {aluno} apagado!");
-                        return;
+                        return "Gráfico apagado.";
                     }
 
-                    // Apagar gráfico das médias
-                    if (caption.Contains("#tag#medias#") ||
-                        titulo.Contains("médias") || titulo.Contains("media"))
+                    if (titulo.Contains("médias") || titulo.Contains("media"))
                     {
                         charts.Item(i).Delete();
-                        Console.WriteLine("🗑 Gráfico das médias apagado!");
-                        return;
+                        return "Gráfico apagado.";
                     }
                 }
 
-                Console.WriteLine("⚠ Nenhum gráfico correspondente encontrado.");
+                return "Nenhum gráfico encontrado.";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro ao apagar gráfico: " + ex.Message);
+                return "Erro ao apagar gráfico.";
             }
         }
 
 
-        public static void ApagarTodosGraficos()
+        public static string ApagarTodosGraficos()
         {
             try
             {
@@ -889,15 +1066,15 @@ namespace ExcelVoiceAssistant
                 for (int i = charts.Count; i >= 1; i--)
                     charts.Item(i).Delete();
 
-                Console.WriteLine("🧹 Todos os gráficos foram apagados!");
+                return "Todos os gráficos apagados.";
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("❌ Erro ao apagar todos os gráficos: " + ex.Message);
+                return "Erro ao apagar todos.";
             }
         }
 
-        public static void OperacoesMatematicas(dynamic json)
+        public static string OperacoesMatematicas(dynamic json)
         {
             try
             {
@@ -918,11 +1095,10 @@ namespace ExcelVoiceAssistant
                         break;
                     }
                 }
-
                 if (colMedia == -1)
                 {
                     Console.WriteLine("⚠️ É necessário calcular a média primeiro.");
-                    return;
+                    return "É necessário calcular a média primeiro.";
                 }
 
                 int row = headerRow + 1;
@@ -941,31 +1117,31 @@ namespace ExcelVoiceAssistant
                     row++;
                 }
 
-                Console.WriteLine($"📊 Estatísticas: {aprovados} aprovados, {reprovados} reprovados, {acimaDe16} acima de 16 valores.");
+                string resultado = $"Aprovados: {aprovados}, Reprovados: {reprovados}, Acima de 16: {acimaDe16}, Total: {total}";
+                Console.WriteLine($"📊 Estatísticas: {resultado}");
+                return resultado;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("❌ Erro em Operações Matemáticas: " + ex.Message);
+                return "Erro em Operações Matemáticas: " + ex.Message;
             }
         }
-
-
-
-
-        // =====================================================
-        // GUARDAR RELATÓRIO
-        // =====================================================
-        public static void GuardarRelatorio()
+        public static string GuardarRelatorio()
         {
             try
             {
                 workbook.SaveAs(pathFinal);
                 Console.WriteLine("💾 Relatório guardado!");
+                return "Relatório guardado.";
             }
             catch (Exception ex)
             {
                 Console.WriteLine("❌ Erro ao guardar relatório: " + ex.Message);
+                return "Erro ao guardar relatório: " + ex.Message;
             }
         }
+
+
     }
 }
