@@ -83,6 +83,11 @@ rasa-env/
 .rasa/
 .rasa/*
 .rasa\cache/cache.db
+.rasa/
+.rasa/*
+.rasa/cache/
+.rasa/cache/*
+
 
 
 ###############################################
