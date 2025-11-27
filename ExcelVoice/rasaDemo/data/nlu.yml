@@ -100,12 +100,10 @@ nlu:
     - Atualiza as médias da turma
     - Faz o cálculo das médias
     - Adiciona a fórmula de média à folha
-
     - Calcula a média do aluno [João](aluno_nome)
     - Calcula a média da aluna [Maria](aluno_nome)
     - Quero saber a média da [Ana](aluno_nome)
     - Média da aluna [Daniela](aluno_nome)
-
     - Calcula a média da aluna [MARIA INÊS OLIVEIRA SILVA](aluno_nome)
     - Faz a média da aluna [ANA CATARINA FONSECA MARQUES](aluno_nome)
     - Média da aluna [MARIANA FIGUEIREDO MARQUES](aluno_nome)
@@ -118,7 +116,6 @@ nlu:
     - Média da aluna [EDUARDA VILAS BOAS CASTRO](aluno_nome)
     - Média da aluna [ELIANA PERES BETTENCOURT](aluno_nome)
     - Calcula a média do aluno [DIOGO GABRIEL ANTUNES CANHOTO](aluno_nome)
-
     - Qual é a média da aluna [MARIA INÊS OLIVEIRA SILVA](aluno_nome)?
     - Diz-me a média do aluno [JOSÉ PEDRO ALMEIDA ABREU](aluno_nome)
     - Media do aluno [DIOGO GABRIEL ANTUNES CANHOTO](aluno_nome)
@@ -250,6 +247,17 @@ nlu:
     - Gera gráfico de barras do aluno [256789](aluno_numero)
     - Mostra as notas do aluno [123456](aluno_numero) em barras
     - Gráfico de barras do aluno número [778899](aluno_numero)
+    - Faz gráfico de barras para o aluno [João Silva](aluno_nome)
+    - Cria gráfico de barras para a aluna [Maria de Fátima](aluno_nome)
+    - Quero o gráfico do aluno [Ana Rita](aluno_nome)
+    - Mostra o gráfico das notas da aluna [Catarina Sousa](aluno_nome)
+    - Gera gráfico de barras para o aluno chamado [Miguel Costa](aluno_nome)
+    - Mostra gráfico do aluno [João Silva](aluno_nome) número [123456](aluno_numero)
+    - Quero o gráfico da aluna [Maria de Fátima](aluno_nome) com número [987654](aluno_numero)
+    - Gera gráfico para o aluno [Pedro Miguel](aluno_nome) número [111222](aluno_numero)
+    - Quero ver as notas do aluno [João](aluno_nome) em barras
+    - Mostra o desempenho em barras do aluno número [888111](aluno_numero)
+    - Cria o gráfico em barras do aluno chamado [Tiago](aluno_nome)
 
 
 
@@ -300,16 +308,35 @@ nlu:
 
 
 # ----------------------------------------------------
+# ----------------------------------------------------
 - intent: operacoes_matematicas
   examples: |
+    # Perguntas simples
     - Conta o número de alunos aprovados
+    - Conta os aprovados
+    - Quantos aprovados existem?
+    - Quantos alunos passaram?
     - Conta os reprovados
-    - Quantos alunos têm nota acima de 16?
-    - Calcula a percentagem de aprovação
-    - Quantos tiraram mais de 18 valores?
-    - Faz a soma das médias
-    - Percentagem de alunos com média positiva
+    - Quantos reprovaram?
     - Quantos ficaram abaixo de 10?
+    - Quantos alunos têm nota acima de 16?
+    - Quantos têm média superior a 18?
+    - Quantos tiraram mais de 18 valores?
+    - Percentagem de alunos com média positiva
+    - Qual é a percentagem de aprovação?
+    - Qual a média geral da turma?
+    - Faz a soma das médias
+    - Dá-me estatísticas gerais da turma
+    - Mostra estatísticas gerais
+    - Estatísticas da turma
+    - Quais são as estatísticas da turma?
+    - Mostra o resumo da turma
+    - Faz o resumo estatístico da turma
+    - Resumo geral das notas
+    - Gera estatísticas da turma
+    - Quero o relatório estatístico da turma
+    - Estatísticas globais
+
 
 
 
