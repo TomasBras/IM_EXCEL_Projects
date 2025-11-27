@@ -14,11 +14,11 @@ intents:
   - inserir_colunas
   - gerar_grafico_turma
   - gerar_grafico_barras_aluno
+  - gerar_grafico_perguntas_t2
   - atualizar_notas
   - guardar_ficheiro
   - operacoes_matematicas
   - atualizar_valores
-  - apagar_grafico
   - apagar_todos_graficos
   - fallback
 
@@ -132,6 +132,7 @@ responses:
         • Inserir coluna Situação
         • Criar gráfico da turma
         • Criar gráfico de barras de um aluno
+        • Apagar todos os gráficos
         • Atualizar notas
         • Guardar ficheiro
         • Operações matemáticas
@@ -174,11 +175,11 @@ actions:
   - action_inserir_colunas
   - action_gerar_grafico_turma
   - action_gerar_grafico_barras_aluno
+  - action_gerar_grafico_perguntas_t2
   - action_atualizar_notas
   - action_guardar_ficheiro
   - action_operacoes_matematicas
   - action_atualizar_valores
-  - action_apagar_grafico
   - action_apagar_todos_graficos
 
 

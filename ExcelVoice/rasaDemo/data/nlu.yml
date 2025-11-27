@@ -45,10 +45,10 @@ lookup:
     - Miguel Costa
 
 regex:
-  aluno: "[0-9]{4,12}"
-  valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
-  grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
-  pergunta: "(pergunta|questao|q)[ ]?[1-5]|teste ?1|teste ?2"
+  aluno: '[0-9]{4,12}'
+  valores: '[0-9]+([.,][0-9]+)?([ :;,e][0-9]+([.,][0-9]+)?)*'
+  grafico: '(linha|linhas|barra|barras|m[eé]dia|medias|media|evolu[cç][aã]o|desempenho)'
+  pergunta: '(pergunta|quest[aã]o|q)\s?[1-5]|teste\s?1|teste\s?2'
 
 
 
@@ -141,17 +141,22 @@ nlu:
     - Gráfico de barras do aluno número [778899](aluno)
     - Faz gráfico do aluno de mecanográfico [445566](aluno)
 
-
-# ----------------------------------------------------
-
-- intent: apagar_grafico
+- intent: gerar_grafico_perguntas_t2
   examples: |
-    - Apaga o gráfico do [João](aluno)
-    - Apaga o gráfico da [Maria](aluno)
-    - Elimina o gráfico do [Pedro](aluno)
-    - Remove o gráfico das médias
-    - Apaga o gráfico das médias da turma
-    - Eliminar gráfico das médias
+    - Gera gráfico das perguntas do teste 2
+    - Faz um gráfico das perguntas do T2
+    - Cria gráfico das questões do teste dois
+    - Quero comparar as perguntas do teste 2
+    - Mostra gráfico das perguntas T2_P1 a T2_P5
+    - Gráfico das perguntas do T2
+    - Mostra a média das perguntas do teste 2
+    - Quero ver a média de cada pergunta do teste 2
+    - Mostra a média das questões do teste 2
+    - Mostra a média de T2_P1 a T2_P5
+    - Mostra o gráfico com a média das perguntas do teste 2
+    - Mostra a média das perguntas por gráfico
+    - Média das perguntas do teste 2
+
 
 - intent: apagar_todos_graficos
   examples: |

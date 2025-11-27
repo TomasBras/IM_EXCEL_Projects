@@ -511,8 +511,13 @@
                             aluno: aluno_barras
                         };
                         break;
+                    
+                    // 7. Gráfico das perguntas do Teste 2 
+                    case 'gerar_grafico_perguntas_t2':
+                        message = { intent: 'gerar_grafico_perguntas_t2' };
+                        break;
 
-                    // 7. Atualizar notas
+                    // 8. Atualizar notas
                     case 'atualizar_notas':
                         let aluno = '';
                         let notas = [];
@@ -523,24 +528,19 @@
                         message = { intent: 'atualizar_notas', aluno, notas };
                         break;
 
-                    // 8. Guardar ficheiro
+                    // 9. Guardar ficheiro
                     case 'guardar_ficheiro':
                         message = { intent: 'guardar_ficheiro' };
                         break;
 
-                    // 9. Operações matemáticas
+                    // 10. Operações matemáticas
                     case 'operacoes_matematicas':
                         message = { intent: 'operacoes_matematicas' };
                         break;
 
-                    // 10. Atualizar valores
+                    // 11. Atualizar valores
                     case 'atualizar_valores':
                         message = { intent: 'atualizar_valores' };
-                        break;
-
-                    // 11. Apagar gráfico
-                    case 'apagar_grafico':
-                        message = { intent: 'apagar_grafico' };
                         break;
 
                     // 12. Apagar todos gráficos

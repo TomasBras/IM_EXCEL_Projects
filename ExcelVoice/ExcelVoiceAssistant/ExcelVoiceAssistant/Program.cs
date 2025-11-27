@@ -157,10 +157,9 @@ namespace ExcelVoiceAssistant
                     case "gerar_grafico_barras_aluno":
                         ExcelController.GerarGraficoBarras(json);
                         return "Gráfico de barras do aluno gerado com sucesso.";
-
-                    case "apagar_grafico":
-                        ExcelController.ApagarGrafico(json);
-                        return "Gráfico apagado.";
+                    case "gerar_grafico_perguntas_t2":
+                        ExcelController.GerarGraficoPerguntasT2();
+                        return "Gráfico das médias das perguntas do Teste 2 criado com sucesso.";
                     case "apagar_todos_graficos":
                         ExcelController.ApagarTodosGraficos();
                         return "Gráficos apagados.";
@@ -198,7 +197,7 @@ namespace ExcelVoiceAssistant
         {
             return "<mmi:mmi xmlns:mmi=\"http://www.w3.org/2008/04/mmi-arch\" mmi:version=\"1.0\">" +
                     "<mmi:startRequest mmi:context=\"ctx-1\" mmi:requestId=\"text-1\" mmi:source=\"APPSPEECH\" mmi:target=\"IM\">" +
-                        "<mmi:data>" +
+                        "<mmi:data>" + msg +
                             "<emma:emma xmlns:emma=\"http://www.w3.org/2003/04/emma\" emma:version=\"1.0\">" +
                                 "<emma:interpretation emma:confidence=\"1\" emma:id=\"text-\" emma:medium=\"text\" emma:mode=\"command\" emma:start=\"0\">" +
                                     "<command>\"&lt;speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='pt-PT'&gt;&lt;p&gt;" + msg + "&lt;/p&gt;&lt;/speak&gt;\"</command>" +

@@ -831,55 +831,6 @@ namespace ExcelVoiceAssistant
                 Console.WriteLine("❌ Erro ao atualizar notas: " + ex.Message);
             }
         }
-
-
-
-
-        public static void ApagarGrafico(dynamic json)
-        {
-            try
-            {
-                string aluno = json.nlu.aluno != null ? json.nlu.aluno.ToString().ToLower() : "";
-
-                Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
-
-                for (int i = charts.Count; i >= 1; i--)
-                {
-                    Excel.Chart chart = charts.Item(i).Chart;
-
-                    if (!chart.HasTitle) continue;
-
-                    string caption = (chart.ChartTitle.Caption ?? "").ToLower();
-                    string titulo = (chart.ChartTitle.Text ?? "").ToLower();
-
-                    // Apagar gráfico do aluno
-                    if (!string.IsNullOrEmpty(aluno) &&
-                        (caption.Contains($"#tag#aluno#{aluno}") || titulo.Contains(aluno)))
-                    {
-                        charts.Item(i).Delete();
-                        Console.WriteLine($"🗑 Gráfico do aluno {aluno} apagado!");
-                        return;
-                    }
-
-                    // Apagar gráfico das médias
-                    if (caption.Contains("#tag#medias#") ||
-                        titulo.Contains("médias") || titulo.Contains("media"))
-                    {
-                        charts.Item(i).Delete();
-                        Console.WriteLine("🗑 Gráfico das médias apagado!");
-                        return;
-                    }
-                }
-
-                Console.WriteLine("⚠ Nenhum gráfico correspondente encontrado.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("❌ Erro ao apagar gráfico: " + ex.Message);
-            }
-        }
-
-
         public static void ApagarTodosGraficos()
         {
             try
@@ -949,6 +900,96 @@ namespace ExcelVoiceAssistant
             }
         }
 
+        public static void GerarGraficoPerguntasT2()
+{
+    try
+    {
+        var (headerRow, headerColNome) = EncontrarCabecalho();
+        Excel.Range used = sheet.UsedRange;
+
+        int firstCol = used.Column;
+        int lastCol = firstCol + used.Columns.Count - 1;
+
+        // Encontrar colunas T2_P1 ... T2_P5
+        Dictionary<string, int> perguntas = new Dictionary<string, int>();
+
+        for (int c = firstCol; c <= lastCol; c++)
+        {
+            string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+            if (titulo == null) continue;
+
+            if (titulo.Trim().StartsWith("T2_P"))
+            {
+                perguntas[titulo.Trim()] = c;
+            }
+        }
+
+        if (perguntas.Count == 0)
+        {
+            Console.WriteLine("❌ Nenhuma coluna T2_P encontrada.");
+            return;
+        }
+
+        // Ordenar T2_P1, T2_P2, ...
+        var ordenadas = perguntas.OrderBy(k => k.Key).ToList();
+
+        // Descobrir última linha com alunos
+        int lastRow = headerRow + 1;
+        while (sheet.Cells[lastRow, headerColNome].Value != null)
+            lastRow++;
+
+        int totalAlunos = lastRow - headerRow - 1;
+        if (totalAlunos <= 0)
+        {
+            Console.WriteLine("❌ Nenhum aluno encontrado.");
+            return;
+        }
+
+        // Calcular média de cada pergunta
+        List<double> medias = new List<double>();
+
+        foreach (var kv in ordenadas)
+        {
+            double soma = 0;
+            for (int r = headerRow + 1; r < lastRow; r++)
+            {
+                soma += Convert.ToDouble(sheet.Cells[r, kv.Value].Value2 ?? 0);
+            }
+
+            medias.Add(soma / totalAlunos);
+        }
+
+        // Criar gráfico
+        Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
+
+        double posY = charts.Count == 0
+            ? sheet.Rows[lastRow].Top + 30
+            : charts.Item(charts.Count).Top + charts.Item(charts.Count).Height + 40;
+
+        Excel.ChartObject chartObj = charts.Add(50, posY, 700, 400);
+        Excel.Chart chart = chartObj.Chart;
+
+        chart.ChartType = Excel.XlChartType.xlColumnClustered;
+        chart.HasTitle = true;
+        chart.ChartTitle.Text = "Médias das Perguntas do Teste 2 (T2_P1 a T2_P5)";
+
+        Excel.SeriesCollection sc = (Excel.SeriesCollection)chart.SeriesCollection();
+        Excel.Series s = sc.NewSeries();
+
+        s.Name = "Média";
+        s.Values = medias.ToArray();
+        s.XValues = ordenadas.Select(k => k.Key).ToArray();
+
+        chart.Axes(Excel.XlAxisType.xlValue).MinimumScale = 0;
+        chart.Axes(Excel.XlAxisType.xlValue).MaximumScale = 20;
+
+        Console.WriteLine("📊 Gráfico das médias das perguntas do Teste 2 criado com sucesso!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("❌ Erro ao gerar gráfico das perguntas: " + ex.Message);
+    }
+}
 
 
 

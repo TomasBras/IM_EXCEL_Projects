@@ -78,13 +78,11 @@ venv/
 env/
 .rasa_env/
 rasa-env/
-rasaDemo/.rasa\cache/
-.rasa\cache/
+.rasa
 # RASA cache
 .rasa/
 .rasa/*
 .rasa\cache/cache.db
-
 
 
 ###############################################
