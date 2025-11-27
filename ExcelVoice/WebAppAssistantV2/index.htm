@@ -516,10 +516,11 @@
                         break;
 
                     // -------------------------
-                    case 'gerar_grafico_barras_aluno':
+                   case 'gerar_grafico_barras_aluno':
                         message = {
                             intent: 'gerar_grafico_barras_aluno',
-                            aluno_numero: data.entities.find(e => e.entity === "aluno_numero")?.value || null
+                            aluno_numero: data.entities.find(e => e.entity === "aluno_numero")?.value || null,
+                            aluno_nome: data.entities.find(e => e.entity === "aluno_nome")?.value || null
                         };
                         break;
 
