@@ -24,7 +24,7 @@ namespace ExcelVoiceAssistant
         {
             string host = "localhost";
             string path = "/IM/USER1/APP";
-            string uri = $"wss://{host}:8005{path}"; 
+            string uri = $"wss://{host}:8005{path}";
 
             Console.WriteLine(" Conectando ao IM via WebSocket...");
 
@@ -55,7 +55,7 @@ namespace ExcelVoiceAssistant
             InicializarExcel();
 
             Console.WriteLine("💬 Aguardando mensagens do IM...");
-            await Task.Delay(-1); 
+            await Task.Delay(-1);
         }
 
         // =========================================================

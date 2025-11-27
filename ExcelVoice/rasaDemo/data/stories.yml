@@ -20,7 +20,7 @@ stories:
       - action: utter_identificar_melhoria
       - action: action_identificar_melhoria
 
-  - story: Inserir coluna Situação
+  - story: Inserir colunas
     steps:
       - intent: inserir_colunas
       - action: utter_inserir_colunas
@@ -50,7 +50,7 @@ stories:
       - action: utter_gerar_grafico_perguntas_t2
       - action: action_gerar_grafico_perguntas_t2
 
-  - story: Criar tabela dinâmica (Pivot Table)
+  - story: Criar tabela dinâmica
     steps:
       - intent: criar_pivot_table
       - action: utter_criar_pivot_table
@@ -74,7 +74,7 @@ stories:
       - action: utter_operacoes_matematicas
       - action: action_operacoes_matematicas
 
-  - story: Atualizar valores específicos
+  - story: Atualizar valores
     steps:
       - intent: atualizar_valores
       - action: utter_atualizar_valores

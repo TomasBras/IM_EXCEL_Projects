@@ -80,36 +80,58 @@ namespace ExcelVoiceAssistant
                 for (int c = firstCol; c <= lastCol; c++)
                 {
                     var valor = sheet.Cells[r, c].Value;
-                    if (valor != null && IgualIgnorandoAcentos(valor.ToString(), "nome"))
+
+                    if (valor == null) continue;
+
+                    string texto = valor.ToString();
+
+                    // 🔥 Normalizador universal
+                    string clean = new string(
+                        texto.Normalize(NormalizationForm.FormD)
+                        .Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
+                        .ToArray()
+                    )
+                    .Replace("\u00A0", " ") // remove non-breaking space
+                    .Replace("\t", " ")     // remove tabs
+                    .Replace("  ", " ")
+                    .Trim()
+                    .ToLower();
+
+                    if (clean == "nome")
                         return (r, c);
                 }
             }
 
-            throw new Exception("Cabeçalho Nome não encontrado.");
+            throw new Exception("Cabeçalho Nome não encontrado (mesmo após limpeza).");
         }
 
 
-        // =====================================================
-        // CALCULAR MÉDIA DINAMICAMENTE
-
         public static string CalcularMedia(dynamic json)
         {
-            if (json.nlu.entities == null)
-                return CalcularMediaTurma();
-
-            string nome = null;
-            string numero = null;
-
-            foreach (var e in json.nlu.entities)
+            try
             {
-                if (e.entity == "aluno_nome") nome = e.value.ToString();
-                if (e.entity == "aluno_numero") numero = e.value.ToString();
+                // o intent vem sempre em nlu.intent
+                string intent = json.nlu.intent.ToString();
+
+                // ENTIDADES VÊM COMO CAMPOS DIRETOS (não dentro de "entities")
+                string nome = json.nlu.aluno_nome != null ? json.nlu.aluno_nome.ToString() : null;
+                string numero = json.nlu.aluno_numero != null ? json.nlu.aluno_numero.ToString() : null;
+
+                // 🎯 Se o nome existir → calcula só para esse aluno
+                if (!string.IsNullOrEmpty(nome))
+                    return CalcularMediaAluno(nome);
+
+                // 🎯 Se houver número mecanográfico
+                if (!string.IsNullOrEmpty(numero))
+                    return CalcularMediaAlunoNumero(numero);
+
+                // Caso contrário → média da turma
+                return CalcularMediaTurma();
             }
-
-            if (!string.IsNullOrEmpty(nome)) return CalcularMediaAluno(nome);
-            if (!string.IsNullOrEmpty(numero)) return CalcularMediaAlunoNumero(numero);
-
-            return CalcularMediaTurma();
+            catch
+            {
+                return CalcularMediaTurma();
+            }
         }
 
 
@@ -161,10 +183,12 @@ namespace ExcelVoiceAssistant
                 workbook.Save();
                 return "Média turma calculada.";
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("❌ ERRO CalcularMediaTurma: " + ex.Message);
                 return "Erro ao calcular média turma.";
             }
+
         }
 
 

@@ -1,7 +1,7 @@
 version: "3.1"
 
 ############################################
-#              INTENTS                    
+#                INTENTS                   
 ############################################
 intents:
   - greet
@@ -21,12 +21,12 @@ intents:
   - operacoes_matematicas
   - atualizar_valores
   - apagar_todos_graficos
-  - criar_pivot_table        # <-- ADICIONADO
+  - criar_pivot_table
   - fallback
 
 
 ############################################
-#                ENTIDADES                
+#                ENTIDADES                 
 ############################################
 entities:
   - aluno_nome
@@ -41,7 +41,7 @@ entities:
 
 
 ############################################
-#                  SLOTS                  
+#                  SLOTS                   
 ############################################
 slots:
 
@@ -103,7 +103,7 @@ slots:
 
 
 ############################################
-#              RESPONSES                  
+#                RESPONSES                 
 ############################################
 responses:
 
@@ -177,15 +177,15 @@ responses:
   utter_apagar_todos_graficos:
     - text: "A apagar todos os gráficos da folha..."
 
-  utter_criar_pivot_table:          # <-- ADICIONADO
+  utter_criar_pivot_table:
     - text: "A criar a tabela dinâmica (Pivot Table)..."
 
-  utter_default:
-    - text: "Não percebi, pode repetir?"
+  utter_fallback:
+    - text: "Não percebi, pode repetir por favor?"
 
 
 ############################################
-#               ACTIONS                   
+#                ACTIONS                   
 ############################################
 actions:
   - action_calcular_media
@@ -200,13 +200,13 @@ actions:
   - action_guardar_ficheiro
   - action_operacoes_matematicas
   - action_atualizar_valores
-  - action_criar_pivot_table      # <-- ADICIONADO
+  - action_criar_pivot_table
   - action_apagar_todos_graficos
   - action_default_fallback
 
 
 ############################################
-#             SESSION CONFIG              
+#             SESSION CONFIG               
 ############################################
 session_config:
   session_expiration_time: 60

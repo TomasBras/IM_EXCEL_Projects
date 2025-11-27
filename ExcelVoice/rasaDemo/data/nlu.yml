@@ -52,6 +52,7 @@ lookup:
 # REGEX ENTIDADES
 ##############################################
 regex:
+  aluno_nome: "\\b([A-ZÀ-Ý][a-zà-ÿ]+(?: [A-ZÀ-Ý][a-zà-ÿ]+){0,5})\\b"
   aluno_numero: "[0-9]{4,12}"
   valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
   grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
@@ -96,14 +97,37 @@ nlu:
     - Calcula a média da turma
     - Faz a média de todos os alunos
     - Cria a fórmula de média
+    - Atualiza as médias da turma
+    - Faz o cálculo das médias
+    - Adiciona a fórmula de média à folha
+
     - Calcula a média do aluno [João](aluno_nome)
     - Calcula a média da aluna [Maria](aluno_nome)
     - Quero saber a média da [Ana](aluno_nome)
-    - Calcula a média do aluno número [123456](aluno_numero)
-    - Adiciona a fórmula de média à folha
-    - Atualiza as médias da turma
-    - Faz o cálculo das médias
     - Média da aluna [Daniela](aluno_nome)
+
+    - Calcula a média da aluna [MARIA INÊS OLIVEIRA SILVA](aluno_nome)
+    - Faz a média da aluna [ANA CATARINA FONSECA MARQUES](aluno_nome)
+    - Média da aluna [MARIANA FIGUEIREDO MARQUES](aluno_nome)
+    - Calcula a média da aluna [MARIA JOÃO MATOS FORTE](aluno_nome)
+    - Quero saber a média da aluna [DANIELA INÊS FERREIRA TELES](aluno_nome)
+    - Média da aluna [JOANA MONTEIRO MOREIRA DA SILVA](aluno_nome)
+    - Faz a média da aluna [JOANA GOMES INÁCIO](aluno_nome)
+    - Calcula a média do aluno [JOSÉ PEDRO ALMEIDA ABREU](aluno_nome)
+    - Média do aluno [JOSÉ PEDRO GASPAR BARBOSA](aluno_nome)
+    - Média da aluna [EDUARDA VILAS BOAS CASTRO](aluno_nome)
+    - Média da aluna [ELIANA PERES BETTENCOURT](aluno_nome)
+    - Calcula a média do aluno [DIOGO GABRIEL ANTUNES CANHOTO](aluno_nome)
+
+    - Qual é a média da aluna [MARIA INÊS OLIVEIRA SILVA](aluno_nome)?
+    - Diz-me a média do aluno [JOSÉ PEDRO ALMEIDA ABREU](aluno_nome)
+    - Media do aluno [DIOGO GABRIEL ANTUNES CANHOTO](aluno_nome)
+    - Quero calcular a média da aluna [JOANA GOMES INÁCIO](aluno_nome)
+    - Podes calcular a média da aluna [ANA CATARINA FONSECA MARQUES](aluno_nome)?
+    - Qual a média do aluno número [123456](aluno_numero)
+    - Média do aluno número [987654](aluno_numero)
+    - Calcula a média do aluno número [456123](aluno_numero)
+
 
 
 
@@ -170,7 +194,14 @@ nlu:
     - Criar coluna referente ao teste [2](teste_numero)
     - Adicionar coluna de nota do teste [3](teste_numero)
     - Adicionar uma coluna do teste [4](teste_numero)
-
+    - Adiciona a coluna [Observações](coluna_nome)
+    - Insere a coluna [Comentários](coluna_nome)
+    - Cria a coluna [Situação Final](coluna_nome)
+    - Quero criar a coluna [Desempenho](coluna_nome)
+    - Insere a [coluna do teste](coluna_teste) [1](teste_numero)
+    - Cria a [coluna de teste](coluna_teste) para o [teste 2](teste_numero)
+    - Quero adicionar a [coluna do teste](coluna_teste) [3](teste_numero)
+    - Adiciona uma [coluna de teste](coluna_teste) para o [teste 4](teste_numero)
 
 
 # ----------------------------------------------------

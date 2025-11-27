@@ -462,8 +462,6 @@
         mmiCli_1 = new MMIClient(null, mmi_fusion + "SPEECHIN");
 
 
-
-
         function sendMMI(final_transcript) {
 
             var obj = new Object();
@@ -475,88 +473,108 @@
 
                 switch (data.intent.name) {
 
-                    // 1. Calcular média
+                    // -------------------------
                     case 'calcular_media':
                         message = {
                             intent: 'calcular_media',
-                            entities: data.entities   // <-- ENSA ENVIAR AS ENTIDADES!
+                            aluno_nome: data.entities.find(e => e.entity === "aluno_nome")?.value || null,
+                            aluno_numero: data.entities.find(e => e.entity === "aluno_numero")?.value || null
                         };
                         break;
 
-
-                    // 2. Destacar aprovados
+                    // -------------------------
                     case 'destacar_aprovados_reprovados':
                         message = { intent: 'destacar_aprovados_reprovados' };
                         break;
 
-                    // 3. Identificar melhorias
+                    // -------------------------
                     case 'identificar_melhoria':
                         message = { intent: 'identificar_melhoria' };
+                        break;
 
-                    // 4. Inserir colunas
+                    // -------------------------
                     case 'inserir_colunas':
-                        message = { intent: 'inserir_colunas' };
-
-
-                    // 5. GRÁFICO DA TURMA (NOVO)
-                    case 'gerar_grafico_turma':
-                        message = { intent: 'gerar_grafico_turma' };
-
-                    // 6. GRÁFICO DE BARRAS DO ALUNO (NOVO)
-                    case 'gerar_grafico_barras_aluno':
-                        let aluno_barras = '';
-                        for (let e of data.entities)
-                            if (e.entity === 'aluno') aluno_barras = e.value;
-
                         message = {
-                            intent: 'gerar_grafico_barras_aluno',
-                            aluno: aluno_barras
+                            intent: 'inserir_colunas',
+                            coluna_nome: data.entities.find(e => e.entity === "coluna_nome")?.value || null,
+                            coluna_teste: data.entities.find(e => e.entity === "coluna_teste")?.value || null,
+                            teste_numero: data.entities.find(e => e.entity === "teste_numero")?.value || null
                         };
                         break;
 
-                    // 7. Gráfico das perguntas do Teste 2
+                    // -------------------------
+                    case 'inserir_perguntas':
+                        message = {
+                            intent: 'inserir_perguntas',
+                            teste_numero: data.entities.find(e => e.entity === "teste_numero")?.value || null
+                        };
+                        break;
+
+                    // -------------------------
+                    case 'gerar_grafico_turma':
+                        message = { intent: 'gerar_grafico_turma' };
+                        break;
+
+                    // -------------------------
+                    case 'gerar_grafico_barras_aluno':
+                        message = {
+                            intent: 'gerar_grafico_barras_aluno',
+                            aluno_numero: data.entities.find(e => e.entity === "aluno_numero")?.value || null
+                        };
+                        break;
+
+                    // -------------------------
                     case 'gerar_grafico_perguntas_t2':
                         message = { intent: 'gerar_grafico_perguntas_t2' };
                         break;
 
-                    // 8. Atualizar notas
+                    // -------------------------
                     case 'atualizar_notas':
-                        let aluno = '';
-                        let notas = [];
-                        for (let e of data.entities) {
-                            if (e.entity === 'aluno') aluno = e.value;
-                            if (e.entity === 'valores') notas.push(e.value);
-                        }
-                        message = { intent: 'atualizar_notas', aluno, notas };
+                        message = {
+                            intent: 'atualizar_notas',
+                            aluno_numero: data.entities.find(e => e.entity === "aluno_numero")?.value || null,
+                            pergunta: data.entities.find(e => e.entity === "pergunta")?.value || null,
+                            valores: data.entities.filter(e => e.entity === "valores").map(e => e.value)
+                        };
+                        break;
 
-                    // 9. Guardar ficheiro
+                    // -------------------------
                     case 'guardar_ficheiro':
-                        message = { intent: 'guardar_ficheiro' };
+                        message = {
+                            intent: 'guardar_ficheiro',
+                            nome_ficheiro: data.entities.find(e => e.entity === "nome_ficheiro")?.value || null
+                        };
+                        break;
 
-
-                    // 10. Operações matemáticas
+                    // -------------------------
                     case 'operacoes_matematicas':
                         message = { intent: 'operacoes_matematicas' };
-  
-                    // 11. Atualizar valores
+                        break;
+
+                    // -------------------------
                     case 'atualizar_valores':
-                        message = { intent: 'atualizar_valores' };
+                        message = {
+                            intent: 'atualizar_valores',
+                            valores: data.entities.filter(e => e.entity === "valores").map(e => e.value)
+                        };
+                        break;
 
-
-                    // 12. Apagar todos gráficos
+                    // -------------------------
                     case 'apagar_todos_graficos':
                         message = { intent: 'apagar_todos_graficos' };
+                        break;
 
-
+                    // -------------------------
                     case 'greet':
                     case 'ask_how_are_you':
                     case 'respond_how_am_i':
                     case 'helper':
                         message = { intent: data.intent.name };
                         break;
-                    // 14. FALLBACK
+
+                    // -------------------------
                     default:
-                        console.warn("Intent não reconhecida: ", data.intent.name);
+                        console.warn("Intent não reconhecida:", data.intent.name);
                         return;
                 }
 
