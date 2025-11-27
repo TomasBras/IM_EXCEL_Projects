@@ -1228,6 +1228,11 @@ namespace ExcelVoiceAssistant
         {
             try
             {
+                // Texto original decodificado do Base64
+                string texto = json.text != null
+                    ? Encoding.UTF8.GetString(Convert.FromBase64String(json.text.ToString())).ToLower()
+                    : "";
+
                 var (headerRow, headerCol) = EncontrarCabecalho();
 
                 Excel.Range used = sheet.UsedRange;
@@ -1245,38 +1250,160 @@ namespace ExcelVoiceAssistant
                         break;
                     }
                 }
-                if (colMedia == -1)
-                {
-                    Console.WriteLine("⚠️ É necessário calcular a média primeiro.");
-                    return "É necessário calcular a média primeiro.";
-                }
 
+                if (colMedia == -1)
+                    return "É necessário calcular a média primeiro.";
+
+                // Ler todas as médias
                 int row = headerRow + 1;
-                int aprovados = 0, reprovados = 0, acimaDe16 = 0, total = 0;
+                List<double> medias = new List<double>();
 
                 while (sheet.Cells[row, headerCol].Value != null)
                 {
                     double media = sheet.Cells[row, colMedia].Value2 ?? 0;
-
-                    if (media >= 10) aprovados++;
-                    else reprovados++;
-
-                    if (media >= 16) acimaDe16++;
-
-                    total++;
+                    medias.Add(media);
                     row++;
                 }
 
-                string resultado = $"Aprovados: {aprovados}, Reprovados: {reprovados}, Acima de 16: {acimaDe16}, Total: {total}";
-                Console.WriteLine($"📊 Estatísticas: {resultado}");
-                return resultado;
+                int total = medias.Count;
+                if (total == 0) return "Nenhum aluno encontrado.";
+
+                // Estatísticas
+                int aprovados = medias.Count(m => m >= 10);
+                int reprovados = medias.Count(m => m < 10);
+                int acima16 = medias.Count(m => m >= 16);
+                int acima18 = medias.Count(m => m >= 18);
+                double mediaGeral = medias.Average();
+                double melhor = medias.Max();
+                double pior = medias.Min();
+                double mediana = medias.OrderBy(v => v).ToList()[total / 2];
+                double desvio = Math.Sqrt(medias.Sum(v => Math.Pow(v - mediaGeral, 2)) / total);
+                double percAprov = (double)aprovados / total * 100;
+
+                // --------------------------------------------------------
+                // 🔍 DETEÇÃO: É pedido geral?
+                // --------------------------------------------------------
+                bool pedidoGeral =
+                    texto.Contains("estatistic") ||
+                    texto.Contains("resumo") ||
+                    texto.Contains("tabela") ||
+                    texto.Contains("relatório") ||
+                    texto.Contains("estatísticas gerais");
+
+                // --------------------------------------------------------
+                // 📌 CASO 1: PEDIDOS ESPECÍFICOS → escrever 1 linha no Excel
+                // --------------------------------------------------------
+                if (!pedidoGeral)
+                {
+                    int writeRow = headerRow + total + 3;
+                    int col = headerCol;
+
+                    string titulo = "";
+                    string valor = "";
+
+                    if (texto.Contains("aprovad"))
+                    {
+                        titulo = "Aprovados";
+                        valor = aprovados.ToString();
+                    }
+                    else if (texto.Contains("reprovad"))
+                    {
+                        titulo = "Reprovados";
+                        valor = reprovados.ToString();
+                    }
+                    else if (texto.Contains("acima de 16") || texto.Contains("superior a 16"))
+                    {
+                        titulo = "Média ≥ 16";
+                        valor = acima16.ToString();
+                    }
+                    else if (texto.Contains("acima de 18") || texto.Contains("superior a 18"))
+                    {
+                        titulo = "Média ≥ 18";
+                        valor = acima18.ToString();
+                    }
+                    else if (texto.Contains("percentagem") || texto.Contains("aprovação"))
+                    {
+                        titulo = "Percentagem aprovação";
+                        valor = $"{percAprov:0.0}%";
+                    }
+                    else if (texto.Contains("média geral") || texto.Contains("media geral"))
+                    {
+                        titulo = "Média geral";
+                        valor = $"{mediaGeral:0.00}";
+                    }
+                    else if (texto.Contains("soma das médias"))
+                    {
+                        titulo = "Soma das médias";
+                        valor = $"{medias.Sum():0.00}";
+                    }
+                    else
+                    {
+                        return "Não consegui interpretar a pergunta.";
+                    }
+
+                    // Escrever no Excel
+                    sheet.Cells[writeRow, col].Value2 = titulo;
+                    sheet.Cells[writeRow, col + 1].Value2 = valor;
+
+                    Excel.Range r = sheet.Range[
+                        sheet.Cells[writeRow, col],
+                        sheet.Cells[writeRow, col + 1]
+                    ];
+                    r.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                    r.Columns.AutoFit();
+
+                    return $"{titulo}: {valor}";
+                }
+
+
+                // --------------------------------------------------------
+                // 📌 CASO 2: ESTATÍSTICAS GERAIS → criar tabela completa
+                // --------------------------------------------------------
+                int startTableRow = headerRow + total + 3;
+                int baseCol = headerCol;
+
+                sheet.Cells[startTableRow, baseCol].Value2 = "ESTATÍSTICAS GERAIS DA TURMA";
+                sheet.Cells[startTableRow, baseCol].Font.Bold = true;
+
+                int r2 = startTableRow + 1;
+
+                void Linha(string nome, object val)
+                {
+                    sheet.Cells[r2, baseCol].Value2 = nome;
+                    sheet.Cells[r2, baseCol + 1].Value2 = val;
+                    r2++;
+                }
+
+                Linha("Total de alunos", total);
+                Linha("Aprovados", aprovados);
+                Linha("Reprovados", reprovados);
+                Linha("Percentagem de aprovação", $"{percAprov:0.0}%");
+                Linha("Média geral", $"{mediaGeral:0.00}");
+                Linha("Melhor nota", $"{melhor:0.00}");
+                Linha("Pior nota", $"{pior:0.00}");
+                Linha("Mediana", $"{mediana:0.00}");
+                Linha("Desvio padrão", $"{desvio:0.00}");
+                Linha("Notas ≥ 16", acima16);
+                Linha("Notas ≥ 18", acima18);
+
+                Excel.Range range = sheet.Range[
+                    sheet.Cells[startTableRow, baseCol],
+                    sheet.Cells[r2 - 1, baseCol + 1]
+                ];
+
+                range.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                range.Columns.AutoFit();
+
+                return "Tabela de estatísticas gerais criada no Excel!";
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ Erro em Operações Matemáticas: " + ex.Message);
                 return "Erro em Operações Matemáticas: " + ex.Message;
             }
         }
+
+
+
         public static string GuardarRelatorio()
         {
             try

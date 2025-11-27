@@ -2,129 +2,141 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>CASA VIVA + Assistant</title>
+    <title>Excel AI Assistant</title>
 
-
+    <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            --indicator-color: black;
-            background: #fff; /*radial-gradient(#fff 75%, var(--indicator-color));*/
-            min-height: 100vh;
-            color: burlywood;
-            font-family: Poppins;
-            margin: 0;
-            padding: 0;
-        }
+   <style>
+    body {
+        background: #f3f4f6; /* Cinza claro suave */
+        color: #333;
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
-        .mic {
-            width: 150px;
-        }
+    /* HEADER */
+    header {
+        padding: 20px 40px;
+        background: #ffffff;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #168022; /* Azul Office pastel */
+        border-bottom: 1px solid #d6d6d6;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
 
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            border-radius: 10px;
-            background-color: #f0f0f0;
-        }
+    /* MAIN CONTAINER */
+    .bottomNav {
+        position: fixed;
+        bottom: 2%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        .responseText {
-            border: solid 2px #8ea7cf;
-            margin: 2%;
-            color: #41683a;
-        }
+    #response {
+        background: #ffffff;
+        padding: 15px 25px;
+        border-radius: 14px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+        border: 1px solid #e1e1e1;
+        font-size: 18px;
+        max-width: 80%;
+        min-height: 30px;
+        transition: 0.3s;
+        color: #0f5132;
+    }
 
-        .bottomNav {
-            position: absolute;
-            bottom: 2%;
-            width: 95%;
-        }
+    /* MIC AREA */
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        gap: 30px;
+        width: 75%;
+        padding: 22px;
+        margin-top: 25px;
+        background: #ffffff;
+        border-radius: 22px;
+        border: 1px solid #e4e4e7;
+        box-shadow: 0px 4px 16px rgba(0,0,0,0.06);
+    }
 
-        .recognized {
-            font-size: x-large;
-        }
-    </style>
-</head>
-<body>
-    <h1 style="background-color: #4F5D73; margin: 0;">CASA VIVA + Assistant</h1>
-    <!-- <p>Click the button below and start speaking.</p>
-     <button id="start-btn">Start</button>
-     -->
+    .mic {
+        width: 140px;
+        cursor: pointer;
+        transition: 0.3s;
+        filter: drop-shadow(0px 0px 6px rgba(0, 150, 90, 0.25));
+    }
 
+    .mic:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0px 0px 10px rgba(0, 150, 90, 0.35));
+    }
 
-
-
-
-
-    <div class="bottomNav">
-        <div id="response" class="" style="">d</div>
-        <div class="container" style="border: solid 2px #4F5D73;margin: 2%;">
-
-            <svg class="mic" id="mic" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                 viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
-            <style type="text/css">
-                .st01 {
-                    fill: #4F5D73;
-                }
-
-                .st1 {
-                    opacity: 0.2;
-                }
-
-                .st2 {
-                    fill: #231F20;
-                }
-
-                .st3 {
-                    fill: #4F5D73;
-                }
-
-                .st4 {
-                    fill: #FFFFFF;
-                }
+    /* TRANSCRIPT TEXT */
+    #transcript {
+        font-size: 22px;
+        color: #168022; /* Azul suave */
+        letter-spacing: 0.5px;
+        font-weight: 400;
+    }
 </style>
-            <defs>
-            <filter id="f1" x="0" y="0">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
-         </filter>
-       </defs>
+
+</head>
+
+<body>
+
+<header>Excel AI Assistant</header>
+
+<div class="bottomNav">
+    <div id="response"></div>
+
+    <div class="container">
+
+        <!-- MICROPHONE SVG (unchanged) -->
+        <svg class="mic" id="mic" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             x="0px" y="0px" viewBox="0 0 100 100" xml:space="preserve">
+            <style type="text/css">
+                .st0{fill:#168022;}
+                .st1{opacity:0.2;}
+                .st2{fill:#1e293b;}
+                .st3{fill:#168022;}
+                .st4{fill:#ffffff;}
+            </style>
             <circle class="st0" cx="50" cy="50" r="32" />
             <g id="Layer_1" transform="translate(18,18)">
-            <g class="st1">
-            <path class="st2" d="M32,41.5c3.3,0,6-2.7,6-6v-18c0-3.3-2.7-6-6-6s-6,2.7-6,6v18C26,38.8,28.7,41.5,32,41.5z" />
-         </g>
-            <g class="st1">
-            <path class="st2" d="M32,48.2c-7.2,0-13-5.8-13-13v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8c0,5.5,4.5,10,10,10
-               s10-4.5,10-10v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8C45,42.4,39.2,48.2,32,48.2z" />
-         </g>
-            <g class="st1">
-            <path class="st2" d="M32,55c-0.8,0-1.5-0.7-1.5-1.5v-6c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v6C33.5,54.3,32.8,55,32,55z" />
-         </g>
-            <g class="st1">
-            <path class="st2" d="M37,56H27c-0.8,0-1.5-0.7-1.5-1.5S26.2,53,27,53h10c0.8,0,1.5,0.7,1.5,1.5S37.8,56,37,56z" />
-         </g>
-            <path class="st3" d="M32,39.5c3.3,0,6-2.7,6-6v-18c0-3.3-2.7-6-6-6s-6,2.7-6,6v18C26,36.8,28.7,39.5,32,39.5z" />
-            <path class="st4" d="M32,46.2c-7.2,0-13-5.8-13-13v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8c0,5.5,4.5,10,10,10
-             s10-4.5,10-10v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8C45,40.4,39.2,46.2,32,46.2z" />
-            <path class="st4" d="M32,53c-0.8,0-1.5-0.7-1.5-1.5v-6c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v6C33.5,52.3,32.8,53,32,53z" />
-            <path class="st4" d="M37,54H27c-0.8,0-1.5-0.7-1.5-1.5S26.2,51,27,51h10c0.8,0,1.5,0.7,1.5,1.5S37.8,54,37,54z" />
-       </g>
-       </svg>
+                <g class="st1">
+                    <path class="st2" d="M32,41.5c3.3,0,6-2.7,6-6v-18c0-3.3-2.7-6-6-6s-6,2.7-6,6v18C26,38.8,28.7,41.5,32,41.5z"/>
+                </g>
+                <g class="st1">
+                    <path class="st2" d="M32,48.2c-7.2,0-13-5.8-13-13v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8c0,5.5,4.5,10,10,10
+                        s10-4.5,10-10v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8C45,42.4,39.2,48.2,32,48.2z"/>
+                </g>
+                <g class="st1">
+                    <path class="st2" d="M32,55c-0.8,0-1.5-0.7-1.5-1.5v-6c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v6C33.5,54.3,32.8,55,32,55z"/>
+                </g>
+                <g class="st1">
+                    <path class="st2" d="M37,56H27c-0.8,0-1.5-0.7-1.5-1.5S26.2,53,27,53h10c0.8,0,1.5,0.7,1.5,1.5S37.8,56,37,56z"/>
+                </g>
+                <path class="st3" d="M32,39.5c3.3,0,6-2.7,6-6v-18c0-3.3-2.7-6-6-6s-6,2.7-6,6v18C26,36.8,28.7,39.5,32,39.5z" />
+                <path class="st4" d="M32,46.2c-7.2,0-13-5.8-13-13v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8c0,5.5,4.5,10,10,10
+                    s10-4.5,10-10v-3.8c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v3.8C45,40.4,39.2,46.2,32,46.2z"/>
+                <path class="st4" d="M32,53c-0.8,0-1.5-0.7-1.5-1.5v-6c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5v6C33.5,52.3,32.8,53,32,53z"/>
+                <path class="st4" d="M37,54H27c-0.8,0-1.5-0.7-1.5-1.5S26.2,51,27,51h10c0.8,0,1.5,0.7,1.5,1.5S37.8,54,37,54z"/>
+            </g>
+        </svg>
 
-            <div class="recognized" style="display: inline; vertical-align: center; top: auto;bottom: auto; width: 600px;" id="transcript"></div>
-
-        </div>
+        <div id="transcript"></div>
     </div>
-
-
-
-    <div id="energy"></div>
-
+</div>
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@latest/dist/svg.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.7/dist/bundle.min.js"></script>
@@ -256,7 +268,7 @@
         const transcriptDiv = document.getElementById('transcript');
         const energyDiv = document.getElementById('energy');
 
-        var firstSent = "Diga 'Casa Viva' para comecar a falar.";
+        var firstSent = "Como posso ajudar no Excel? Descubra todos os comandos que temos disponíveis.";
         transcriptDiv.textContent = firstSent;
         var resetfunc;
 

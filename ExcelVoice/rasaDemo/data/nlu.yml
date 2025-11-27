@@ -300,16 +300,35 @@ nlu:
 
 
 # ----------------------------------------------------
+# ----------------------------------------------------
 - intent: operacoes_matematicas
   examples: |
+    # Perguntas simples
     - Conta o número de alunos aprovados
+    - Conta os aprovados
+    - Quantos aprovados existem?
+    - Quantos alunos passaram?
     - Conta os reprovados
-    - Quantos alunos têm nota acima de 16?
-    - Calcula a percentagem de aprovação
-    - Quantos tiraram mais de 18 valores?
-    - Faz a soma das médias
-    - Percentagem de alunos com média positiva
+    - Quantos reprovaram?
     - Quantos ficaram abaixo de 10?
+    - Quantos alunos têm nota acima de 16?
+    - Quantos têm média superior a 18?
+    - Quantos tiraram mais de 18 valores?
+    - Percentagem de alunos com média positiva
+    - Qual é a percentagem de aprovação?
+    - Qual a média geral da turma?
+    - Faz a soma das médias
+    - Dá-me estatísticas gerais da turma
+    - Mostra estatísticas gerais
+    - Estatísticas da turma
+    - Quais são as estatísticas da turma?
+    - Mostra o resumo da turma
+    - Faz o resumo estatístico da turma
+    - Resumo geral das notas
+    - Gera estatísticas da turma
+    - Quero o relatório estatístico da turma
+    - Estatísticas globais
+
 
 
 
