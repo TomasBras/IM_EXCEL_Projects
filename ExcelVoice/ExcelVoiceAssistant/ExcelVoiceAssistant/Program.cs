@@ -71,8 +71,8 @@ namespace ExcelVoiceAssistant
                 //excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM\IM_EXCEL_NODEPENDENCIES\ETP.xlsx";
                 //excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM\IM_EXCEL_NODEPENDENCIES\Relatorio_Final.xlsx";
 
-                excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\ETP.xlsx";
-                excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\Relatorio_Final.xlsx";
+                excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+                excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
                 if (!File.Exists(excelPathBase))
                 {
