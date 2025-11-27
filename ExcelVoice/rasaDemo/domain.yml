@@ -12,6 +12,7 @@ intents:
   - destacar_aprovados_reprovados
   - identificar_melhoria
   - inserir_colunas
+  - inserir_perguntas
   - gerar_grafico_turma
   - gerar_grafico_barras_aluno
   - gerar_grafico_perguntas_t2
@@ -20,7 +21,9 @@ intents:
   - operacoes_matematicas
   - atualizar_valores
   - apagar_todos_graficos
+  - criar_pivot_table        # <-- ADICIONADO
   - fallback
+
 
 ############################################
 #                ENTIDADES                
@@ -29,9 +32,13 @@ entities:
   - aluno_nome
   - aluno_numero
   - valores
-  - nome_ficheiro
   - pergunta
   - grafico
+  - nome_ficheiro
+  - teste_numero
+  - coluna_nome
+  - coluna_teste
+
 
 ############################################
 #                  SLOTS                  
@@ -44,13 +51,6 @@ slots:
     mappings:
       - type: from_entity
         entity: aluno_nome
-        intent: calcular_media
-      - type: from_entity
-        entity: aluno_nome
-        intent: atualizar_valores
-      - type: from_entity
-        entity: aluno_nome
-        intent: apagar_grafico
 
   aluno_numero:
     type: text
@@ -58,13 +58,6 @@ slots:
     mappings:
       - type: from_entity
         entity: aluno_numero
-        intent: atualizar_notas
-      - type: from_entity
-        entity: aluno_numero
-        intent: gerar_grafico_barras_aluno
-      - type: from_entity
-        entity: aluno_numero
-        intent: calcular_media
 
   valores:
     type: text
@@ -72,7 +65,6 @@ slots:
     mappings:
       - type: from_entity
         entity: valores
-        intent: atualizar_notas
 
   nome_ficheiro:
     type: text
@@ -80,7 +72,6 @@ slots:
     mappings:
       - type: from_entity
         entity: nome_ficheiro
-        intent: guardar_ficheiro
 
   pergunta:
     type: text
@@ -88,10 +79,28 @@ slots:
     mappings:
       - type: from_entity
         entity: pergunta
-        intent: atualizar_notas
+
+  teste_numero:
+    type: text
+    influence_conversation: false
+    mappings:
       - type: from_entity
-        entity: pergunta
-        intent: atualizar_valores
+        entity: teste_numero
+
+  coluna_nome:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_nome
+
+  coluna_teste:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_teste
+
 
 ############################################
 #              RESPONSES                  
@@ -114,16 +123,20 @@ responses:
   utter_helper:
     - text: |
         Aqui estão os comandos que pode usar:
-        • Calcular média
-        • Destacar aprovados
-        • Identificar melhoria
-        • Inserir coluna Situação
-        • Criar gráfico da turma
-        • Criar gráfico de barras de um aluno
-        • Apagar todos os gráficos
-        • Atualizar notas
-        • Guardar ficheiro
-        • Operações matemáticas
+        • Calcular média  
+        • Destacar aprovados  
+        • Identificar melhoria  
+        • Inserir colunas  
+        • Inserir perguntas  
+        • Criar gráfico da turma  
+        • Criar gráfico de barras de um aluno  
+        • Criar gráfico do teste 2  
+        • Criar tabela dinâmica (Pivot Table)  
+        • Atualizar notas  
+        • Atualizar valores  
+        • Operações matemáticas  
+        • Guardar ficheiro  
+        • Apagar todos os gráficos  
 
   utter_calcular_media:
     - text: "A calcular a média..."
@@ -135,13 +148,19 @@ responses:
     - text: "A identificar melhorias significativas..."
 
   utter_inserir_colunas:
-    - text: "A inserir coluna Situação..."
+    - text: "A inserir colunas solicitadas..."
+
+  utter_inserir_perguntas:
+    - text: "A inserir perguntas no teste..."
 
   utter_gerar_grafico_turma:
     - text: "A gerar o gráfico da turma..."
 
   utter_gerar_grafico_barras_aluno:
     - text: "A gerar o gráfico de barras do aluno {aluno_numero}..."
+
+  utter_gerar_grafico_perguntas_t2:
+    - text: "A gerar o gráfico das perguntas do teste 2..."
 
   utter_atualizar_notas:
     - text: "A atualizar as notas do aluno {aluno_numero}..."
@@ -150,19 +169,20 @@ responses:
     - text: "A guardar o ficheiro como {nome_ficheiro}..."
 
   utter_operacoes_matematicas:
-    - text: "A executar a operação pedida..."
+    - text: "A executar a operação solicitada..."
 
   utter_atualizar_valores:
-    - text: "A atualizar o valor da pergunta {pergunta}..."
-
-  utter_apagar_grafico:
-    - text: "A apagar o gráfico solicitado..."
+    - text: "A atualizar os valores das perguntas..."
 
   utter_apagar_todos_graficos:
     - text: "A apagar todos os gráficos da folha..."
 
+  utter_criar_pivot_table:          # <-- ADICIONADO
+    - text: "A criar a tabela dinâmica (Pivot Table)..."
+
   utter_default:
     - text: "Não percebi, pode repetir?"
+
 
 ############################################
 #               ACTIONS                   
@@ -172,6 +192,7 @@ actions:
   - action_destacar_aprovados_reprovados
   - action_identificar_melhoria
   - action_inserir_colunas
+  - action_inserir_perguntas
   - action_gerar_grafico_turma
   - action_gerar_grafico_barras_aluno
   - action_gerar_grafico_perguntas_t2
@@ -179,8 +200,10 @@ actions:
   - action_guardar_ficheiro
   - action_operacoes_matematicas
   - action_atualizar_valores
+  - action_criar_pivot_table      # <-- ADICIONADO
   - action_apagar_todos_graficos
   - action_default_fallback
+
 
 ############################################
 #             SESSION CONFIG              

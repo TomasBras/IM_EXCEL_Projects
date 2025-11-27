@@ -26,6 +26,12 @@ rules:
       - action: utter_inserir_colunas
       - action: action_inserir_colunas
 
+  - rule: Inserir perguntas
+    steps:
+      - intent: inserir_perguntas
+      - action: utter_inserir_perguntas
+      - action: action_inserir_perguntas
+
   - rule: Gerar gráfico da turma
     steps:
       - intent: gerar_grafico_turma
@@ -37,11 +43,18 @@ rules:
       - intent: gerar_grafico_barras_aluno
       - action: utter_gerar_grafico_barras_aluno
       - action: action_gerar_grafico_barras_aluno
-  
+
   - rule: Gerar gráfico das perguntas do Teste 2
     steps:
       - intent: gerar_grafico_perguntas_t2
+      - action: utter_gerar_grafico_perguntas_t2
       - action: action_gerar_grafico_perguntas_t2
+
+  - rule: Criar tabela dinâmica (Pivot Table)
+    steps:
+      - intent: criar_pivot_table
+      - action: utter_criar_pivot_table
+      - action: action_criar_pivot_table
 
   - rule: Atualizar notas
     steps:
@@ -70,6 +83,7 @@ rules:
   - rule: Apagar todos os gráficos
     steps:
       - intent: apagar_todos_graficos
+      - action: utter_apagar_todos_graficos
       - action: action_apagar_todos_graficos
 
   - rule: Saudação

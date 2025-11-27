@@ -10,6 +10,10 @@ entities:
   - pergunta
   - grafico
   - nome_ficheiro
+  - teste_numero
+  - coluna_nome
+  - coluna_teste
+
 
 ##############################################
 # LOOKUP: ALUNOS MAIS COMUNS
@@ -43,6 +47,7 @@ lookup:
     - Bruno Fernandes
     - Miguel Costa
 
+
 ##############################################
 # REGEX ENTIDADES
 ##############################################
@@ -50,12 +55,26 @@ regex:
   aluno_numero: "[0-9]{4,12}"
   valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
   grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
-  pergunta: "(pergunta|questao|q)[ ]?[1-5]|teste ?1|teste ?2"
+
+  # PERGUNTAS (P1, pergunta 1, q1, questao 2, p12)
+  pergunta: "(p|pergunta|questao|q)[ ]?([1-9][0-9]?)"
+
+  # TESTES (teste 1, teste 12)
+  teste_numero: "teste ?([0-9]{1,2})"
+
+  # COLUNA TESTE
+  coluna_teste: "coluna (do|de) teste"
+
+  # NOMES DE COLUNA FLEXÍVEIS
+  coluna_nome: "[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9 _-]{1,39}"
+
 
 ##############################################
 # INTENTS
 ##############################################
 nlu:
+
+
 
 # ----------------------------------------------------
 - intent: greet
@@ -68,6 +87,8 @@ nlu:
     - Olá, tudo bem?
     - Olá, pronto para trabalhar no Excel?
     - Como estás hoje?
+
+
 
 # ----------------------------------------------------
 - intent: calcular_media
@@ -82,12 +103,9 @@ nlu:
     - Adiciona a fórmula de média à folha
     - Atualiza as médias da turma
     - Faz o cálculo das médias
-    - Calcula a média da aluna [Daniela](aluno_nome)
-    - Calcula a média da aluna [Daniela Inês](aluno_nome)
-    - Calcula a média da aluna [Daniela Inês Ferreira Teles](aluno_nome)
-    - Faz a média para a aluna [Daniela](aluno_nome)
     - Média da aluna [Daniela](aluno_nome)
-    - A média da aluna [Daniela](aluno_nome)
+
+
 
 # ----------------------------------------------------
 - intent: destacar_aprovados_reprovados
@@ -100,6 +118,8 @@ nlu:
     - Marca em verde os alunos com média acima de 10
     - Realça os reprovados com vermelho
 
+
+
 # ----------------------------------------------------
 - intent: identificar_melhoria
   examples: |
@@ -107,9 +127,25 @@ nlu:
     - Mostra quem melhorou mais de 20%
     - Analisa a evolução entre os testes
     - Quem teve maior progresso?
-    - Calcula a variação entre as avaliações
-    - Quais alunos apresentaram maior melhoria?
-    - Verifica quem melhorou mais
+    - Quem ainda pode melhorar?
+    - Mostra melhoria possível
+    - Identifica alunos com melhoria possível
+    - Verifica quem tem MP
+    - Quem ainda consegue obter positiva?
+    - Quais alunos precisam melhorar para passar?
+    - Mostrar alunos com potencial de melhoria
+    - Ver MP
+    - Mostrar MP
+    - Identificar MP
+    - Marca MP
+    - Quem está em MP?
+    - Melhoria posivel
+    - Melhoria prosivel
+    - Melhoria pocivel
+    - Ver quem pode recuperar
+    - Quem ainda consegue recuperar?
+
+
 
 # ----------------------------------------------------
 - intent: inserir_colunas
@@ -118,8 +154,40 @@ nlu:
     - Cria uma nova coluna chamada Situação
     - Adiciona uma coluna para Aprovado ou Reprovado
     - Cria coluna com o estado de cada aluno
-    - Adiciona uma coluna com “Aprovado” e “Reprovado”
     - Insere coluna extra com resultados finais
+    - Adiciona a coluna Observações
+    - Criar coluna Comentários
+    - Cria uma coluna chamada Faltas
+    - Adiciona a coluna Nota Final
+    - Adiciona uma coluna com o nome [Estado](coluna_nome)
+    - Criar coluna chamada [Feedback](coluna_nome)
+    - Quero criar a coluna [Descrição](coluna_nome)
+    - Inserir uma coluna nova
+    - Inserir uma coluna no fim
+    - Inserir coluna antes da média
+    - Adicionar coluna depois das notas 
+    - Criar coluna referente ao teste [1](teste_numero)
+    - Criar coluna referente ao teste [2](teste_numero)
+    - Adicionar coluna de nota do teste [3](teste_numero)
+    - Adicionar uma coluna do teste [4](teste_numero)
+
+
+
+# ----------------------------------------------------
+- intent: inserir_perguntas
+  examples: |
+    - Adiciona perguntas ao teste [1](teste_numero)
+    - Criar perguntas do teste [2](teste_numero)
+    - Adicionar perguntas para o teste [3](teste_numero)
+    - Cria as perguntas do teste [4](teste_numero)
+    - Adicionar P1 a P5 para o teste [5](teste_numero)
+    - Criar questões do teste [6](teste_numero)
+    - Adiciona as perguntas do teste [7](teste_numero)
+    - Criar questões para o teste [8](teste_numero)
+    - Adiciona perguntas no teste [9](teste_numero)
+    - Criar P1 até P5 do teste [10](teste_numero)
+
+
 
 # ----------------------------------------------------
 - intent: gerar_grafico_turma
@@ -129,11 +197,10 @@ nlu:
     - Mostra a evolução da turma
     - Cria gráfico de desempenho da turma
     - Gera gráfico de evolução entre testes
-    - Faz gráfico de linhas da turma
-    - Gráfico de desempenho geral
-    - Quero ver a evolução geral da turma
     - Mostra evolução das médias
     - Cria gráfico com as médias
+
+
 
 # ----------------------------------------------------
 - intent: gerar_grafico_barras_aluno
@@ -142,10 +209,10 @@ nlu:
     - Cria gráfico para o número mecanográfico [298451](aluno_numero)
     - Mostra gráfico do aluno com número [140233](aluno_numero)
     - Gera gráfico de barras do aluno [256789](aluno_numero)
-    - Quero ver o gráfico do aluno número [987654](aluno_numero)
     - Mostra as notas do aluno [123456](aluno_numero) em barras
     - Gráfico de barras do aluno número [778899](aluno_numero)
-    - Faz gráfico do aluno de mecanográfico [445566](aluno_numero)
+
+
 
 # ----------------------------------------------------
 - intent: gerar_grafico_perguntas_t2
@@ -155,14 +222,10 @@ nlu:
     - Cria gráfico das questões do teste dois
     - Quero comparar as perguntas do teste 2
     - Mostra gráfico das perguntas T2_P1 a T2_P5
-    - Gráfico das perguntas do T2
-    - Mostra a média das perguntas do teste 2
-    - Quero ver a média de cada pergunta do teste 2
-    - Mostra a média das questões do teste 2
-    - Mostra a média de T2_P1 a T2_P5
     - Mostra o gráfico com a média das perguntas do teste 2
-    - Mostra a média das perguntas por gráfico
     - Média das perguntas do teste 2
+
+
 
 # ----------------------------------------------------
 - intent: apagar_todos_graficos
@@ -172,16 +235,19 @@ nlu:
     - Remove todos os gráficos da folha
     - Elimina todos os gráficos
 
+
+
 # ----------------------------------------------------
 - intent: atualizar_notas
   examples: |
-    - Atualiza a [pergunta 1](pergunta) do aluno número [107447](aluno_numero) para [3](valores)
-    - Muda a [pergunta 3](pergunta) do aluno [108370](aluno_numero) para [4.5](valores)
-    - Atualiza o [teste 1](pergunta) do aluno [94716](aluno_numero) para [12](valores)
-    - Define o [teste 2](pergunta) do aluno número [108522](aluno_numero) como [15](valores)
-    - Atualiza todas as perguntas do teste 2 do aluno [107447](aluno_numero) para [2 3 4 5 1](valores)
-    - Altera a [questão 4](pergunta) do aluno [109830](aluno_numero) para [2.5](valores)
-    - Muda a nota da [pergunta 2](pergunta) para o aluno [107447](aluno_numero)
+    - Atualiza a nota da [pergunta 1](pergunta) do aluno número [107447](aluno_numero) para [3](valores)
+    - Muda a nota da [pergunta 3](pergunta) do aluno [108370](aluno_numero) para [4.5](valores)
+    - Atualiza a nota do [teste 1](teste_numero) do aluno [94716](aluno_numero) para [12](valores)
+    - Define a nota do [teste 2](teste_numero) do aluno número [108522](aluno_numero) como [15](valores)
+    - Atualiza todas as notas do teste 2 do aluno [107447](aluno_numero) para [2 3 4 5 1](valores)
+    - Altera a nota da [questão 4](pergunta) do aluno [109830](aluno_numero) para [2.5](valores)
+
+
 
 # ----------------------------------------------------
 - intent: guardar_ficheiro
@@ -191,6 +257,8 @@ nlu:
     - Grava o ficheiro como [Notas_Turma.xlsx](nome_ficheiro)
     - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
     - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
+
+
 
 # ----------------------------------------------------
 - intent: operacoes_matematicas
@@ -204,15 +272,37 @@ nlu:
     - Percentagem de alunos com média positiva
     - Quantos ficaram abaixo de 10?
 
+
+
 # ----------------------------------------------------
 - intent: atualizar_valores
   examples: |
-    - Atualiza a cotação da [pergunta 2](pergunta) para o aluno [João](aluno_nome)
-    - Muda a cotação da [pergunta 3](pergunta) para [Maria](aluno_nome)
-    - Atualiza o valor da [pergunta 1](pergunta) para toda a turma
-    - Altera o valor da [pergunta 5](pergunta) para o aluno [Pedro](aluno_nome)
-    - Atualiza a pontuação da [pergunta 4](pergunta) para a turma inteira
-    - Modifica o valor da [pergunta 2](pergunta) para todos os alunos
+    - Atualiza a cotação da [pergunta 2](pergunta)
+    - Muda o valor da [pergunta 3](pergunta) para [4](valores)
+    - Altera a pontuação máxima da [questão 1](pergunta)
+    - Define a cotação da [pergunta 5](pergunta) como [2](valores)
+    - Atualiza os valores das perguntas do teste 2
+    - Muda a cotação das perguntas do teste 1 para [2 3 5 4 1](valores)
+    - Modifica o valor máximo da [pergunta 4](pergunta)
+    - Alterar valor das perguntas do teste
+
+
+- intent: criar_pivot_table
+  examples: |
+    - Cria uma tabela dinâmica
+    - Gera uma pivot table
+    - Adiciona uma tabela dinâmica
+    - Quero uma pivot table
+    - Cria uma pivot com os dados da turma
+    - Faz uma tabela dinâmica das médias
+    - Gera uma pivot das notas
+    - Monta uma tabela dinâmica com os testes
+    - Cria uma tabela dinâmica por aluno
+    - Fazer pivot table
+    - Criar pivot table das perguntas
+    - Adicionar pivot table
+    - Preciso de uma tabela dinâmica dos resultados
+
 
 # ----------------------------------------------------
 - intent: helper
@@ -225,6 +315,8 @@ nlu:
     - Quais são as tuas funcionalidades?
     - Diz-me o que sabes fazer
 
+
+
 # ----------------------------------------------------
 - intent: ask_how_are_you
   examples: |
@@ -233,6 +325,8 @@ nlu:
     - Estás bem?
     - Como vai?
     - Está tudo bem?
+
+
 
 # ----------------------------------------------------
 - intent: respond_how_am_i
@@ -244,6 +338,8 @@ nlu:
     - Estou mais ou menos
     - Estou excelente
     - Tudo ótimo comigo
+
+
 
 # ----------------------------------------------------
 - intent: fallback
