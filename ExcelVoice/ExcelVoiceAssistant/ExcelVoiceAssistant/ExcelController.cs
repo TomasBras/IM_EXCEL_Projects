@@ -15,11 +15,11 @@ namespace ExcelVoiceAssistant
         private static Excel.Workbook workbook;
         private static Excel.Worksheet sheet;
 
-        //private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
-        //private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
+        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
+        private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
 
-        private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
-        private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
+        //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+        //private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
         // =====================================================
         // Ligar Excel já aberto
@@ -448,7 +448,7 @@ namespace ExcelVoiceAssistant
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // 📌 Encontrar colunas de testes dinamicamente
+                // Encontrar colunas de testes automaticamente
                 List<(int col, int num)> testes = new List<(int col, int num)>();
 
                 for (int c = firstCol; c <= lastCol; c++)
@@ -456,7 +456,6 @@ namespace ExcelVoiceAssistant
                     string titulo = sheet.Cells[headerRow, c].Value?.ToString();
                     if (titulo == null) continue;
 
-                    // Aceita: Teste 1, teste1, Teste   3
                     var match = System.Text.RegularExpressions.Regex.Match(
                         titulo.ToLower().Replace(" ", ""),
                         @"teste(\d+)"
@@ -467,12 +466,10 @@ namespace ExcelVoiceAssistant
                 }
 
                 if (testes.Count < 2)
-                    return "São necessários pelo menos dois testes para comparar melhoria.";
+                    return "São necessários pelo menos dois testes para calcular melhoria.";
 
-                // Ordena Teste 1, Teste 2, Teste 3...
                 testes = testes.OrderBy(t => t.num).ToList();
 
-                // Colunas relevantes
                 int colPenultimo = testes[testes.Count - 2].col;
                 int colUltimo = testes[testes.Count - 1].col;
 
@@ -492,9 +489,10 @@ namespace ExcelVoiceAssistant
                 {
                     colMelhoria = lastCol + 1;
                     sheet.Cells[headerRow, colMelhoria].Value2 = "Melhoria Real";
+                    lastCol++;
                 }
 
-                // Comparar melhoria aluno a aluno
+                // Processar aluno a aluno
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerColNome].Value != null)
@@ -502,22 +500,55 @@ namespace ExcelVoiceAssistant
                     double penultimo = Convert.ToDouble(sheet.Cells[row, colPenultimo].Value2 ?? 0);
                     double ultimo = Convert.ToDouble(sheet.Cells[row, colUltimo].Value2 ?? 0);
 
-                    if (ultimo > penultimo)
-                        sheet.Cells[row, colMelhoria].Value2 = "Melhorou";
+                    double diferenca = ultimo - penultimo;
+                    double percent = (penultimo != 0)
+                        ? (diferenca / penultimo) * 100
+                        : (diferenca > 0 ? 100 : 0);
+
+                    // Mensagem
+                    string texto;
+
+                    if (diferenca > 0)
+                    {
+                        texto = $"Melhorou (+{Math.Round(diferenca, 2)} valores, +{Math.Round(percent, 1)}%)";
+
+                        var cell = sheet.Cells[row, colMelhoria];
+                        cell.Value2 = texto;
+
+                        // Verde
+                        cell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGreen);
+                    }
+                    else if (diferenca < 0)
+                    {
+                        texto = $"Piorou ({Math.Round(diferenca, 2)} valores, {Math.Round(percent, 1)}%)";
+
+                        var cell = sheet.Cells[row, colMelhoria];
+                        cell.Value2 = texto;
+
+                        // Vermelho
+                        cell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCoral);
+                    }
                     else
-                        sheet.Cells[row, colMelhoria].Value2 = "";
+                    {
+                        texto = $"Igual (0)";
+
+                        var cell = sheet.Cells[row, colMelhoria];
+                        cell.Value2 = texto;
+
+                        // Cinza
+                        cell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray);
+                    }
 
                     row++;
                 }
 
-                return "Melhoria real calculada dinamicamente.";
+                return "Melhoria Real atualizada com detalhes e cores.";
             }
             catch (Exception ex)
             {
                 return "Erro em Melhoria Real: " + ex.Message;
             }
         }
-
 
         public static string MelhoriaPossivel()
         {
@@ -538,8 +569,7 @@ namespace ExcelVoiceAssistant
                     if (titulo == null) continue;
 
                     var m = System.Text.RegularExpressions.Regex.Match(
-                        titulo.ToLower().Replace(" ", ""),
-                        @"teste(\d+)"
+                        titulo.ToLower().Replace(" ", ""), @"teste(\d+)"
                     );
 
                     if (m.Success)
@@ -550,12 +580,10 @@ namespace ExcelVoiceAssistant
                     return "São necessários pelo menos dois testes para calcular MP.";
 
                 colTestes = colTestes.OrderBy(c => c).ToList();
-
                 int colUltimoTeste = colTestes.Last();
 
                 // Encontrar coluna média
                 int colMedia = -1;
-
                 for (int c = firstCol; c <= lastCol; c++)
                 {
                     string titulo = sheet.Cells[headerRow, c].Value?.ToString();
@@ -571,7 +599,6 @@ namespace ExcelVoiceAssistant
 
                 // Criar coluna MP se não existir
                 int colMP = -1;
-
                 for (int c = firstCol; c <= lastCol; c++)
                 {
                     string titulo = sheet.Cells[headerRow, c].Value?.ToString();
@@ -586,6 +613,26 @@ namespace ExcelVoiceAssistant
                 {
                     colMP = lastCol + 1;
                     sheet.Cells[headerRow, colMP].Value2 = "MP";
+                    lastCol++;
+                }
+
+                // Criar coluna Nota Necessária se não existir
+                int colNotaNecessaria = -1;
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo != null && IgualIgnorandoAcentos(titulo, "nota necessária"))
+                    {
+                        colNotaNecessaria = c;
+                        break;
+                    }
+                }
+
+                if (colNotaNecessaria == -1)
+                {
+                    colNotaNecessaria = lastCol + 1;
+                    sheet.Cells[headerRow, colNotaNecessaria].Value2 = "Nota Necessária";
+                    lastCol++;
                 }
 
                 // Calcular MP aluno a aluno
@@ -597,24 +644,29 @@ namespace ExcelVoiceAssistant
 
                     if (mediaAtual >= 10)
                     {
-                        // Já aprovado → sem MP
                         sheet.Cells[row, colMP].Value2 = "";
+                        sheet.Cells[row, colNotaNecessaria].Value2 = "—";
                         row++;
                         continue;
                     }
 
-                    // Calcular soma dos testes EXCETO o último
+                    // Calcular soma dos testes exceto o último
                     double soma = 0;
-
                     foreach (int col in colTestes.Take(colTestes.Count - 1))
                         soma += Convert.ToDouble(sheet.Cells[row, col].Value2 ?? 0);
 
                     int n = colTestes.Count;
 
-                    // Nota necessária no último teste
+                    // Nota necessária para média >= 10
                     double notaNecessaria = 10 * n - soma;
 
-                    // Se for possível com nota ≤20 → MP
+                    // Preencher coluna Nota Necessária
+                    if (notaNecessaria > 20)
+                        sheet.Cells[row, colNotaNecessaria].Value2 = ">20";
+                    else
+                        sheet.Cells[row, colNotaNecessaria].Value2 = Math.Round(notaNecessaria, 2);
+
+                    // Preencher MP
                     if (notaNecessaria <= 20)
                         sheet.Cells[row, colMP].Value2 = "MP";
                     else
@@ -623,7 +675,7 @@ namespace ExcelVoiceAssistant
                     row++;
                 }
 
-                return "Melhoria possível calculada dinamicamente.";
+                return "Melhoria possível e nota necessária calculadas dinamicamente.";
             }
             catch (Exception ex)
             {

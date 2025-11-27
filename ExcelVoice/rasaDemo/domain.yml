@@ -1,7 +1,7 @@
 version: "3.1"
 
 ############################################
-#                INTENTS                   
+#                 INTENTS                    
 ############################################
 intents:
   - greet
@@ -27,7 +27,7 @@ intents:
 
 
 ############################################
-#                ENTIDADES                 
+#                 ENTIDADES                  
 ############################################
 entities:
   - aluno_nome
@@ -42,7 +42,7 @@ entities:
 
 
 ############################################
-#                  SLOTS                   
+#                   SLOTS                    
 ############################################
 slots:
 
@@ -104,7 +104,7 @@ slots:
 
 
 ############################################
-#                RESPONSES                 
+#                 RESPONSES                  
 ############################################
 responses:
 
@@ -124,27 +124,27 @@ responses:
   utter_helper:
     - text: |
         Aqui estão os comandos que pode usar:
-        • Calcular média  
-        • Destacar aprovados  
-        • Identificar melhoria  
-        • Inserir colunas  
-        • Inserir perguntas  
-        • Criar gráfico da turma  
-        • Criar gráfico de barras de um aluno  
-        • Criar gráfico do teste 2  
-        • Criar tabela dinâmica (Pivot Table)  
-        • Atualizar notas  
-        • Atualizar valores  
-        • Operações matemáticas  
-        • Guardar ficheiro  
-        • Apagar todos os gráficos  
+        • Calcular média 
+        • Destacar aprovados 
+        • Identificar melhoria 
+        • Inserir colunas 
+        • Inserir perguntas 
+        • Criar gráfico da turma 
+        • Criar gráfico de barras de um aluno 
+        • Criar gráfico do teste 2 
+        • Criar tabela dinâmica (Pivot Table) 
+        • Atualizar notas 
+        • Atualizar valores 
+        • Operações matemáticas 
+        • Guardar ficheiro 
+        • Apagar todos os gráficos 
 
   utter_calcular_media:
     - text: "A calcular a média..."
 
   utter_destacar_aprovados_reprovados:
     - text: "Destacando aprovados e reprovados..."
-  
+ 
   utter_melhoria_real:
     - text: "A identificar os alunos que melhoraram..."
 
@@ -189,7 +189,7 @@ responses:
 
 
 ############################################
-#                ACTIONS                   
+#                 ACTIONS                    
 ############################################
 actions:
   - action_calcular_media
@@ -211,7 +211,7 @@ actions:
 
 
 ############################################
-#             SESSION CONFIG               
+#              SESSION CONFIG                
 ############################################
 session_config:
   session_expiration_time: 60
