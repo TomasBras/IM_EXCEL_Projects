@@ -111,7 +111,7 @@ namespace ExcelVoiceAssistant
                 dynamic json = JsonConvert.DeserializeObject(com);
                 if (json.nlu == null) return;
 
-                string intent = json.nlu.intent;
+                string intent = json.nlu.intent.ToString();
                 Console.WriteLine($"🎯 Intent recebido: {intent}");
 
                 string resposta = ExecutarComando(intent, json);
@@ -141,8 +141,11 @@ namespace ExcelVoiceAssistant
                     case "inserir_colunas":
                         return ExcelController.InserirSituacao();
 
-                    case "identificar_melhoria":
-                        return ExcelController.IdentificarMelhoria();
+                    case "melhoria_real":
+                        return ExcelController.MelhoriaReal();
+
+                    case "melhoria_possivel":
+                        return ExcelController.MelhoriaPossivel();
 
                     case "operacoes_matematicas":
                         return ExcelController.OperacoesMatematicas(json);
@@ -166,6 +169,7 @@ namespace ExcelVoiceAssistant
                         return ExcelController.AtualizarNotas(json);
 
                     default:
+                        Console.WriteLine("Intent não reconhecida:", intent);
                         return "Comando não reconhecido.";
                 }
             }

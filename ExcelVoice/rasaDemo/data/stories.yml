@@ -14,11 +14,18 @@ stories:
       - action: utter_destacar_aprovados_reprovados
       - action: action_destacar_aprovados_reprovados
 
-  - story: Identificar alunos com melhoria significativa
+  - story: Melhoria Real
     steps:
-      - intent: identificar_melhoria
-      - action: utter_identificar_melhoria
-      - action: action_identificar_melhoria
+      - intent: melhoria_real
+      - action: utter_melhoria_real
+      - action: action_melhoria_real
+
+  - story: Melhoria Possivel
+    steps:
+      - intent: melhoria_possivel
+      - action: utter_melhoria_possivel
+      - action: action_melhoria_possivel
+
 
   - story: Inserir colunas
     steps:

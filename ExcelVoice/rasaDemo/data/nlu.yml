@@ -145,29 +145,37 @@ nlu:
 
 
 # ----------------------------------------------------
-- intent: identificar_melhoria
+- intent: melhoria_real
   examples: |
-    - Identifica os alunos com melhoria significativa
-    - Mostra quem melhorou mais de 20%
-    - Analisa a evolução entre os testes
+    - Quem melhorou?
+    - Mostra quem melhorou
+    - Quem melhorou mais de 20%
+    - Mostra quem evoluiu
     - Quem teve maior progresso?
-    - Quem ainda pode melhorar?
-    - Mostra melhoria possível
-    - Identifica alunos com melhoria possível
-    - Verifica quem tem MP
-    - Quem ainda consegue obter positiva?
-    - Quais alunos precisam melhorar para passar?
-    - Mostrar alunos com potencial de melhoria
+    - Quem evoluiu mais?
+    - Analisa a evolução entre os testes
+    - Melhoria significativa
+    - Mostrar alunos com evolução
+    - Quem teve evolução positiva?
+    - Qual aluno melhorou?
+
+- intent: melhoria_possivel
+  examples: |
     - Ver MP
     - Mostrar MP
-    - Identificar MP
-    - Marca MP
+    - Quem tem MP?
     - Quem está em MP?
+    - Quem pode recuperar?
+    - Quem ainda pode recuperar?
+    - Quem ainda consegue obter positiva?
+    - Mostra melhoria possível
+    - Melhoria possível
     - Melhoria posivel
     - Melhoria prosivel
     - Melhoria pocivel
-    - Ver quem pode recuperar
-    - Quem ainda consegue recuperar?
+    - Ver quem consegue recuperar
+    - Alunos que ainda podem passar
+    - Quem ainda tem hipótese?
 
 
 
