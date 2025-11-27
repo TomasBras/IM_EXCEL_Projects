@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ExcelVoice",
+    "\\ExcelVoice\\ExcelVoiceAssistant",
+    "\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant",
+    "\\ExcelVoice\\rasaDemo",
+    "\\ExcelVoice\\rasaDemo\\data",
+    "\\ExcelVoice\\WebAppAssistantV2"
   ],
-  "SelectedNode": "\\ExcelVoiceAssistant.sln",
+  "SelectedNode": "\\ExcelVoice\\WebAppAssistantV2\\index.htm",
   "PreviewInSolutionExplorer": false
 }

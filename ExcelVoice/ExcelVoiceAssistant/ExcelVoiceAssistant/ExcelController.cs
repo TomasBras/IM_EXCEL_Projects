@@ -438,17 +438,17 @@ namespace ExcelVoiceAssistant
             }
         }
 
-        public static string IdentificarMelhoria()
+        public static string MelhoriaReal()
         {
             try
             {
-                var (headerRow, headerCol) = EncontrarCabecalho();
+                var (headerRow, headerColNome) = EncontrarCabecalho();
                 Excel.Range used = sheet.UsedRange;
 
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // 1️⃣ Encontrar dinamicamente todas as colunas Teste X
+                // 📌 Encontrar colunas de testes dinamicamente
                 List<(int col, int num)> testes = new List<(int col, int num)>();
 
                 for (int c = firstCol; c <= lastCol; c++)
@@ -456,43 +456,32 @@ namespace ExcelVoiceAssistant
                     string titulo = sheet.Cells[headerRow, c].Value?.ToString();
                     if (titulo == null) continue;
 
-                    var match = Regex.Match(titulo.ToLower().Replace(" ", ""), @"teste(\d+)");
+                    // Aceita: Teste 1, teste1, Teste   3
+                    var match = System.Text.RegularExpressions.Regex.Match(
+                        titulo.ToLower().Replace(" ", ""),
+                        @"teste(\d+)"
+                    );
+
                     if (match.Success)
-                    {
                         testes.Add((c, int.Parse(match.Groups[1].Value)));
-                    }
                 }
 
-                if (testes.Count < 1)
-                    return "Nenhum teste encontrado.";
+                if (testes.Count < 2)
+                    return "São necessários pelo menos dois testes para comparar melhoria.";
 
-                // Ordenar Teste 1, Teste 2, Teste 3, ...
+                // Ordena Teste 1, Teste 2, Teste 3...
                 testes = testes.OrderBy(t => t.num).ToList();
 
-                int numTestes = testes.Count;
-                int colUltimoTeste = testes.Last().col;
+                // Colunas relevantes
+                int colPenultimo = testes[testes.Count - 2].col;
+                int colUltimo = testes[testes.Count - 1].col;
 
-                // 2️⃣ Encontrar coluna Média
-                int colMedia = -1;
-                for (int c = firstCol; c <= lastCol; c++)
-                {
-                    string v = sheet.Cells[headerRow, c].Value?.ToString();
-                    if (v != null && IgualIgnorandoAcentos(v.ToString(), "média"))
-                    {
-                        colMedia = c;
-                        break;
-                    }
-                }
-
-                if (colMedia == -1)
-                    return "Calcule a média primeiro.";
-
-                // 3️⃣ Criar coluna Melhoria se necessário
+                // Criar coluna Melhoria Real se não existir
                 int colMelhoria = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    string raw = sheet.Cells[headerRow, c].Value?.ToString();
-                    if (raw != null && IgualIgnorandoAcentos(raw, "melhoria"))
+                    var val = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (val != null && IgualIgnorandoAcentos(val, "melhoria real"))
                     {
                         colMelhoria = c;
                         break;
@@ -502,48 +491,143 @@ namespace ExcelVoiceAssistant
                 if (colMelhoria == -1)
                 {
                     colMelhoria = lastCol + 1;
-                    sheet.Cells[headerRow, colMelhoria].Value2 = "Melhoria";
+                    sheet.Cells[headerRow, colMelhoria].Value2 = "Melhoria Real";
                 }
 
-                // 4️⃣ Calcular MP linha a linha
+                // Comparar melhoria aluno a aluno
                 int row = headerRow + 1;
-                while (sheet.Cells[row, headerCol].Value != null)
+
+                while (sheet.Cells[row, headerColNome].Value != null)
                 {
-                    double mediaAtual = sheet.Cells[row, colMedia].Value2 ?? 0;
+                    double penultimo = Convert.ToDouble(sheet.Cells[row, colPenultimo].Value2 ?? 0);
+                    double ultimo = Convert.ToDouble(sheet.Cells[row, colUltimo].Value2 ?? 0);
 
-                    if (mediaAtual >= 10)
-                    {
-                        sheet.Cells[row, colMelhoria].Value2 = "";
-                        row++;
-                        continue;
-                    }
-
-                    // somar todos os testes exceto o último
-                    double somaAnteriores = 0;
-
-                    foreach (var t in testes.Take(testes.Count - 1))
-                    {
-                        somaAnteriores += Convert.ToDouble(sheet.Cells[row, t.col].Value2 ?? 0);
-                    }
-
-                    // 5️⃣ Nota necessária no último teste para atingir média 10
-                    double notaNecessaria =
-                        10 * numTestes - somaAnteriores;
-
-                    // 6️⃣ Se a nota necessária for possível (<=20) → MP
-                    if (notaNecessaria <= 20)
-                        sheet.Cells[row, colMelhoria].Value2 = "MP";
+                    if (ultimo > penultimo)
+                        sheet.Cells[row, colMelhoria].Value2 = "Melhorou";
                     else
                         sheet.Cells[row, colMelhoria].Value2 = "";
 
                     row++;
                 }
 
-                return $"Melhoria calculada usando todos os {numTestes} testes.";
+                return "Melhoria real calculada dinamicamente.";
             }
             catch (Exception ex)
             {
-                return "Erro ao identificar melhoria: " + ex.Message;
+                return "Erro em Melhoria Real: " + ex.Message;
+            }
+        }
+
+
+        public static string MelhoriaPossivel()
+        {
+            try
+            {
+                var (headerRow, headerColNome) = EncontrarCabecalho();
+                Excel.Range used = sheet.UsedRange;
+
+                int firstCol = used.Column;
+                int lastCol = firstCol + used.Columns.Count - 1;
+
+                // Encontrar colunas dos testes dinamicamente
+                List<int> colTestes = new List<int>();
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo == null) continue;
+
+                    var m = System.Text.RegularExpressions.Regex.Match(
+                        titulo.ToLower().Replace(" ", ""),
+                        @"teste(\d+)"
+                    );
+
+                    if (m.Success)
+                        colTestes.Add(c);
+                }
+
+                if (colTestes.Count < 2)
+                    return "São necessários pelo menos dois testes para calcular MP.";
+
+                colTestes = colTestes.OrderBy(c => c).ToList();
+
+                int colUltimoTeste = colTestes.Last();
+
+                // Encontrar coluna média
+                int colMedia = -1;
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo != null && IgualIgnorandoAcentos(titulo, "média"))
+                    {
+                        colMedia = c;
+                        break;
+                    }
+                }
+
+                if (colMedia == -1)
+                    return "Calcule a média antes de verificar MP.";
+
+                // Criar coluna MP se não existir
+                int colMP = -1;
+
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo != null && IgualIgnorandoAcentos(titulo, "mp"))
+                    {
+                        colMP = c;
+                        break;
+                    }
+                }
+
+                if (colMP == -1)
+                {
+                    colMP = lastCol + 1;
+                    sheet.Cells[headerRow, colMP].Value2 = "MP";
+                }
+
+                // Calcular MP aluno a aluno
+                int row = headerRow + 1;
+
+                while (sheet.Cells[row, headerColNome].Value != null)
+                {
+                    double mediaAtual = sheet.Cells[row, colMedia].Value2 ?? 0;
+
+                    if (mediaAtual >= 10)
+                    {
+                        // Já aprovado → sem MP
+                        sheet.Cells[row, colMP].Value2 = "";
+                        row++;
+                        continue;
+                    }
+
+                    // Calcular soma dos testes EXCETO o último
+                    double soma = 0;
+
+                    foreach (int col in colTestes.Take(colTestes.Count - 1))
+                        soma += Convert.ToDouble(sheet.Cells[row, col].Value2 ?? 0);
+
+                    int n = colTestes.Count;
+
+                    // Nota necessária no último teste
+                    double notaNecessaria = 10 * n - soma;
+
+                    // Se for possível com nota ≤20 → MP
+                    if (notaNecessaria <= 20)
+                        sheet.Cells[row, colMP].Value2 = "MP";
+                    else
+                        sheet.Cells[row, colMP].Value2 = "";
+
+                    row++;
+                }
+
+                return "Melhoria possível calculada dinamicamente.";
+            }
+            catch (Exception ex)
+            {
+                return "Erro em Melhoria Possível: " + ex.Message;
             }
         }
 

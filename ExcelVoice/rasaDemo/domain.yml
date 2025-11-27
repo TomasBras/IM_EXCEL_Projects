@@ -10,7 +10,8 @@ intents:
   - helper
   - calcular_media
   - destacar_aprovados_reprovados
-  - identificar_melhoria
+  - melhoria_real
+  - melhoria_possivel
   - inserir_colunas
   - inserir_perguntas
   - gerar_grafico_turma
@@ -143,9 +144,12 @@ responses:
 
   utter_destacar_aprovados_reprovados:
     - text: "Destacando aprovados e reprovados..."
+  
+  utter_melhoria_real:
+    - text: "A identificar os alunos que melhoraram..."
 
-  utter_identificar_melhoria:
-    - text: "A identificar melhorias significativas..."
+  utter_melhoria_possivel:
+    - text: "A verificar quem tem possibilidade de melhoria (MP)..."
 
   utter_inserir_colunas:
     - text: "A inserir colunas solicitadas..."
@@ -190,7 +194,8 @@ responses:
 actions:
   - action_calcular_media
   - action_destacar_aprovados_reprovados
-  - action_identificar_melhoria
+  - action_melhoria_real
+  - action_melhoria_possivel
   - action_inserir_colunas
   - action_inserir_perguntas
   - action_gerar_grafico_turma
