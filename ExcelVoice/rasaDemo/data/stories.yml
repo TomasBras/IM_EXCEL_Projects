@@ -38,6 +38,11 @@ stories:
       - action: utter_gerar_grafico_barras_aluno
       - action: action_gerar_grafico_barras_aluno
 
+  - story: Gerar gráfico das perguntas do Teste 2
+    steps:
+      - intent: gerar_grafico_perguntas_t2
+      - action: action_gerar_grafico_perguntas_t2
+
   - story: Atualizar notas de um aluno
     steps:
       - intent: atualizar_notas
@@ -61,11 +66,6 @@ stories:
       - intent: atualizar_valores
       - action: utter_atualizar_valores
       - action: action_atualizar_valores
-
-  - story: Apagar gráfico
-    steps:
-      - intent: apagar_grafico
-      - action: action_apagar_grafico
 
   - story: Apagar todos os gráficos
     steps:

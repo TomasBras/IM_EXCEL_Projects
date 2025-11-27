@@ -37,6 +37,11 @@ rules:
       - intent: gerar_grafico_barras_aluno
       - action: utter_gerar_grafico_barras_aluno
       - action: action_gerar_grafico_barras_aluno
+  
+  - rule: Gerar gráfico das perguntas do Teste 2
+    steps:
+      - intent: gerar_grafico_perguntas_t2
+      - action: action_gerar_grafico_perguntas_t2
 
   - rule: Atualizar notas
     steps:
@@ -61,11 +66,6 @@ rules:
       - intent: atualizar_valores
       - action: utter_atualizar_valores
       - action: action_atualizar_valores
-
-  - rule: Apagar gráfico
-    steps:
-      - intent: apagar_grafico
-      - action: action_apagar_grafico
 
   - rule: Apagar todos os gráficos
     steps:

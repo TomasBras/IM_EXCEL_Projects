@@ -17,7 +17,7 @@ Thumbs.db
 ###############################################
 # PYTHON
 ###############################################
-_pycache_/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -46,8 +46,8 @@ Java/
 # Modelos treinados
 /models/
 /models/*
-*/models/
-*/DIETClassifier.
+**/models/*
+**/DIETClassifier.*
 **/oov_words.json
 **/metadata.json
 **/vocabularies.json
@@ -56,7 +56,7 @@ Java/
 **/patterns.json
 **/checkpoint
 **/tokenizers.json
-*/.pkl
+**/*.pkl
 
 # -------------------------
 # LOGS
@@ -66,7 +66,7 @@ Java/
 # -------------------------
 # PYTHON
 # -------------------------
-_pycache_/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd

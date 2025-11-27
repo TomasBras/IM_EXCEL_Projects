@@ -24,7 +24,7 @@ namespace ExcelVoiceAssistant
         {
             string host = "localhost";
             string path = "/IM/USER1/APP";
-            string uri = $"wss://{host}:8005{path}";
+            string uri = $"wss://{host}:8005{path}"; 
 
             Console.WriteLine(" Conectando ao IM via WebSocket...");
 
@@ -55,7 +55,7 @@ namespace ExcelVoiceAssistant
             InicializarExcel();
 
             Console.WriteLine("💬 Aguardando mensagens do IM...");
-            await Task.Delay(-1);
+            await Task.Delay(-1); 
         }
 
         // =========================================================
@@ -191,7 +191,7 @@ namespace ExcelVoiceAssistant
         {
             return "<mmi:mmi xmlns:mmi=\"http://www.w3.org/2008/04/mmi-arch\" mmi:version=\"1.0\">" +
                     "<mmi:startRequest mmi:context=\"ctx-1\" mmi:requestId=\"text-1\" mmi:source=\"APPSPEECH\" mmi:target=\"IM\">" +
-                        "<mmi:data>" +
+                        "<mmi:data>" + msg +
                             "<emma:emma xmlns:emma=\"http://www.w3.org/2003/04/emma\" emma:version=\"1.0\">" +
                                 "<emma:interpretation emma:confidence=\"1\" emma:id=\"text-\" emma:medium=\"text\" emma:mode=\"command\" emma:start=\"0\">" +
                                     "<command>\"&lt;speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='pt-PT'&gt;&lt;p&gt;" + msg + "&lt;/p&gt;&lt;/speak&gt;\"</command>" +

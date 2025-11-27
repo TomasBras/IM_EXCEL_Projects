@@ -148,14 +148,21 @@ nlu:
     - Faz gráfico do aluno de mecanográfico [445566](aluno_numero)
 
 # ----------------------------------------------------
-- intent: apagar_grafico
+- intent: gerar_grafico_perguntas_t2
   examples: |
-    - Apaga o gráfico do [João](aluno_nome)
-    - Apaga o gráfico da [Maria](aluno_nome)
-    - Elimina o gráfico do [Pedro](aluno_nome)
-    - Remove o gráfico das médias
-    - Apaga o gráfico das médias da turma
-    - Eliminar gráfico das médias
+    - Gera gráfico das perguntas do teste 2
+    - Faz um gráfico das perguntas do T2
+    - Cria gráfico das questões do teste dois
+    - Quero comparar as perguntas do teste 2
+    - Mostra gráfico das perguntas T2_P1 a T2_P5
+    - Gráfico das perguntas do T2
+    - Mostra a média das perguntas do teste 2
+    - Quero ver a média de cada pergunta do teste 2
+    - Mostra a média das questões do teste 2
+    - Mostra a média de T2_P1 a T2_P5
+    - Mostra o gráfico com a média das perguntas do teste 2
+    - Mostra a média das perguntas por gráfico
+    - Média das perguntas do teste 2
 
 # ----------------------------------------------------
 - intent: apagar_todos_graficos

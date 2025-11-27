@@ -1,0 +1,44 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-aluno",
+      "2": "I-aluno",
+      "3": "L-aluno",
+      "4": "U-aluno",
+      "5": "B-nome_ficheiro",
+      "6": "I-nome_ficheiro",
+      "7": "L-nome_ficheiro",
+      "8": "U-nome_ficheiro",
+      "9": "B-pergunta",
+      "10": "I-pergunta",
+      "11": "L-pergunta",
+      "12": "U-pergunta",
+      "13": "B-valores",
+      "14": "I-valores",
+      "15": "L-valores",
+      "16": "U-valores",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-aluno": 1,
+      "I-aluno": 2,
+      "L-aluno": 3,
+      "U-aluno": 4,
+      "B-nome_ficheiro": 5,
+      "I-nome_ficheiro": 6,
+      "L-nome_ficheiro": 7,
+      "U-nome_ficheiro": 8,
+      "B-pergunta": 9,
+      "I-pergunta": 10,
+      "L-pergunta": 11,
+      "U-pergunta": 12,
+      "B-valores": 13,
+      "I-valores": 14,
+      "L-valores": 15,
+      "U-valores": 16,
+      "O": 0
+    },
+    "num_tags": 17
+  }
+]

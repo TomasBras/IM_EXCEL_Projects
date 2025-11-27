@@ -492,13 +492,22 @@
                     // 3. Identificar melhorias
                     case 'identificar_melhoria':
                         message = { intent: 'identificar_melhoria' };
+                    // 3. Identificar melhorias
+                    case 'identificar_melhoria':
+                        message = { intent: 'identificar_melhoria' };
                         break;
 
                     // 4. Inserir colunas
                     case 'inserir_colunas':
                         message = { intent: 'inserir_colunas' };
+                    // 4. Inserir colunas
+                    case 'inserir_colunas':
+                        message = { intent: 'inserir_colunas' };
                         break;
 
+                    // 5. GRÁFICO DA TURMA (NOVO)
+                    case 'gerar_grafico_turma':
+                        message = { intent: 'gerar_grafico_turma' };
                     // 5. GRÁFICO DA TURMA (NOVO)
                     case 'gerar_grafico_turma':
                         message = { intent: 'gerar_grafico_turma' };
@@ -530,8 +539,20 @@
                             if (e.entity === 'valores') notas.push(e.value);
                         }
                         message = { intent: 'atualizar_notas', aluno, notas };
+                    // 8. Atualizar notas
+                    case 'atualizar_notas':
+                        let aluno = '';
+                        let notas = [];
+                        for (let e of data.entities) {
+                            if (e.entity === 'aluno') aluno = e.value;
+                            if (e.entity === 'valores') notas.push(e.value);
+                        }
+                        message = { intent: 'atualizar_notas', aluno, notas };
                         break;
 
+                    // 9. Guardar ficheiro
+                    case 'guardar_ficheiro':
+                        message = { intent: 'guardar_ficheiro' };
                     // 9. Guardar ficheiro
                     case 'guardar_ficheiro':
                         message = { intent: 'guardar_ficheiro' };
@@ -540,13 +561,22 @@
                     // 10. Operações matemáticas
                     case 'operacoes_matematicas':
                         message = { intent: 'operacoes_matematicas' };
+                    // 10. Operações matemáticas
+                    case 'operacoes_matematicas':
+                        message = { intent: 'operacoes_matematicas' };
                         break;
 
                     // 11. Atualizar valores
                     case 'atualizar_valores':
                         message = { intent: 'atualizar_valores' };
+                    // 11. Atualizar valores
+                    case 'atualizar_valores':
+                        message = { intent: 'atualizar_valores' };
                         break;
 
+                    // 12. Apagar todos gráficos
+                    case 'apagar_todos_graficos':
+                        message = { intent: 'apagar_todos_graficos' };
                     // 12. Apagar todos gráficos
                     case 'apagar_todos_graficos':
                         message = { intent: 'apagar_todos_graficos' };
@@ -558,8 +588,15 @@
                     case 'respond_how_am_i':
                     case 'helper':
                         message = { intent: data.intent.name };
+                    // 13. Cumprimentos / ajuda
+                    case 'greet':
+                    case 'ask_how_are_you':
+                    case 'respond_how_am_i':
+                    case 'helper':
+                        message = { intent: data.intent.name };
                         break;
 
+                    // 14. FALLBACK
                     // 14. FALLBACK
                     default:
                         console.warn("Intent não reconhecida: ", data.intent.name);

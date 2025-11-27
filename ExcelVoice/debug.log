@@ -1,0 +1,38 @@
+[34872:34876:1107/232116.944:VERBOSE1:chrome\updater\updater.cc:411] Version: 143.0.7482.0, opt, x86_64, command line: "C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\updater.exe" --wake-all --system
+[34872:34876:1107/232116.944:VERBOSE1:chrome\updater\updater.cc:414] OS version: 10.0.26200.7019, System uptime (seconds): 25303, parent pid: 18332
+[34872:34876:1107/232116.944:VERBOSE1:chrome\updater\updater.cc:325] available: 6704752K, total: 32160820K
+[35752:35756:1107/232117.137:VERBOSE1:chrome\updater\updater.cc:411] Version: 143.0.7482.0, opt, x86_64, command line: "C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\updater.exe" --crash-handler --system "--database=C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\Crashpad" --url=https://clients2.google.com/cr/report --annotation=prod=Update4 --annotation=ver=143.0.7482.0 "--attachment=C:\Program Files (x86)\Google\GoogleUpdater\updater.log" --initial-client-data=0x270,0x274,0x278,0x24c,0x27c,0x7ff7b6688e44,0x7ff7b6688e50,0x7ff7b6688e60
+[35752:35756:1107/232117.138:VERBOSE1:chrome\updater\updater.cc:414] OS version: 10.0.26200.7019, System uptime (seconds): 25303, parent pid: 34872
+[35752:35756:1107/232117.138:VERBOSE1:chrome\updater\updater.cc:325] available: 6632224K, total: 32160820K
+[34872:34876:1107/232117.140:VERBOSE1:chrome\updater\crash_reporter.cc:120] Crash handler launched and ready.
+[34872:34876:1107/232117.141:ERROR:chrome\updater\crash_client.cc:116] Failed to fetch completed crash reports: 3
+[34872:34876:1107/232117.141:ERROR:chrome\updater\crash_client.cc:132] Failed to fetch pending crash reports: 3
+[34872:34876:1107/232117.141:VERBOSE2:chrome\updater\usage_stats_permissions_win.cc:77] usage stats enabled by app {8a69d345-d564-463c-aff1-a69d9e530f96}
+[34872:34876:1107/232117.141:ERROR:third_party\crashpad\crashpad\util\file\file_io_win.cc:181] CreateFile C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\Crashpad\settings.dat: Acesso negado. (0x5)
+[34872:34876:1107/232117.141:ERROR:third_party\crashpad\crashpad\util\file\file_io_win.cc:181] CreateFile C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\Crashpad\settings.dat: Acesso negado. (0x5)
+[34872:34876:1107/232117.141:VERBOSE1:chrome\updater\updater.cc:97] Crash reporting initialized.
+[34872:34876:1107/232117.143:VERBOSE1:chrome\updater\updater.cc:147] IsUserAdmin: 0, IsUserNonElevatedAdmin: 1, IsUACOn: 1, IsElevatedWithUACOn: 0, LUA: 1
+[34872:30556:1107/232117.144:VERBOSE1:chrome\updater\app\app_wakeall.cc:57] Launching `"C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\updater.exe" --wake --system`
+[34760:34304:1107/232117.356:VERBOSE1:chrome\updater\updater.cc:411] Version: 143.0.7482.0, opt, x86_64, command line: "C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\updater.exe" --wake --system
+[34760:34304:1107/232117.356:VERBOSE1:chrome\updater\updater.cc:414] OS version: 10.0.26200.7019, System uptime (seconds): 25304, parent pid: 34872
+[34760:34304:1107/232117.356:VERBOSE1:chrome\updater\updater.cc:325] available: 6626044K, total: 32160820K
+[34856:6832:1107/232117.529:VERBOSE1:chrome\updater\updater.cc:411] Version: 143.0.7482.0, opt, x86_64, command line: "C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\updater.exe" --crash-handler --system "--database=C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\Crashpad" --url=https://clients2.google.com/cr/report --annotation=prod=Update4 --annotation=ver=143.0.7482.0 "--attachment=C:\Program Files (x86)\Google\GoogleUpdater\updater.log" --initial-client-data=0x278,0x27c,0x280,0x14c,0x284,0x7ff7b6688e44,0x7ff7b6688e50,0x7ff7b6688e60
+[34856:6832:1107/232117.529:VERBOSE1:chrome\updater\updater.cc:414] OS version: 10.0.26200.7019, System uptime (seconds): 25304, parent pid: 34760
+[34856:6832:1107/232117.529:VERBOSE1:chrome\updater\updater.cc:325] available: 6641104K, total: 32160820K
+[34760:34304:1107/232117.531:VERBOSE1:chrome\updater\crash_reporter.cc:120] Crash handler launched and ready.
+[34760:34304:1107/232117.532:ERROR:chrome\updater\crash_client.cc:116] Failed to fetch completed crash reports: 3
+[34760:34304:1107/232117.533:ERROR:chrome\updater\crash_client.cc:132] Failed to fetch pending crash reports: 3
+[34760:34304:1107/232117.533:VERBOSE2:chrome\updater\usage_stats_permissions_win.cc:77] usage stats enabled by app {8a69d345-d564-463c-aff1-a69d9e530f96}
+[34760:34304:1107/232117.533:ERROR:third_party\crashpad\crashpad\util\file\file_io_win.cc:181] CreateFile C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\Crashpad\settings.dat: Acesso negado. (0x5)
+[34760:34304:1107/232117.535:ERROR:third_party\crashpad\crashpad\util\file\file_io_win.cc:181] CreateFile C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\Crashpad\settings.dat: Acesso negado. (0x5)
+[34760:34304:1107/232117.535:VERBOSE1:chrome\updater\updater.cc:97] Crash reporting initialized.
+[34760:34304:1107/232117.537:VERBOSE1:chrome\updater\updater.cc:147] IsUserAdmin: 0, IsUserNonElevatedAdmin: 1, IsUACOn: 1, IsElevatedWithUACOn: 0, LUA: 1
+[34760:34304:1107/232117.537:VERBOSE1:chrome\updater\ipc\update_service_internal_proxy_win.cc:156] Run
+[34760:32328:1107/232124.383:VERBOSE2:chrome\updater\ipc\update_service_internal_proxy_win.cc:65] Run result 0.
+[34760:34304:1107/232124.383:VERBOSE1:chrome\updater\ipc\update_service_internal_proxy_win.cc:148] ~UpdateServiceInternalProxyImpl
+[34760:27328:1107/232124.384:VERBOSE2:chrome\updater\ipc\proxy_impl_base_win.h:58] ~ProxyImplBase
+[34760:34304:1107/232124.385:VERBOSE1:chrome\updater\updater.cc:423] UpdaterMain (--wake) returned 0.
+[34872:30556:1107/232124.388:VERBOSE1:chrome\updater\app\app_wakeall.cc:67] `"C:\Program Files (x86)\Google\GoogleUpdater\143.0.7482.0\updater.exe" --wake --system` exited 0
+[34856:6832:1107/232124.389:VERBOSE1:chrome\updater\updater.cc:423] UpdaterMain (--crash-handler) returned 0.
+[34872:34876:1107/232124.389:VERBOSE1:chrome\updater\updater.cc:423] UpdaterMain (--wake-all) returned 0.
+[35752:35756:1107/232124.393:VERBOSE1:chrome\updater\updater.cc:423] UpdaterMain (--crash-handler) returned 0.
