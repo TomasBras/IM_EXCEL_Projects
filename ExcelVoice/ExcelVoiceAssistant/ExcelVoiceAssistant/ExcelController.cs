@@ -15,11 +15,11 @@ namespace ExcelVoiceAssistant
         private static Excel.Workbook workbook;
         private static Excel.Worksheet sheet;
 
-        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
-        private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
+        //private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
+        //private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
 
-        //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
-        //private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
+        private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+        private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
         // =====================================================
         // Ligar Excel já aberto
@@ -695,6 +695,135 @@ namespace ExcelVoiceAssistant
             }
         }
 
+        public static string InserirPerguntas(dynamic json)
+        {
+            try
+            {
+                // 1) Obter número do teste
+                int testeNum = -1;
+
+                if (json.nlu.teste_numero != null)
+                {
+                    string raw = json.nlu.teste_numero.ToString();
+                    var m = Regex.Match(raw, @"(\d+)");
+                    if (m.Success)
+                        testeNum = int.Parse(m.Groups[1].Value);
+                }
+
+                if (testeNum == -1)
+                    return "Não percebi qual é o teste.";
+
+                string prefixo = $"T{testeNum}_P";
+
+                // 2) Texto do utilizador
+                string texto = json.text != null
+                    ? Encoding.UTF8.GetString(Convert.FromBase64String(json.text.ToString())).ToLower()
+                    : "";
+
+                // 3) Procurar intervalo tipo “1 a 5”
+                int pInicio = -1, pFim = -1;
+                var intervalo = Regex.Match(texto, @"(\d+)\s*(a|à|até|-)\s*(\d+)");
+                if (intervalo.Success)
+                {
+                    pInicio = int.Parse(intervalo.Groups[1].Value);
+                    pFim = int.Parse(intervalo.Groups[3].Value);
+                }
+
+                // 4) Procurar pergunta única
+                var unico = Regex.Match(texto, @"(p|pergunta|questao|questão|q)\s*(número\s*)?(\d+)");
+                if (unico.Success)
+                {
+                    int p = int.Parse(unico.Groups[3].Value);
+                    pInicio = pFim = p;
+                }
+
+                // 5) Se nada foi encontrado → ERRO (não default!)
+                if (pInicio == -1)
+                    return "Não percebi qual pergunta queres adicionar.";
+
+                // 6) Cabeçalho
+                var (headerRow, headerCol) = EncontrarCabecalho();
+                Excel.Range used = sheet.UsedRange;
+
+                int firstCol = used.Column;
+                int lastCol = firstCol + used.Columns.Count - 1;
+
+                // 7) Encontrar posição da coluna “Teste N”
+                int colTeste = -1;
+                for (int c = firstCol; c <= lastCol; c++)
+                {
+                    string titulo = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (titulo != null && IgualIgnorandoAcentos(titulo, $"teste {testeNum}"))
+                    {
+                        colTeste = c;
+                        break;
+                    }
+                }
+
+                if (colTeste == -1)
+                    return $"Não encontrei o Teste {testeNum}.";
+
+                // 8) Mapear perguntas existentes ANTES do teste
+                Dictionary<int, int> existentes = new Dictionary<int, int>();
+
+                for (int c = firstCol; c < colTeste; c++)
+                {
+                    string t = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (t == null) continue;
+
+                    string norm = t.Replace(" ", "").ToUpper();
+
+                    if (norm.StartsWith(prefixo.ToUpper()))
+                    {
+                        var mm = Regex.Match(norm, @"P(\d+)");
+                        if (mm.Success)
+                        {
+                            int per = int.Parse(mm.Groups[1].Value);
+                            existentes[per] = c;
+                        }
+                    }
+                }
+
+                // 9) Inserir NOVAS perguntas
+                int adicionadas = 0;
+
+                for (int p = pInicio; p <= pFim; p++)
+                {
+                    if (!existentes.ContainsKey(p))
+                    {
+                        // Inserir nova coluna ANTES do teste
+                        sheet.Columns[colTeste].Insert();
+
+                        sheet.Cells[headerRow, colTeste].Value2 = $"{prefixo}{p}";
+
+                        int r = headerRow + 1;
+                        while (sheet.Cells[r, headerCol].Value != null)
+                        {
+                            sheet.Cells[r, colTeste].Value2 = "";
+                            r++;
+                        }
+
+                        adicionadas++;
+
+                        // mover o teste uma coluna para a direita
+                        colTeste++;
+                        lastCol++;
+                    }
+                }
+
+                if (adicionadas == 0)
+                    return $"As perguntas pedidas já existiam no Teste {testeNum}.";
+
+                return $"Foram adicionadas {adicionadas} perguntas ao Teste {testeNum}.";
+            }
+            catch (Exception ex)
+            {
+                return "Erro ao inserir perguntas: " + ex.Message;
+            }
+        }
+
+
+
 
         public static string GerarGraficoTurma(dynamic json)
         {
@@ -1035,325 +1164,317 @@ namespace ExcelVoiceAssistant
                 return "Erro ao gerar gráfico das perguntas.";
             }
         }
-
-
         public static string AtualizarNotas(dynamic json)
         {
             try
             {
-                // 1️⃣ ALUNO (número mecanográfico)
-                var alunoInfo = ExtrairAluno(json);
-                string numeroMec = alunoInfo.numero;
-                if (string.IsNullOrEmpty(numeroMec))
-                {
-                    Console.WriteLine("❌ Número mecanográfico não encontrado.");
-                    return "";
-                }
-                // 2️⃣ TEXTO BASE64 → frase original
-                string base64 = json.text.ToString();
-                string frase = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-                Console.WriteLine("📥 Texto decodificado: " + frase);
+                // ==========================================================
+                // 1) DECODIFICAR TEXTO ORIGINAL
+                // ==========================================================
+                string textoOriginal = json.text != null
+                    ? Encoding.UTF8.GetString(Convert.FromBase64String(json.text.ToString())).ToLower()
+                    : "";
 
-                // -------------------------------------------------------------
-                // NORMALIZAÇÃO INTELIGENTE DO INPUT
-                // -------------------------------------------------------------
+                // ==========================================================
+                // 2) ENTIDADES: aluno (nome/numero), teste, pergunta
+                // ==========================================================
+                string numeroMec = json.nlu.aluno_numero != null ? json.nlu.aluno_numero.ToString() : null;
+                string alunoNome = json.nlu.aluno_nome != null ? json.nlu.aluno_nome.ToString() : null;
 
-                // 1) Corrigir número mecanográfico dito com pausas ("978 76" → "97876")
-                // Declarar antes de qualquer uso
-                double[] notas = null;
+                // TESTE
+                int testeNum = -1;
+                Match matchTeste = Regex.Match(textoOriginal, @"teste ?([0-9]{1,2})");
+                if (matchTeste.Success)
+                    testeNum = int.Parse(matchTeste.Groups[1].Value);
 
-                if (!string.IsNullOrEmpty(numeroMec))
-                {
-                    numeroMec = Regex.Replace(numeroMec, @"\s+", "");   // remover espaços
-                }
-
-
-                // 2) Verificar se as notas vieram coladas ("12345")
-                bool notasColadas = false;
-
-                // Contamos quantos dígitos existem depois da palavra "para"
-                int idxPara2 = frase.ToLower().IndexOf("para");
-                if (idxPara2 != -1)
-                {
-                    string depois = frase.Substring(idxPara2);
-
-                    // Se só há UM MATCH e tem 2 ou mais dígitos → provavelmente são várias notas coladas
-                    var matchesPossiveis = Regex.Matches(depois, @"\d");
-                    var matchGrande = Regex.Match(depois, @"\d{2,}");
-
-                    if (matchGrande.Success && matchesPossiveis.Count > 1 && matchGrande.Value.Length > 1)
-                        notasColadas = true;
-                }
-
-                // Se as notas estiverem coladas, expandimos cada dígito individualmente
-                if (notasColadas)
-                {
-                    Console.WriteLine("⚠️ Detetado padrão de notas coladas. A separar dígitos...");
-
-                    string apenasDigitos = Regex.Replace(frase.Substring(frase.ToLower().IndexOf("para")), @"\D", "");
-
-                    // converter cada dígito numa nota
-                    List<double> lista = new List<double>();
-                    foreach (char ch in apenasDigitos)
-                    {
-                        if (char.IsDigit(ch))
-                            lista.Add(double.Parse(ch.ToString()));
-                    }
-
-                    // substituir as notas
-                    notas = lista.ToArray();
-
-                    Console.WriteLine("📌 Notas corrigidas: " + string.Join(", ", notas));
-                }
-
-
-                // 3️⃣ INTERPRETAR PERGUNTA / TESTE NATURAL
-                string perguntaRaw = json.nlu.pergunta != null ? json.nlu.pergunta.ToString().ToLower() : "";
-                string colunaAlvo = "";
-
-                // PERGUNTA 1..5 → T2_P1..T2_P5
-                var matchPerg = Regex.Match(frase.ToLower(), @"pergunta\s*(\d)");
+                // PERGUNTA
+                int perguntaNum = -1;
+                Match matchPerg = Regex.Match(textoOriginal, @"(pergunta|quest[aã]o) ?([0-9]{1,2})");
                 if (matchPerg.Success)
+                    perguntaNum = int.Parse(matchPerg.Groups[2].Value);
+
+                // REGRA: PERGUNTA sem TESTE → erro
+                if (perguntaNum != -1 && testeNum == -1)
+                    return "Tens de indicar o número do teste. Ex.: 'pergunta 2 do teste 1'.";
+
+
+                // ==========================================================
+                // 2B) EXTRAIR VALORES -> APENAS APÓS "COM" ou "PARA"
+                // ==========================================================
+                List<double> valores = new List<double>();
+
+                Match matchValores = Regex.Match(textoOriginal, @"(?:com|para)\s+([0-9.,\s]+)");
+                if (matchValores.Success)
                 {
-                    int num = int.Parse(matchPerg.Groups[1].Value);
-                    colunaAlvo = $"T2_P{num}";
-                }
+                    string bloco = matchValores.Groups[1].Value;
+                    string[] parts = bloco.Split(new char[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (frase.ToLower().Contains("teste 1"))
-                    colunaAlvo = "Teste 1";
-
-                if (frase.ToLower().Contains("teste 2"))
-                    colunaAlvo = "Teste 2";
-
-
-                // 4️⃣ EXTRAIR NOTAS (todos os números)
-                var matches = System.Text.RegularExpressions.Regex.Matches(frase, @"\d+[.,]?\d*");
-
-                if (matches.Count == 0)
-                {
-                    Console.WriteLine("❌ Nenhum valor encontrado.");
-                    return "";
-                }
-
-                notas = matches
-                    .Cast<System.Text.RegularExpressions.Match>()
-                    .Select(m => double.Parse(m.Value.Replace(",", "."), CultureInfo.InvariantCulture))
-                    .ToArray();
-
-                Console.WriteLine("📌 Notas extraídas: " + string.Join(", ", notas));
-
-                // 🛑 REMOVER O NÚMERO MECANOGRÁFICO DA LISTA DE NOTAS
-                // 🧹 REMOVER números que não são notas (mec, pergunta, teste)
-
-                List<double> filtradas = new List<double>();
-
-                // A frase sempre tem a estrutura "... para X Y Z"
-                int idxPara = frase.ToLower().IndexOf("para");
-                if (idxPara != -1)
-                {
-                    string soDepois = frase.Substring(idxPara); // só texto depois de "para"
-                    var matchesAfter = System.Text.RegularExpressions.Regex.Matches(soDepois, @"\d+[.,]?\d*");
-
-                    foreach (Match m in matchesAfter)
+                    foreach (string p in parts)
                     {
-                        double v = double.Parse(m.Value.Replace(",", "."), CultureInfo.InvariantCulture);
-
-                        // remover número mecanográfico
-                        if (v.ToString() == numeroMec) continue;
-
-                        // remover "1" de "teste 1"
-                        if (perguntaRaw.Contains("teste 1") && v == 1) continue;
-
-                        // remover "2" de "teste 2"
-                        if (perguntaRaw.Contains("teste 2") && v == 2) continue;
-
-                        // remover número da pergunta (ex: "pergunta 1")
-                        var pm = System.Text.RegularExpressions.Regex.Match(perguntaRaw, @"\d");
-                        if (pm.Success && v == int.Parse(pm.Value)) continue;
-
-                        filtradas.Add(v);
+                        double v;
+                        if (double.TryParse(p.Replace(",", "."), NumberStyles.Any,
+                            CultureInfo.InvariantCulture, out v))
+                        {
+                            valores.Add(v);
+                        }
                     }
                 }
 
-                notas = filtradas.ToArray();
+                // ==========================================================
+                // 3) CABEÇALHO E COLUNAS
+                // ==========================================================
+                var header = EncontrarCabecalho();
+                int headerRow = header.Item1;
+                int colNome = header.Item2;
 
-                if (notas.Length == 0)
-                {
-                    Console.WriteLine("❌ Não foram encontradas notas válidas.");
-                    return "";
-                }
-
-                Console.WriteLine("📌 Notas finais filtradas: " + string.Join(", ", notas));
-
-
-
-                // 5️⃣ LOCALIZAR LINHA DO ALUNO POR NÚMERO MECANOGRÁFICO
                 Excel.Range used = sheet.UsedRange;
-
-                var (headerRow, headerColNome) = EncontrarCabecalho();
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-
-                // ================================================================
-                // 🔥 **CORREÇÃO CRÍTICA: DETETAR COLUNA 'Número mecanográfico'**
-                // ================================================================
-                int colNumeroMec = -1;
-
+                // Coluna número mecanográfico
+                int colNMec = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    var raw = sheet.Cells[headerRow, c].Value?.ToString();
-                    if (raw == null) continue;
-
-                    string v = raw
-                        .Trim()
-                        .ToLower()
-                        .Replace("  ", " ")
-                        .Normalize(NormalizationForm.FormD);
-
-                    v = new string(v.Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark).ToArray());
-
-                    if (v.Contains("numero") && v.Contains("mecanograf"))
+                    string t = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (t != null && IgualIgnorandoAcentos(t, "número mecanográfico"))
                     {
-                        colNumeroMec = c;
+                        colNMec = c;
                         break;
                     }
                 }
+                if (colNMec == -1)
+                    return "Coluna 'Número Mecanográfico' não encontrada.";
 
-                if (colNumeroMec == -1)
-                {
-                    Console.WriteLine("❌ Coluna 'Número mecanográfico' não encontrada.");
-                    return "";
-                }
+                // Última linha
+                int lastRow = headerRow + 1;
+                while (sheet.Cells[lastRow, colNome].Value != null)
+                    lastRow++;
 
-                // Procurar linha do aluno
+                // ==========================================================
+                // 4) ENCONTRAR ALUNO
+                // ==========================================================
                 int alunoRow = -1;
-                int rPtr = headerRow + 1;
 
-                while (sheet.Cells[rPtr, colNumeroMec].Value != null)
+                for (int r = headerRow + 1; r < lastRow; r++)
                 {
-                    string val = sheet.Cells[rPtr, colNumeroMec].Value.ToString().Trim();
-                    if (val == numeroMec)
+                    object nm = sheet.Cells[r, colNMec].Value;
+
+                    // Por número
+                    if (numeroMec != null && nm != null && nm.ToString() == numeroMec)
                     {
-                        alunoRow = rPtr;
+                        alunoRow = r;
                         break;
                     }
-                    rPtr++;
+
+                    // Por nome
+                    if (alunoNome != null)
+                    {
+                        string excelNome = (sheet.Cells[r, colNome].Value ?? "").ToString().ToLower();
+                        string[] partes = alunoNome.ToLower().Split(' ');
+
+                        bool matchAll = true;
+                        foreach (string p in partes)
+                            if (!excelNome.Contains(p)) matchAll = false;
+
+                        if (matchAll)
+                        {
+                            alunoRow = r;
+                            break;
+                        }
+                    }
                 }
 
-                if (alunoRow == -1)
-                {
-                    Console.WriteLine($"❌ Número mecanográfico {numeroMec} não encontrado.");
-                    return "";
-                }
+                // Operação turma -> apenas se explicitamente pedido
+                bool operacaoTurma =
+                    alunoRow == -1 &&
+                    (textoOriginal.Contains("toda a turma") || textoOriginal.Contains("todos os alunos"));
 
-                // 6️⃣ LOCALIZAR TODAS AS COLUNAS DE TESTES E PERGUNTAS
-                Dictionary<string, int> mapaColunas = new Dictionary<string, int>();
+
+                // ==========================================================
+                // 5) MAPEAR PERGUNTAS (Tn_Px)
+                // ==========================================================
+                if (testeNum == -1)
+                    return "Tens de indicar o número do teste.";
+
+                string prefixo = "T" + testeNum + "_P";
+
+                Dictionary<int, int> colsPerguntas = new Dictionary<int, int>();
+                int colTesteFinal = -1;
 
                 for (int c = firstCol; c <= lastCol; c++)
                 {
                     string titulo = sheet.Cells[headerRow, c].Value?.ToString();
                     if (titulo == null) continue;
 
-                    string normal = titulo.Trim();
+                    if (IgualIgnorandoAcentos(titulo, "teste " + testeNum))
+                        colTesteFinal = c;
 
-                    if (IgualIgnorandoAcentos(normal, "Teste 1")) mapaColunas["Teste 1"] = c;
-                    if (IgualIgnorandoAcentos(normal, "Teste 2")) mapaColunas["Teste 2"] = c;
-                    if (normal.StartsWith("T2_P")) mapaColunas[normal] = c;
+                    string norm = titulo.Replace(" ", "").ToUpper();
+
+                    if (norm.StartsWith(prefixo.ToUpper()))
+                    {
+                        Match m = Regex.Match(norm, @"P(\d+)");
+                        if (m.Success)
+                        {
+                            colsPerguntas[int.Parse(m.Groups[1].Value)] = c;
+                        }
+                    }
                 }
 
-                // Verifica coluna alvo
-                if (!string.IsNullOrEmpty(colunaAlvo) && !mapaColunas.ContainsKey(colunaAlvo))
-                {
-                    Console.WriteLine($"❌ Coluna '{colunaAlvo}' não encontrada.");
-                    return "";
-                }
+                if (colsPerguntas.Count == 0)
+                    return "Nenhuma pergunta encontrada no teste " + testeNum + ".";
 
-                // 7️⃣ Atualizar Pergunta específica
-                if (!string.IsNullOrEmpty(colunaAlvo) && colunaAlvo.StartsWith("T2_P"))
-                {
-                    int col = mapaColunas[colunaAlvo];
-                    sheet.Cells[alunoRow, col].Value2 = notas[0];
 
-                    Console.WriteLine($"✏️ Atualizada {colunaAlvo} do aluno {numeroMec} para {notas[0]}.");
+                // ==========================================================
+                // 6) TIPOS DE OPERAÇÕES
+                // ==========================================================
+                bool pedirZero = textoOriginal.Contains(" zero");
+                bool pedirRandom = textoOriginal.Contains("random") || textoOriginal.Contains("aleat");
+                bool pedirCotacaoMax = textoOriginal.Contains("cotação máxima") || textoOriginal.Contains("nota máxima");
+                bool apenasVazias = textoOriginal.Contains("vazia");
+
+                Random rnd = new Random();
+
+
+                // ==========================================================
+                // 7) APLICAR OPERAÇÃO A UM ALUNO
+                // ==========================================================
+                Action<int> AplicarOperacao = delegate (int r)
+                {
+                    // ZERO
+                    if (pedirZero)
+                    {
+                        foreach (int col in colsPerguntas.Values)
+                            sheet.Cells[r, col].Value2 = 0;
+                    }
+
+                    // RANDOM
+                    else if (pedirRandom)
+                    {
+                        foreach (int col in colsPerguntas.Values)
+                        {
+                            if (apenasVazias &&
+                                sheet.Cells[r, col].Value2 != null &&
+                                sheet.Cells[r, col].Value2.ToString() != "")
+                                continue;
+
+                            double randomNota;
+                            if (rnd.Next(2) == 0)
+                                randomNota = rnd.Next(0, 21);    // inteiro
+                            else
+                                randomNota = Math.Round(rnd.NextDouble() * 20, 1);
+
+                            sheet.Cells[r, col].Value2 = randomNota;
+                        }
+                    }
+
+                    // COTAÇÃO MÁXIMA – alterar APENAS uma pergunta
+                    else if (pedirCotacaoMax && perguntaNum != -1)
+                    {
+                        if (colsPerguntas.ContainsKey(perguntaNum))
+                            sheet.Cells[r, colsPerguntas[perguntaNum]].Value2 = 20.0;
+                    }
+
+                    // PERGUNTA INDIVIDUAL
+                    else if (perguntaNum != -1 && valores.Count >= 1)
+                    {
+                        if (colsPerguntas.ContainsKey(perguntaNum))
+                            sheet.Cells[r, colsPerguntas[perguntaNum]].Value2 = valores[0];
+                    }
+
+                    // LISTA DE PERGUNTAS (ex: 1 2 3 4 5)
+                    else if (valores.Count > 1)
+                    {
+                        List<KeyValuePair<int, int>> ord =
+                            colsPerguntas.OrderBy(k => k.Key).ToList();
+
+                        for (int i = 0; i < valores.Count && i < ord.Count; i++)
+                            sheet.Cells[r, ord[i].Value].Value2 = valores[i];
+                    }
+
+                    // ======================================================
+                    // NORMALIZAÇÃO 0–20 → peso
+                    // ======================================================
+                    double peso = 20.0 / colsPerguntas.Count;
+                    double soma = 0;
+
+                    foreach (int col in colsPerguntas.Values)
+                    {
+                        double bruto = 0;
+                        object valObj = sheet.Cells[r, col].Value2;
+
+                        if (valObj != null)
+                            bruto = Convert.ToDouble(valObj);
+
+                        double normalizado = (bruto / 20.0) * peso;
+
+                        sheet.Cells[r, col].Value2 = normalizado;
+                        soma += normalizado;
+                    }
+
+                    // Teste final
+                    if (colTesteFinal != -1)
+                        sheet.Cells[r, colTesteFinal].Value2 = soma;
+                };
+
+
+                // ==========================================================
+                // 8) EXECUTAR PARA 1 ALUNO OU PARA A TURMA
+                // ==========================================================
+                if (operacaoTurma)
+                {
+                    for (int r = headerRow + 1; r < lastRow; r++)
+                        AplicarOperacao(r);
                 }
                 else
                 {
-                    // 8️⃣ Atualizar Teste 1
-                    if (colunaAlvo == "Teste 1" && mapaColunas.ContainsKey("Teste 1"))
-                    {
-                        sheet.Cells[alunoRow, mapaColunas["Teste 1"]].Value2 = notas[0];
-                        Console.WriteLine("✏️ Atualizado Teste 1.");
-                    }
-
-                    // Atualizar Teste 2
-                    else if (colunaAlvo == "Teste 2" && mapaColunas.ContainsKey("Teste 2"))
-                    {
-                        sheet.Cells[alunoRow, mapaColunas["Teste 2"]].Value2 = notas[0];
-                        Console.WriteLine("✏️ Atualizado Teste 2.");
-                    }
-
-                    // 9️⃣ Atualizar várias perguntas (ex: "12 14 15 10 9")
-                    else if (notas.Length > 1)
-                    {
-                        int i = 0;
-                        foreach (var kv in mapaColunas.Where(k => k.Key.StartsWith("T2_P")).OrderBy(k => k.Key))
-                        {
-                            if (i >= notas.Length) break;
-                            sheet.Cells[alunoRow, kv.Value].Value2 = notas[i];
-                            i++;
-                        }
-
-                        Console.WriteLine("✏️ Atualizadas várias perguntas do Teste 2.");
-                    }
-                }
-
-                // Atualizar Teste 2 como soma das perguntas
-                if (mapaColunas.ContainsKey("Teste 2"))
-                {
-                    double soma = 0;
-                    foreach (var kv in mapaColunas.Where(k => k.Key.StartsWith("T2_P")))
-                    {
-                        soma += Convert.ToDouble(sheet.Cells[alunoRow, kv.Value].Value2 ?? 0);
-                    }
-
-                    sheet.Cells[alunoRow, mapaColunas["Teste 2"]].Value2 = soma;
-                    Console.WriteLine($"🔄 Teste 2 recalculado automaticamente = {soma}");
+                    AplicarOperacao(alunoRow);
                 }
 
 
-                // 🔟 RE-CALCULAR MÉDIA SE EXISTIR
+                // ==========================================================
+                // 9) REFAZER MÉDIAS
+                // ==========================================================
                 int colMedia = -1;
-
                 for (int c = firstCol; c <= lastCol; c++)
                 {
-                    var v = sheet.Cells[headerRow, c].Value?.ToString();
-                    if (v != null && IgualIgnorandoAcentos(v, "Média"))
+                    string t = sheet.Cells[headerRow, c].Value?.ToString();
+                    if (t != null && IgualIgnorandoAcentos(t, "média"))
                         colMedia = c;
                 }
 
-                if (colMedia != -1 && mapaColunas.ContainsKey("Teste 1") && mapaColunas.ContainsKey("Teste 2"))
+                if (colMedia != -1)
                 {
-                    string cT1 = ColunaParaLetra(mapaColunas["Teste 1"]);
-                    string cT2 = ColunaParaLetra(mapaColunas["Teste 2"]);
+                    List<int> colTestes = new List<int>();
 
-                    sheet.Cells[alunoRow, colMedia].FormulaLocal =
-                        $"=MÉDIA({cT1}{alunoRow};{cT2}{alunoRow})";
+                    for (int c = firstCol; c <= lastCol; c++)
+                    {
+                        string t = sheet.Cells[headerRow, c].Value?.ToString();
+                        if (t != null && t.ToLower().StartsWith("teste"))
+                            colTestes.Add(c);
+                    }
 
-                    Console.WriteLine("📊 Média recalculada.");
+                    for (int r = headerRow + 1; r < lastRow; r++)
+                    {
+                        List<string> refs = new List<string>();
+                        foreach (int c in colTestes)
+                            refs.Add(ColunaParaLetra(c) + r);
+
+                        string formula = "=MÉDIA(" + string.Join(";", refs.ToArray()) + ")";
+                        sheet.Cells[r, colMedia].FormulaLocal = formula;
+                    }
                 }
 
                 workbook.Save();
-                Console.WriteLine("✅ Atualização concluída!");
-                return "Notas atualizadas com sucesso.";
+                return operacaoTurma ? "Notas atualizadas para toda a turma!" : "Notas atualizadas!";
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ Erro ao atualizar notas: " + ex.Message);
                 return "Erro ao atualizar notas: " + ex.Message;
             }
         }
-        
+
+
 
         public static string ApagarTodosGraficos()
         {

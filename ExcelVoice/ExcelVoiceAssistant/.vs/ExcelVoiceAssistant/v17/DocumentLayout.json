@@ -1,9 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\",
+  "WorkspaceRootPath": "C:\\Users\\carol\\Desktop\\IM\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\",
   "Documents": [
     {
+<<<<<<< Updated upstream
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+=======
+      "AbsoluteMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|C:\\Users\\carol\\Desktop\\IM\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:ExcelVoiceAssistant\\ExcelController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|c:\\users\\carol\\desktop\\im\\im_excel_projects\\excelvoice\\excelvoiceassistant\\excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> Stashed changes
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
@@ -13,6 +22,7 @@
       "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:excelvoiceassistant\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+<<<<<<< Updated upstream
       "AbsoluteMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -20,16 +30,25 @@
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
+=======
+>>>>>>> Stashed changes
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\WebAppAssistantV2\\index.htm||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\stories.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
+<<<<<<< Updated upstream
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+=======
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+>>>>>>> Stashed changes
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\config.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
@@ -48,6 +67,15 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+<<<<<<< Updated upstream
+=======
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+>>>>>>> Stashed changes
     }
   ],
   "DocumentGroupContainers": [
@@ -57,7 +85,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
+<<<<<<< Updated upstream
           "SelectedChildIndex": 5,
+=======
+          "SelectedChildIndex": 9,
+>>>>>>> Stashed changes
           "Children": [
             {
               "$type": "Bookmark",
@@ -69,6 +101,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 4,
               "Title": "rules.yml",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml",
@@ -116,52 +149,113 @@
               "ViewState": "AgIAANMBAAAAAAAAAAAQwAECAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2025-11-26T17:01:33.808Z",
+=======
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\carol\\Desktop\\IM\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\Program.cs",
+              "RelativeDocumentMoniker": "ExcelVoiceAssistant\\Program.cs",
+              "ToolTip": "C:\\Users\\carol\\Desktop\\IM\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\Program.cs",
+              "RelativeToolTip": "ExcelVoiceAssistant\\Program.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAAAEkAAABpAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T23:38:07.649Z",
+>>>>>>> Stashed changes
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 9,
+=======
+              "DocumentIndex": 6,
+              "Title": "domain.yml",
+              "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml",
+              "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAcwLcAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-11-26T16:49:20.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "nlu.yml",
+              "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml",
+              "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAAAGgAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-11-26T17:01:33.808Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+>>>>>>> Stashed changes
               "Title": "config.yml",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\config.yml",
-              "RelativeDocumentMoniker": "..\\rasaDemo\\config.yml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\config.yml",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\config.yml",
-              "RelativeToolTip": "..\\rasaDemo\\config.yml",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\config.yml",
               "ViewState": "AgIAAAEAAAAAAAAAAAAqwCIAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2025-11-27T00:37:32.967Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 5,
+=======
+              "DocumentIndex": 3,
+>>>>>>> Stashed changes
               "Title": "index.htm",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\WebAppAssistantV2\\index.htm",
-              "RelativeDocumentMoniker": "..\\WebAppAssistantV2\\index.htm",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\WebAppAssistantV2\\index.htm",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\WebAppAssistantV2\\index.htm",
+<<<<<<< Updated upstream
               "RelativeToolTip": "..\\WebAppAssistantV2\\index.htm",
               "ViewState": "AgIAACQDAAAAAAAAAAAQwGYDAAAHAAAAAAAAAA==",
+=======
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\WebAppAssistantV2\\index.htm",
+              "ViewState": "AgIAALkBAAAAAAAAAAAmwMUBAAAjAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
               "WhenOpened": "2025-11-27T10:27:26.823Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 6,
+=======
+              "DocumentIndex": 4,
+>>>>>>> Stashed changes
               "Title": "stories.yml",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\stories.yml",
-              "RelativeDocumentMoniker": "..\\rasaDemo\\data\\stories.yml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\stories.yml",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\stories.yml",
+<<<<<<< Updated upstream
               "RelativeToolTip": "..\\rasaDemo\\data\\stories.yml",
               "ViewState": "AgIAAAoAAAAAAAAAAAAiwCMAAAAmAAAAAAAAAA==",
+=======
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\stories.yml",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAiwFcAAAAAAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2025-11-26T17:07:15.894Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 10,
+=======
+              "DocumentIndex": 8,
+>>>>>>> Stashed changes
               "Title": "actions.py",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\actions.py",
-              "RelativeDocumentMoniker": "..\\rasaDemo\\actions\\actions.py",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\actions.py",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\actions.py",
-              "RelativeToolTip": "..\\rasaDemo\\actions\\actions.py",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\actions.py",
               "ViewState": "AgIAAFAAAAAAAAAAAAAowFoAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-11-26T20:46:12.435Z"
@@ -170,79 +264,130 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "ExcelController.cs",
-              "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs",
+              "DocumentMoniker": "C:\\Users\\carol\\Desktop\\IM\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs",
               "RelativeDocumentMoniker": "ExcelVoiceAssistant\\ExcelController.cs",
-              "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs",
+              "ToolTip": "C:\\Users\\carol\\Desktop\\IM\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs",
               "RelativeToolTip": "ExcelVoiceAssistant\\ExcelController.cs",
+<<<<<<< Updated upstream
               "ViewState": "AgIAAKcGAAAAAAAAAAAUwM4GAAAAAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAByAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-09T00:16:38.167Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 11,
+=======
+              "DocumentIndex": 5,
+              "Title": "rules.yml",
+              "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml",
+              "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\rules.yml",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAcwGkAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-11-26T17:07:46.541Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+>>>>>>> Stashed changes
               "Title": "__init__.py",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\__init__.py",
-              "RelativeDocumentMoniker": "..\\rasaDemo\\actions\\__init__.py",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\__init__.py",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\__init__.py",
-              "RelativeToolTip": "..\\rasaDemo\\actions\\__init__.py",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\actions\\__init__.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-11-26T20:50:16.321Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 13,
+=======
+              "DocumentIndex": 12,
+>>>>>>> Stashed changes
               "Title": "globals.js",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\js\\globals.js",
-              "RelativeDocumentMoniker": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\js\\globals.js",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\js\\globals.js",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\js\\globals.js",
-              "RelativeToolTip": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\js\\globals.js",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\js\\globals.js",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-11-08T09:13:13.774Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 12,
+=======
+              "DocumentIndex": 11,
+>>>>>>> Stashed changes
               "Title": "globals.js",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\globals.js",
-              "RelativeDocumentMoniker": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\globals.js",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\globals.js",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\globals.js",
-              "RelativeToolTip": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\globals.js",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\globals.js",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-11-07T23:41:57.59Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 14,
+=======
+              "DocumentIndex": 13,
+>>>>>>> Stashed changes
               "Title": "cookies.js",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js",
-              "RelativeDocumentMoniker": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js",
-              "RelativeToolTip": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\teste\\cookies.js",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-11-07T23:41:56.617Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 8,
+=======
+              "DocumentIndex": 10,
+              "Title": "st.scxml",
+              "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\st.scxml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\st.scxml",
+              "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\st.scxml",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\mmiframeworkV2\\st.scxml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-07T20:34:19.497Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+>>>>>>> Stashed changes
               "Title": "index.htm",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm",
-              "RelativeDocumentMoniker": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm",
-              "RelativeToolTip": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\WebAppAssistantV2\\index.htm",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
               "WhenOpened": "2025-11-07T16:25:27.136Z"
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 7,
+=======
+              "DocumentIndex": 15,
+>>>>>>> Stashed changes
               "Title": "actions.py",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py",
-              "RelativeDocumentMoniker": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py",
-              "RelativeToolTip": "..\\..\\..\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\trmbr\\OneDrive\\Desktop\\IM\\IM_EXCEL_NODEPENDENCIES\\rasaDemo\\actions\\actions.py",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-11-07T15:51:45.482Z"
             }

@@ -154,9 +154,11 @@ regex:
   valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
   grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
   # PERGUNTAS (P1, pergunta 1, q1, questao 2, p12)
-  pergunta: "(p|pergunta|questao|q)[ ]?([1-9][0-9]?)"
+  pergunta: "(?:p|pergunta|questao|questão|q)[ ]?(?:n(ú|u)mero)?[ ]?([0-9]{1,2})(?:[ ]?(?:a|à|até|-)[ ]?([0-9]{1,2}))?"
+
   # TESTES (teste 1, teste 12)
-  teste_numero: "teste ?([0-9]{1,2})"
+  teste_numero: "(?:teste|t)[ ]?(?:n(ú|u)mero)?[ ]?([0-9]{1,2})"
+
   # COLUNA TESTE
   coluna_teste: "coluna (do|de) teste"
   # NOMES DE COLUNA FLEXÍVEIS
@@ -297,12 +299,26 @@ nlu:
     - Criar perguntas do teste [2](teste_numero)
     - Adicionar perguntas para o teste [3](teste_numero)
     - Cria as perguntas do teste [4](teste_numero)
-    - Adicionar P1 a P5 para o teste [5](teste_numero)
-    - Criar questões do teste [6](teste_numero)
-    - Adiciona as perguntas do teste [7](teste_numero)
-    - Criar questões para o teste [8](teste_numero)
     - Adiciona perguntas no teste [9](teste_numero)
-    - Criar P1 até P5 do teste [10](teste_numero)
+    - Criar questões para o teste [8](teste_numero)
+    - Adiciona a pergunta [P1](pergunta) ao teste [1](teste_numero)
+    - Adiciona a questão [P3](pergunta) no teste [2](teste_numero)
+    - Cria a pergunta [P7](pergunta) do teste [5](teste_numero)
+    - Quero criar a pergunta [P10](pergunta) no teste [6](teste_numero)
+    - Adiciona a P4 ao teste [7](teste_numero)
+    - Quero adicionar apenas a pergunta [5](pergunta) ao teste [3](teste_numero)
+    - Criar a questão [3](pergunta) no teste [4](teste_numero)
+    - Adicionar [P1](pergunta) a [P5](pergunta) para o teste [5](teste_numero)
+    - Criar [P1](pergunta) até [P5](pergunta) do teste [10](teste_numero)
+    - Adiciona da [P2](pergunta) à [P7](pergunta) no teste [3](teste_numero)
+    - Quero perguntas de [P1](pergunta) até [P4](pergunta) para o teste [6](teste_numero)
+    - Adicionar questões de [P3](pergunta) a [P8](pergunta) no teste [12](teste_numero)
+    - Cria perguntas entre [P1](pergunta) e [P10](pergunta) para o teste [9](teste_numero)
+    - Cria perguntas da 1 à 5 para o teste [2](teste_numero)
+    - Adiciona as perguntas da pergunta 2 até à 6 no teste [4](teste_numero)
+    - Meter perguntas de 1 a 3 para o teste [5](teste_numero)
+    - Quero adicionar perguntas da pergunta 4 à 9 para o teste [1](teste_numero)
+
 
 # ----------------------------------------------------
 - intent: gerar_grafico_turma
@@ -355,15 +371,51 @@ nlu:
     - Remove todos os gráficos da folha
     - Elimina todos os gráficos
 
-# ----------------------------------------------------
+
+
 - intent: atualizar_notas
   examples: |
-    - Atualiza a nota da [pergunta 1](pergunta) do aluno número [107447](aluno_numero) para [3](valores)
-    - Muda a nota da [pergunta 3](pergunta) do aluno [108370](aluno_numero) para [4.5](valores)
-    - Atualiza a nota do [teste 1](teste_numero) do aluno [94716](aluno_numero) para [12](valores)
-    - Define a nota do [teste 2](teste_numero) do aluno número [108522](aluno_numero) como [15](valores)
-    - Atualiza todas as notas do teste 2 do aluno [107447](aluno_numero) para [2 3 4 5 1](valores)
-    - - Altera a nota da [questão 4](pergunta) do aluno [109830](aluno_numero) para [2.5](valores)
+    # --- Atualizar 1 pergunta (SEMPRE COM TESTE) ---
+    - Atualiza a nota da pergunta [1](pergunta) do teste [1](teste_numero) do aluno número [107447](aluno_numero) para [3](valores)
+    - Muda a nota da pergunta [3](pergunta) do teste [2](teste_numero) do aluno número [108370](aluno_numero) para [4.5](valores)
+    - Define a pergunta [2](pergunta) do teste [1](teste_numero) para [2](valores) no aluno número [456789](aluno_numero)
+    - Atualiza a pergunta [4](pergunta) do teste [3](teste_numero) do aluno número [123456](aluno_numero) para [5](valores)
+    - Atualiza a pergunta [1](pergunta) do teste [2](teste_numero) da aluna [Maria Silva](aluno_nome) para [4](valores)
+    - Muda o valor da pergunta [4](pergunta) do teste [2](teste_numero) para o aluno [João Pereira](aluno_nome)
+
+    # --- Atualizar várias perguntas de um teste ---
+    - Define todas as perguntas do teste [2](teste_numero) do aluno número [97876](aluno_numero) com [1 2 3 4 5](valores)
+    - Atualiza as perguntas do teste [3](teste_numero) do aluno número [107447](aluno_numero) com [2 3 4 5 1](valores)
+    - Quero atualizar todas as perguntas do teste [5](teste_numero) do aluno número [223344](aluno_numero) com valores [3 3 3 3]
+
+    # --- Nota final do teste ---
+    - Atualiza a nota do teste [1](teste_numero) do aluno número [94716](aluno_numero) para [12](valores)
+    - Define o teste [2](teste_numero) do aluno número [108522](aluno_numero) como [15](valores)
+
+    # --- Definir ZERO ---
+    - Mete a zero todas as perguntas do teste [4](teste_numero) do aluno número [12345](aluno_numero)
+    - Coloca zero nas perguntas do teste [2](teste_numero) do aluno número [111222](aluno_numero)
+    - Mete zero em todas as perguntas do teste [3](teste_numero) da aluna [Ana Santos](aluno_nome)
+
+    # --- RANDOM ---
+    - Mete valores aleatórios no teste [3](teste_numero) para o aluno número [777777](aluno_numero)
+    - Define valores random para todas as perguntas do teste [1](teste_numero) do aluno número [888999](aluno_numero)
+    - Mete valores random no teste [3](teste_numero) para a aluna [Ana Santos](aluno_nome)
+
+    # --- RANDOM para toda a turma ---
+    - Mete valores aleatórios para todas as perguntas do teste [1](teste_numero) em toda a turma
+    - Preenche o teste [2](teste_numero) com valores aleatórios para toda a turma
+    - Coloca valores random no teste [3](teste_numero) para todos os alunos
+
+    # --- RANDOM apenas em perguntas vazias ---
+    - Preenche as perguntas vazias do teste [2](teste_numero) com valores aleatórios
+    - Mete valores random apenas nas perguntas vazias do teste [4](teste_numero)
+    - Preenche com random as perguntas vazias do teste [1](teste_numero)
+
+    # --- Cotação máxima ---
+    - Mete a cotação máxima na pergunta [3](pergunta) do teste [1](teste_numero) para todos os alunos
+    - Coloca a nota máxima na pergunta [2](pergunta) do teste [4](teste_numero) para toda a turma
+    - Atribui nota máxima à pergunta [1](pergunta) do teste [2](teste_numero)
 
 # ----------------------------------------------------
 - intent: guardar_ficheiro
@@ -373,6 +425,8 @@ nlu:
     - Grava o ficheiro como [Notas_Turma.xlsx](nome_ficheiro)
     - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
     - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
+
+
 
 # ----------------------------------------------------
 - intent: operacoes_matematicas
@@ -402,17 +456,6 @@ nlu:
     - Quero o relatório estatístico da turma
     - Estatísticas globais
 
-# ----------------------------------------------------
-- intent: atualizar_valores
-  examples: |
-    - Atualiza a cotação da [pergunta 2](pergunta)
-    - Muda o valor da [pergunta 3](pergunta) para [4](valores)
-    - Altera a pontuação máxima da [questão 1](pergunta)
-    - Define a cotação da [pergunta 5](pergunta) como [2](valores)
-    - Atualiza os valores das perguntas do teste 2
-    - Muda a cotação das perguntas do teste 1 para [2 3 5 4 1](valores)
-    - Modifica o valor máximo da [pergunta 4](pergunta)
-    - Alterar valor das perguntas do teste
 
 - intent: criar_pivot_table
   examples: |
