@@ -68,10 +68,10 @@ namespace ExcelVoiceAssistant
                 _excelApp = new Application();
                 _excelApp.Visible = true;
 
-                //excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
-                //excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
-                excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
-                excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
+                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
+                excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
+                //excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+                //excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
                 if (!File.Exists(excelPathBase))
                 {
@@ -172,6 +172,8 @@ namespace ExcelVoiceAssistant
                         return ExcelController.AtualizarNotas(json);
                     case "criar_pivot_table":
                         return ExcelController.CriarPivotTable(json);
+                    case "helper":
+                        return ExcelController.Helper();
                     default:
                         Console.WriteLine("Intent não reconhecida:", intent);
                         return "Comando não reconhecido.";

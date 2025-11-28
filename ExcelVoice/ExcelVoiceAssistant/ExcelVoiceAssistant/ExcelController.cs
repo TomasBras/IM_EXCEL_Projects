@@ -15,11 +15,11 @@ namespace ExcelVoiceAssistant
         private static Excel.Workbook workbook;
         private static Excel.Worksheet sheet;
 
-        //private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
-        //private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
+        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
+        private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
 
-        private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
-        private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
+        //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+        //private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
         // =====================================================
         // Ligar Excel já aberto
@@ -1705,6 +1705,17 @@ namespace ExcelVoiceAssistant
             Console.WriteLine("=================================");
         }
 
+        private static bool ColunaEhNumerica(string colunaNome)
+        {
+            string[] numericFields =
+            {
+        "Média", "Teste 1", "Teste 2", "Teste 3",
+        "Nota Necessária", "Melhoria Real"
+    };
+
+            return numericFields.Contains(colunaNome, StringComparer.OrdinalIgnoreCase);
+        }
+
         public static void DebugCabecalhos()
         {
             Excel.Range used = sheet.UsedRange;
@@ -1732,7 +1743,6 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                // 1) A folha dos dados já está no "sheet"
                 Excel.Range used = sheet.UsedRange;
 
                 int firstRow = used.Row;
@@ -1743,7 +1753,7 @@ namespace ExcelVoiceAssistant
                 Excel.Range dataRange =
                     sheet.Range[sheet.Cells[firstRow, firstCol], sheet.Cells[lastRow, lastCol]];
 
-                // 2) Criar nova folha Pivot
+                // Criar folha para Pivot
                 Excel.Worksheet pivotSheet = (Excel.Worksheet)workbook.Worksheets.Add();
                 pivotSheet.Name = "Pivot_" + DateTime.Now.Ticks;
 
@@ -1757,39 +1767,22 @@ namespace ExcelVoiceAssistant
                     "TabelaDinamica"
                 );
 
-                // 3) Ler pedidos vindos do Rasa
+                // Ler campos enviados pelo Rasa
                 string rowField = json?.nlu?.coluna_excel_row?.ToString();
                 string valueField = json?.nlu?.coluna_excel_value?.ToString();
                 string filterRegime = json?.nlu?.regime?.ToString();
 
-                // --- 3B) DETETAR SE É UM COMANDO BÁSICO ---
                 bool comandoBasico = (rowField == null && valueField == null);
 
-                // Campos que queremos usar por defeito
-                List<string> defaultRows = new List<string>
-        {
-            "nome",
-            "numero mecanografico",
-            "regime"
-        };
-
-                if (comandoBasico)
-                {
-                    rowField = null;       // vai ser ignorado
-                    valueField = "média";  // sempre média
-                }
-
-                // 4) Mapa RASA → Cabeçalhos Excel
+                // Mapa RASA → cabeçalhos Excel
                 Dictionary<string, string> map = new Dictionary<string, string>
         {
-            { "regime",               "REGIME" },
-            { "média",                "Média" },
-            { "media",                "Média" },
-            { "teste 1",              "Teste 1" },
-            { "teste 2",              "Teste 2" },
-            { "tp",                   "TP" },
-            { "p",                    "P" },
-            { "nome",                 "Nome" },
+            { "regime", "REGIME" },
+            { "média", "Média" },
+            { "media", "Média" },
+            { "teste 1", "Teste 1" },
+            { "teste 2", "Teste 2" },
+            { "nome", "Nome" },
             { "numero mecanografico", "Número mecanográfico" }
         };
 
@@ -1803,65 +1796,70 @@ namespace ExcelVoiceAssistant
                 rowField = Resolve(rowField);
                 valueField = Resolve(valueField);
 
-                // 5) Adicionar campos às linhas
+                // Caso básico: pivot geral
                 if (comandoBasico)
                 {
-                    foreach (var campo in defaultRows)
-                    {
-                        string real = Resolve(campo);
-                        if (real != null)
-                        {
-                            Excel.PivotField pf = pivot.PivotFields(real);
-                            pf.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
-                        }
-                    }
-                }
-                else
-                {
-                    if (rowField != null)
-                    {
-                        pivot.PivotFields(rowField).Orientation =
-                            Excel.XlPivotFieldOrientation.xlRowField;
-                    }
-                }
+                    Excel.PivotField pfNome = pivot.PivotFields("Nome");
+                    pfNome.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
 
-                // 6) Campo de valores (média)
-                if (valueField != null)
-                {
-                    Excel.PivotField pf = pivot.PivotFields(valueField);
+                    Excel.PivotField pfRegime = pivot.PivotFields("REGIME");
+                    pfRegime.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+
+                    // Valores = média por defeito
+                    Excel.PivotField pf = pivot.PivotFields("Média");
                     pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
                     pf.Function = Excel.XlConsolidationFunction.xlAverage;
-                    pf.Name = "Média de " + valueField;
+                    pf.Name = "Média";
+
+                    return "Tabela dinâmica criada com campos padrão.";
                 }
 
-                // 7) Filtro por regime (corrigido)
+                // 1) RowField → OK sempre
+                if (rowField != null)
+                {
+                    Excel.PivotField row = pivot.PivotFields(rowField);
+                    row.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+                }
+
+                // 2) ValueField → tem de ser numérico
+                if (valueField != null)
+                {
+                    if (!ColunaEhNumerica(valueField))
+                    {
+                        // ⚠️ Campo não-numérico → mover para linhas automaticamente
+                        Excel.PivotField pf = pivot.PivotFields(valueField);
+                        pf.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+
+                        return $"O campo '{valueField}' não é numérico e foi movido automaticamente para as linhas.";
+                    }
+                    else
+                    {
+                        Excel.PivotField pf = pivot.PivotFields(valueField);
+                        pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
+                        pf.Function = Excel.XlConsolidationFunction.xlAverage;
+                        pf.Name = "Média de " + valueField;
+                    }
+                }
+
+                // 3) Filtrar por regime se pedido
                 if (!string.IsNullOrEmpty(filterRegime))
                 {
                     Excel.PivotField filtro = pivot.PivotFields("REGIME");
-
-                    // 🔥 tem de ser PageField antes de mexer no filtro
                     filtro.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
 
-                    // 🔥 Esperar que a pivot carregue items
                     app.Calculate();
 
-                    // 🔥 Verificar se o valor existe
-                    bool existe = false;
                     foreach (Excel.PivotItem item in filtro.PivotItems())
                     {
                         if (item.Name.Equals(filterRegime, StringComparison.OrdinalIgnoreCase))
                         {
-                            existe = true;
-                            break;
+                            filtro.CurrentPage = filterRegime;
+                            return "Tabela dinâmica criada com filtro aplicado.";
                         }
                     }
 
-                    if (existe)
-                        filtro.CurrentPage = filterRegime;   // aplica filtro
-                    else
-                        filtro.ClearAllFilters();            // evita crash
+                    filtro.ClearAllFilters();
                 }
-
 
                 return "Tabela dinâmica criada com sucesso!";
             }
@@ -1871,6 +1869,11 @@ namespace ExcelVoiceAssistant
             }
         }
 
+
+        public static string Helper()
+        {
+            return "Pode pedir para calcular médias, destacar aprovados, inserir colunas, atualizar notas, criar gráficos ou gerar tabelas dinâmicas.";
+        }
 
 
         public static string GuardarRelatorio()
