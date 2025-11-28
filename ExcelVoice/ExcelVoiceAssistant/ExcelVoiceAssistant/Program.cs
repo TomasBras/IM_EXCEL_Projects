@@ -82,7 +82,6 @@ namespace ExcelVoiceAssistant
                 _workbook = _excelApp.Workbooks.Open(excelPathBase);
                 _sheet = _workbook.Sheets[1];
 
-                // 👉 Ligar o ExcelController ao Excel já aberto
                 ExcelController.SetExcel(_excelApp, _workbook, _sheet);
 
                 Console.WriteLine("✅ Excel inicializado com sucesso!");
@@ -94,10 +93,6 @@ namespace ExcelVoiceAssistant
         }
 
 
-
-        // =========================================================
-        // PROCESSAR MENSAGENS MMI
-        // =========================================================
         private static void ProcessMessage(string message)
         {
             if (message == "OK" || message == "RENEW") return;
@@ -124,9 +119,6 @@ namespace ExcelVoiceAssistant
             }
         }
 
-        // =========================================================
-        // EXECUTAR COMANDOS
-        // =========================================================
         private static string ExecutarComando(string intent, dynamic json)
         {
             try

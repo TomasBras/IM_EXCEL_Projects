@@ -21,15 +21,11 @@ namespace ExcelVoiceAssistant
         //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
         //private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
-        // =====================================================
-        // Ligar Excel já aberto
-        // =====================================================
         public static void SetExcel(Excel.Application excelApp, Excel.Workbook wb, Excel.Worksheet ws)
         {
             app = excelApp;
             workbook = wb;
 
-            // Procurar folha correta automaticamente
             foreach (Excel.Worksheet sh in workbook.Worksheets)
             {
                 if (sh.Cells[1, 1].Value?.ToString() == "Número mecanográfico")
@@ -39,13 +35,9 @@ namespace ExcelVoiceAssistant
                 }
             }
 
-            // fallback: usa a enviada
             sheet = ws;
         }
 
-        // =====================================================
-        // Normalizar texto
-        // =====================================================
         private static bool IgualIgnorandoAcentos(string a, string b)
         {
             if (a == null || b == null) return false;
@@ -60,9 +52,7 @@ namespace ExcelVoiceAssistant
             return Normalize(a) == Normalize(b);
         }
 
-        // =====================================================
-        // Converter número → letra
-        // =====================================================
+
         private static string ColunaParaLetra(int coluna)
         {
             string letra = "";
@@ -75,9 +65,6 @@ namespace ExcelVoiceAssistant
             return letra;
         }
 
-        // =====================================================
-        // Encontrar cabeçalho "Aluno"
-        // =====================================================
         private static (int headerRow, int headerCol) EncontrarCabecalho()
         {
             Excel.Range used = sheet.UsedRange;
@@ -97,14 +84,13 @@ namespace ExcelVoiceAssistant
 
                     string texto = valor.ToString();
 
-                    // 🔥 Normalizador universal
                     string clean = new string(
                         texto.Normalize(NormalizationForm.FormD)
                         .Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
                         .ToArray()
                     )
-                    .Replace("\u00A0", " ") // remove non-breaking space
-                    .Replace("\t", " ")     // remove tabs
+                    .Replace("\u00A0", " ") 
+                    .Replace("\t", " ")     
                     .Replace("  ", " ")
                     .Trim()
                     .ToLower();
@@ -122,22 +108,17 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                // o intent vem sempre em nlu.intent
                 string intent = json.nlu.intent.ToString();
 
-                // ENTIDADES VÊM COMO CAMPOS DIRETOS (não dentro de "entities")
                 string nome = json.nlu.aluno_nome != null ? json.nlu.aluno_nome.ToString() : null;
                 string numero = json.nlu.aluno_numero != null ? json.nlu.aluno_numero.ToString() : null;
 
-                // 🎯 Se o nome existir → calcula só para esse aluno
                 if (!string.IsNullOrEmpty(nome))
                     return CalcularMediaAluno(nome);
 
-                // 🎯 Se houver número mecanográfico
                 if (!string.IsNullOrEmpty(numero))
                     return CalcularMediaAlunoNumero(numero);
 
-                // Caso contrário → média da turma
                 return CalcularMediaTurma();
             }
             catch
@@ -413,15 +394,12 @@ namespace ExcelVoiceAssistant
                         colSit = c;
                 }
 
-                // 🔥 PRIMEIRA VERIFICAÇÃO: Falta coluna Situação
                 if (colSit == -1)
                     return "Criar coluna situação primeiro.";
 
-                // 🔥 SEGUNDA VERIFICAÇÃO: Falta coluna Média
                 if (colMedia == -1)
                     return "Calcular média primeiro.";
 
-                // ⭐ Ambas existem → processar normalmente
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerCol].Value != null)
@@ -460,7 +438,6 @@ namespace ExcelVoiceAssistant
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // Encontrar colunas de testes automaticamente
                 List<(int col, int num)> testes = new List<(int col, int num)>();
 
                 for (int c = firstCol; c <= lastCol; c++)
@@ -485,7 +462,6 @@ namespace ExcelVoiceAssistant
                 int colPenultimo = testes[testes.Count - 2].col;
                 int colUltimo = testes[testes.Count - 1].col;
 
-                // Criar coluna Melhoria Real se não existir
                 int colMelhoria = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -504,7 +480,6 @@ namespace ExcelVoiceAssistant
                     lastCol++;
                 }
 
-                // Processar aluno a aluno
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerColNome].Value != null)
@@ -517,7 +492,6 @@ namespace ExcelVoiceAssistant
                         ? (diferenca / penultimo) * 100
                         : (diferenca > 0 ? 100 : 0);
 
-                    // Mensagem
                     string texto;
 
                     if (diferenca > 0)
@@ -527,7 +501,6 @@ namespace ExcelVoiceAssistant
                         var cell = sheet.Cells[row, colMelhoria];
                         cell.Value2 = texto;
 
-                        // Verde
                         cell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGreen);
                     }
                     else if (diferenca < 0)
@@ -537,7 +510,6 @@ namespace ExcelVoiceAssistant
                         var cell = sheet.Cells[row, colMelhoria];
                         cell.Value2 = texto;
 
-                        // Vermelho
                         cell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCoral);
                     }
                     else
@@ -547,7 +519,6 @@ namespace ExcelVoiceAssistant
                         var cell = sheet.Cells[row, colMelhoria];
                         cell.Value2 = texto;
 
-                        // Cinza
                         cell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray);
                     }
 
@@ -572,7 +543,6 @@ namespace ExcelVoiceAssistant
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // Encontrar colunas dos testes dinamicamente
                 List<int> colTestes = new List<int>();
 
                 for (int c = firstCol; c <= lastCol; c++)
@@ -594,7 +564,6 @@ namespace ExcelVoiceAssistant
                 colTestes = colTestes.OrderBy(c => c).ToList();
                 int colUltimoTeste = colTestes.Last();
 
-                // Encontrar coluna média
                 int colMedia = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -609,7 +578,6 @@ namespace ExcelVoiceAssistant
                 if (colMedia == -1)
                     return "Calcule a média antes de verificar MP.";
 
-                // Criar coluna MP se não existir
                 int colMP = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -628,7 +596,6 @@ namespace ExcelVoiceAssistant
                     lastCol++;
                 }
 
-                // Criar coluna Nota Necessária se não existir
                 int colNotaNecessaria = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -647,7 +614,6 @@ namespace ExcelVoiceAssistant
                     lastCol++;
                 }
 
-                // Calcular MP aluno a aluno
                 int row = headerRow + 1;
 
                 while (sheet.Cells[row, headerColNome].Value != null)
@@ -662,23 +628,19 @@ namespace ExcelVoiceAssistant
                         continue;
                     }
 
-                    // Calcular soma dos testes exceto o último
                     double soma = 0;
                     foreach (int col in colTestes.Take(colTestes.Count - 1))
                         soma += Convert.ToDouble(sheet.Cells[row, col].Value2 ?? 0);
 
                     int n = colTestes.Count;
 
-                    // Nota necessária para média >= 10
                     double notaNecessaria = 10 * n - soma;
 
-                    // Preencher coluna Nota Necessária
                     if (notaNecessaria > 20)
                         sheet.Cells[row, colNotaNecessaria].Value2 = ">20";
                     else
                         sheet.Cells[row, colNotaNecessaria].Value2 = Math.Round(notaNecessaria, 2);
 
-                    // Preencher MP
                     if (notaNecessaria <= 20)
                         sheet.Cells[row, colMP].Value2 = "MP";
                     else
@@ -699,7 +661,6 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                // 1) Obter número do teste
                 int testeNum = -1;
 
                 if (json.nlu.teste_numero != null)
@@ -715,12 +676,10 @@ namespace ExcelVoiceAssistant
 
                 string prefixo = $"T{testeNum}_P";
 
-                // 2) Texto do utilizador
                 string texto = json.text != null
                     ? Encoding.UTF8.GetString(Convert.FromBase64String(json.text.ToString())).ToLower()
                     : "";
 
-                // 3) Procurar intervalo tipo “1 a 5”
                 int pInicio = -1, pFim = -1;
                 var intervalo = Regex.Match(texto, @"(\d+)\s*(a|à|até|-)\s*(\d+)");
                 if (intervalo.Success)
@@ -729,7 +688,6 @@ namespace ExcelVoiceAssistant
                     pFim = int.Parse(intervalo.Groups[3].Value);
                 }
 
-                // 4) Procurar pergunta única
                 var unico = Regex.Match(texto, @"(p|pergunta|questao|questão|q)\s*(número\s*)?(\d+)");
                 if (unico.Success)
                 {
@@ -737,18 +695,15 @@ namespace ExcelVoiceAssistant
                     pInicio = pFim = p;
                 }
 
-                // 5) Se nada foi encontrado → ERRO (não default!)
                 if (pInicio == -1)
                     return "Não percebi qual pergunta queres adicionar.";
 
-                // 6) Cabeçalho
                 var (headerRow, headerCol) = EncontrarCabecalho();
                 Excel.Range used = sheet.UsedRange;
 
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // 7) Encontrar posição da coluna “Teste N”
                 int colTeste = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -763,7 +718,6 @@ namespace ExcelVoiceAssistant
                 if (colTeste == -1)
                     return $"Não encontrei o Teste {testeNum}.";
 
-                // 8) Mapear perguntas existentes ANTES do teste
                 Dictionary<int, int> existentes = new Dictionary<int, int>();
 
                 for (int c = firstCol; c < colTeste; c++)
@@ -784,14 +738,12 @@ namespace ExcelVoiceAssistant
                     }
                 }
 
-                // 9) Inserir NOVAS perguntas
                 int adicionadas = 0;
 
                 for (int p = pInicio; p <= pFim; p++)
                 {
                     if (!existentes.ContainsKey(p))
                     {
-                        // Inserir nova coluna ANTES do teste
                         sheet.Columns[colTeste].Insert();
 
                         sheet.Cells[headerRow, colTeste].Value2 = $"{prefixo}{p}";
@@ -805,7 +757,6 @@ namespace ExcelVoiceAssistant
 
                         adicionadas++;
 
-                        // mover o teste uma coluna para a direita
                         colTeste++;
                         lastCol++;
                     }
@@ -922,7 +873,6 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                // 📌 1) Obter aluno_nome e aluno_numero do JSON
                 string numeroMec = json.nlu.aluno_numero != null ? json.nlu.aluno_numero.ToString() : "";
                 string alunoNome = json.nlu.aluno_nome != null ? json.nlu.aluno_nome.ToString() : "";
 
@@ -934,10 +884,8 @@ namespace ExcelVoiceAssistant
 
                 Excel.Range used = sheet.UsedRange;
 
-                // 📌 2) Cabeçalho e coluna Nome
                 var (headerRow, colNome) = EncontrarCabecalho();
 
-                // 📌 3) Encontrar coluna "Número Mecanográfico"
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
@@ -961,7 +909,6 @@ namespace ExcelVoiceAssistant
                     return "Coluna 'Número Mecanográfico' não encontrada.";
                 }
 
-                // 📌 4) Encontrar colunas do Teste 1 e Teste 2
                 int colT1 = -1, colT2 = -1;
 
                 for (int c = firstCol; c <= lastCol; c++)
@@ -979,15 +926,12 @@ namespace ExcelVoiceAssistant
                     return "Não encontrei Teste 1 / Teste 2.";
                 }
 
-                // 📌 5) Encontrar última linha
                 int lastRow = headerRow + 1;
                 while (sheet.Cells[lastRow, colNome].Value != null)
                     lastRow++;
 
-                // 📌 6) Procurar aluno
                 int rowAluno = -1;
 
-                // 🔍 6A — Procurar pelo número MEC
                 if (!string.IsNullOrEmpty(numeroMec))
                 {
                     for (int r = headerRow + 1; r < lastRow; r++)
@@ -1002,7 +946,6 @@ namespace ExcelVoiceAssistant
                     }
                 }
 
-                // 🔍 6B — Procurar pelo NOME (caso não tenha encontrado pelo número)
                 if (rowAluno == -1 && !string.IsNullOrEmpty(alunoNome))
                 {
                     string[] partes = alunoNome.ToLower().Split(' ');
@@ -1020,18 +963,15 @@ namespace ExcelVoiceAssistant
                     }
                 }
 
-                // 📌 Falha total
                 if (rowAluno == -1)
                 {
                     Console.WriteLine($"❌ Aluno não encontrado: {alunoNome} / {numeroMec}");
                     return $"Aluno não encontrado: {alunoNome} / {numeroMec}";
                 }
 
-                // 📌 7) Nome verdadeiro para o título
                 string nomeFinal = sheet.Cells[rowAluno, colNome].Value?.ToString() ?? "(Sem nome)";
                 string textoNumero = string.IsNullOrEmpty(numeroMec) ? "" : $" (NMec {numeroMec})";
 
-                // 📌 8) Criar gráfico
                 Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
 
                 double posY = charts.Count == 0
@@ -1081,7 +1021,6 @@ namespace ExcelVoiceAssistant
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // Encontrar colunas T2_P1 ... T2_P5
                 Dictionary<string, int> perguntas = new Dictionary<string, int>();
 
                 for (int c = firstCol; c <= lastCol; c++)
@@ -1101,10 +1040,8 @@ namespace ExcelVoiceAssistant
                     return "Nenhuma coluna T2_P encontrada.";
                 }
 
-                // Ordenar T2_P1, T2_P2, ...
                 var ordenadas = perguntas.OrderBy(k => k.Key).ToList();
 
-                // Descobrir última linha com alunos
                 int lastRow = headerRow + 1;
                 while (sheet.Cells[lastRow, headerColNome].Value != null)
                     lastRow++;
@@ -1116,7 +1053,6 @@ namespace ExcelVoiceAssistant
                     return "Nenhum aluno encontrado.";
                 }
 
-                // Calcular média de cada pergunta
                 List<double> medias = new List<double>();
 
                 foreach (var kv in ordenadas)
@@ -1130,7 +1066,6 @@ namespace ExcelVoiceAssistant
                     medias.Add(soma / totalAlunos);
                 }
 
-                // Criar gráfico
                 Excel.ChartObjects charts = (Excel.ChartObjects)sheet.ChartObjects();
 
                 double posY = charts.Count == 0
@@ -1168,39 +1103,26 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                // ==========================================================
-                // 1) DECODIFICAR TEXTO ORIGINAL
-                // ==========================================================
                 string textoOriginal = json.text != null
                     ? Encoding.UTF8.GetString(Convert.FromBase64String(json.text.ToString())).ToLower()
                     : "";
 
-                // ==========================================================
-                // 2) ENTIDADES: aluno (nome/numero), teste, pergunta
-                // ==========================================================
                 string numeroMec = json.nlu.aluno_numero != null ? json.nlu.aluno_numero.ToString() : null;
                 string alunoNome = json.nlu.aluno_nome != null ? json.nlu.aluno_nome.ToString() : null;
 
-                // TESTE
                 int testeNum = -1;
                 Match matchTeste = Regex.Match(textoOriginal, @"teste ?([0-9]{1,2})");
                 if (matchTeste.Success)
                     testeNum = int.Parse(matchTeste.Groups[1].Value);
 
-                // PERGUNTA
                 int perguntaNum = -1;
                 Match matchPerg = Regex.Match(textoOriginal, @"(pergunta|quest[aã]o) ?([0-9]{1,2})");
                 if (matchPerg.Success)
                     perguntaNum = int.Parse(matchPerg.Groups[2].Value);
 
-                // REGRA: PERGUNTA sem TESTE → erro
                 if (perguntaNum != -1 && testeNum == -1)
                     return "Tens de indicar o número do teste. Ex.: 'pergunta 2 do teste 1'.";
 
-
-                // ==========================================================
-                // 2B) EXTRAIR VALORES -> APENAS APÓS "COM" ou "PARA"
-                // ==========================================================
                 List<double> valores = new List<double>();
 
                 Match matchValores = Regex.Match(textoOriginal, @"(?:com|para)\s+([0-9.,\s]+)");
@@ -1220,9 +1142,7 @@ namespace ExcelVoiceAssistant
                     }
                 }
 
-                // ==========================================================
-                // 3) CABEÇALHO E COLUNAS
-                // ==========================================================
+
                 var header = EncontrarCabecalho();
                 int headerRow = header.Item1;
                 int colNome = header.Item2;
@@ -1231,7 +1151,6 @@ namespace ExcelVoiceAssistant
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // Coluna número mecanográfico
                 int colNMec = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -1245,28 +1164,23 @@ namespace ExcelVoiceAssistant
                 if (colNMec == -1)
                     return "Coluna 'Número Mecanográfico' não encontrada.";
 
-                // Última linha
                 int lastRow = headerRow + 1;
                 while (sheet.Cells[lastRow, colNome].Value != null)
                     lastRow++;
 
-                // ==========================================================
-                // 4) ENCONTRAR ALUNO
-                // ==========================================================
+               
                 int alunoRow = -1;
 
                 for (int r = headerRow + 1; r < lastRow; r++)
                 {
                     object nm = sheet.Cells[r, colNMec].Value;
 
-                    // Por número
                     if (numeroMec != null && nm != null && nm.ToString() == numeroMec)
                     {
                         alunoRow = r;
                         break;
                     }
 
-                    // Por nome
                     if (alunoNome != null)
                     {
                         string excelNome = (sheet.Cells[r, colNome].Value ?? "").ToString().ToLower();
@@ -1284,15 +1198,12 @@ namespace ExcelVoiceAssistant
                     }
                 }
 
-                // Operação turma -> apenas se explicitamente pedido
                 bool operacaoTurma =
                     alunoRow == -1 &&
                     (textoOriginal.Contains("toda a turma") || textoOriginal.Contains("todos os alunos"));
 
 
-                // ==========================================================
-                // 5) MAPEAR PERGUNTAS (Tn_Px)
-                // ==========================================================
+               
                 if (testeNum == -1)
                     return "Tens de indicar o número do teste.";
 
@@ -1325,9 +1236,7 @@ namespace ExcelVoiceAssistant
                     return "Nenhuma pergunta encontrada no teste " + testeNum + ".";
 
 
-                // ==========================================================
-                // 6) TIPOS DE OPERAÇÕES
-                // ==========================================================
+                
                 bool pedirZero = textoOriginal.Contains(" zero");
                 bool pedirRandom = textoOriginal.Contains("random") || textoOriginal.Contains("aleat");
                 bool pedirCotacaoMax = textoOriginal.Contains("cotação máxima") || textoOriginal.Contains("nota máxima");
@@ -1335,20 +1244,14 @@ namespace ExcelVoiceAssistant
 
                 Random rnd = new Random();
 
-
-                // ==========================================================
-                // 7) APLICAR OPERAÇÃO A UM ALUNO
-                // ==========================================================
                 Action<int> AplicarOperacao = delegate (int r)
                 {
-                    // ZERO
                     if (pedirZero)
                     {
                         foreach (int col in colsPerguntas.Values)
                             sheet.Cells[r, col].Value2 = 0;
                     }
 
-                    // RANDOM
                     else if (pedirRandom)
                     {
                         foreach (int col in colsPerguntas.Values)
@@ -1360,7 +1263,7 @@ namespace ExcelVoiceAssistant
 
                             double randomNota;
                             if (rnd.Next(2) == 0)
-                                randomNota = rnd.Next(0, 21);    // inteiro
+                                randomNota = rnd.Next(0, 21);  
                             else
                                 randomNota = Math.Round(rnd.NextDouble() * 20, 1);
 
@@ -1368,21 +1271,18 @@ namespace ExcelVoiceAssistant
                         }
                     }
 
-                    // COTAÇÃO MÁXIMA – alterar APENAS uma pergunta
                     else if (pedirCotacaoMax && perguntaNum != -1)
                     {
                         if (colsPerguntas.ContainsKey(perguntaNum))
                             sheet.Cells[r, colsPerguntas[perguntaNum]].Value2 = 20.0;
                     }
 
-                    // PERGUNTA INDIVIDUAL
                     else if (perguntaNum != -1 && valores.Count >= 1)
                     {
                         if (colsPerguntas.ContainsKey(perguntaNum))
                             sheet.Cells[r, colsPerguntas[perguntaNum]].Value2 = valores[0];
                     }
 
-                    // LISTA DE PERGUNTAS (ex: 1 2 3 4 5)
                     else if (valores.Count > 1)
                     {
                         List<KeyValuePair<int, int>> ord =
@@ -1392,9 +1292,7 @@ namespace ExcelVoiceAssistant
                             sheet.Cells[r, ord[i].Value].Value2 = valores[i];
                     }
 
-                    // ======================================================
-                    // NORMALIZAÇÃO 0–20 → peso
-                    // ======================================================
+                   
                     double peso = 20.0 / colsPerguntas.Count;
                     double soma = 0;
 
@@ -1412,15 +1310,12 @@ namespace ExcelVoiceAssistant
                         soma += normalizado;
                     }
 
-                    // Teste final
                     if (colTesteFinal != -1)
                         sheet.Cells[r, colTesteFinal].Value2 = soma;
                 };
 
 
-                // ==========================================================
-                // 8) EXECUTAR PARA 1 ALUNO OU PARA A TURMA
-                // ==========================================================
+                
                 if (operacaoTurma)
                 {
                     for (int r = headerRow + 1; r < lastRow; r++)
@@ -1432,9 +1327,7 @@ namespace ExcelVoiceAssistant
                 }
 
 
-                // ==========================================================
-                // 9) REFAZER MÉDIAS
-                // ==========================================================
+                
                 int colMedia = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -1497,7 +1390,6 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                // Texto original decodificado do Base64
                 string texto = json.text != null
                     ? Encoding.UTF8.GetString(Convert.FromBase64String(json.text.ToString())).ToLower()
                     : "";
@@ -1508,7 +1400,6 @@ namespace ExcelVoiceAssistant
                 int firstCol = used.Column;
                 int lastCol = firstCol + used.Columns.Count - 1;
 
-                // Encontrar coluna média
                 int colMedia = -1;
                 for (int c = firstCol; c <= lastCol; c++)
                 {
@@ -1523,7 +1414,6 @@ namespace ExcelVoiceAssistant
                 if (colMedia == -1)
                     return "É necessário calcular a média primeiro.";
 
-                // Ler todas as médias
                 int row = headerRow + 1;
                 List<double> medias = new List<double>();
 
@@ -1537,7 +1427,6 @@ namespace ExcelVoiceAssistant
                 int total = medias.Count;
                 if (total == 0) return "Nenhum aluno encontrado.";
 
-                // Estatísticas
                 int aprovados = medias.Count(m => m >= 10);
                 int reprovados = medias.Count(m => m < 10);
                 int acima16 = medias.Count(m => m >= 16);
@@ -1549,9 +1438,7 @@ namespace ExcelVoiceAssistant
                 double desvio = Math.Sqrt(medias.Sum(v => Math.Pow(v - mediaGeral, 2)) / total);
                 double percAprov = (double)aprovados / total * 100;
 
-                // --------------------------------------------------------
-                // 🔍 DETEÇÃO: É pedido geral?
-                // --------------------------------------------------------
+                
                 bool pedidoGeral =
                     texto.Contains("estatistic") ||
                     texto.Contains("resumo") ||
@@ -1559,9 +1446,7 @@ namespace ExcelVoiceAssistant
                     texto.Contains("relatório") ||
                     texto.Contains("estatísticas gerais");
 
-                // --------------------------------------------------------
-                // 📌 CASO 1: PEDIDOS ESPECÍFICOS → escrever 1 linha no Excel
-                // --------------------------------------------------------
+               
                 if (!pedidoGeral)
                 {
                     int writeRow = headerRow + total + 3;
@@ -1610,7 +1495,6 @@ namespace ExcelVoiceAssistant
                         return "Não consegui interpretar a pergunta.";
                     }
 
-                    // Escrever no Excel
                     sheet.Cells[writeRow, col].Value2 = titulo;
                     sheet.Cells[writeRow, col + 1].Value2 = valor;
 
@@ -1625,9 +1509,7 @@ namespace ExcelVoiceAssistant
                 }
 
 
-                // --------------------------------------------------------
-                // 📌 CASO 2: ESTATÍSTICAS GERAIS → criar tabela completa
-                // --------------------------------------------------------
+                
                 int startTableRow = headerRow + total + 3;
                 int baseCol = headerCol;
 
@@ -1674,7 +1556,7 @@ namespace ExcelVoiceAssistant
         public static void ImprimirCabecalhosComUnicode()
         {
             Excel.Range used = sheet.UsedRange;
-            int headerRow = used.Row;   // normalmente é 1
+            int headerRow = used.Row;   
 
             Console.WriteLine("=== DEBUG: A imprimir cabeçalhos ===");
             ImprimirCabecalhosComUnicode();
@@ -1692,7 +1574,6 @@ namespace ExcelVoiceAssistant
                 string texto = valor.ToString();
                 Console.WriteLine($"{ColunaParaLetra(c)}: \"{texto}\"  (len={texto.Length})");
 
-                // imprimir cada carácter com o seu código Unicode
                 for (int i = 0; i < texto.Length; i++)
                 {
                     char ch = texto[i];
@@ -1729,7 +1610,6 @@ namespace ExcelVoiceAssistant
 
                 Console.Write($"{c}: \"{v}\"   |   ");
 
-                // mostrar cada caracter
                 foreach (char ch in v)
                     Console.Write($"[{ch} U+{((int)ch).ToString("X4")}] ");
 
@@ -1753,7 +1633,6 @@ namespace ExcelVoiceAssistant
                 Excel.Range dataRange =
                     sheet.Range[sheet.Cells[firstRow, firstCol], sheet.Cells[lastRow, lastCol]];
 
-                // Criar folha para Pivot
                 Excel.Worksheet pivotSheet = (Excel.Worksheet)workbook.Worksheets.Add();
                 pivotSheet.Name = "Pivot_" + DateTime.Now.Ticks;
 
@@ -1767,14 +1646,12 @@ namespace ExcelVoiceAssistant
                     "TabelaDinamica"
                 );
 
-                // Ler campos enviados pelo Rasa
                 string rowField = json?.nlu?.coluna_excel_row?.ToString();
                 string valueField = json?.nlu?.coluna_excel_value?.ToString();
                 string filterRegime = json?.nlu?.regime?.ToString();
 
                 bool comandoBasico = (rowField == null && valueField == null);
 
-                // Mapa RASA → cabeçalhos Excel
                 Dictionary<string, string> map = new Dictionary<string, string>
         {
             { "regime", "REGIME" },
@@ -1796,7 +1673,6 @@ namespace ExcelVoiceAssistant
                 rowField = Resolve(rowField);
                 valueField = Resolve(valueField);
 
-                // Caso básico: pivot geral
                 if (comandoBasico)
                 {
                     Excel.PivotField pfNome = pivot.PivotFields("Nome");
@@ -1805,7 +1681,6 @@ namespace ExcelVoiceAssistant
                     Excel.PivotField pfRegime = pivot.PivotFields("REGIME");
                     pfRegime.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
 
-                    // Valores = média por defeito
                     Excel.PivotField pf = pivot.PivotFields("Média");
                     pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
                     pf.Function = Excel.XlConsolidationFunction.xlAverage;
@@ -1814,19 +1689,16 @@ namespace ExcelVoiceAssistant
                     return "Tabela dinâmica criada com campos padrão.";
                 }
 
-                // 1) RowField → OK sempre
                 if (rowField != null)
                 {
                     Excel.PivotField row = pivot.PivotFields(rowField);
                     row.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
                 }
 
-                // 2) ValueField → tem de ser numérico
                 if (valueField != null)
                 {
                     if (!ColunaEhNumerica(valueField))
                     {
-                        // ⚠️ Campo não-numérico → mover para linhas automaticamente
                         Excel.PivotField pf = pivot.PivotFields(valueField);
                         pf.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
 
@@ -1841,7 +1713,6 @@ namespace ExcelVoiceAssistant
                     }
                 }
 
-                // 3) Filtrar por regime se pedido
                 if (!string.IsNullOrEmpty(filterRegime))
                 {
                     Excel.PivotField filtro = pivot.PivotFields("REGIME");

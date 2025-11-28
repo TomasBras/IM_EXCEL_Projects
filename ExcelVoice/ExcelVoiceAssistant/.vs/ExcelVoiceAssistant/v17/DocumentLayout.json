@@ -3,15 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\excelvoiceassistant\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:excelvoiceassistant\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24310C7B-E060-48A4-A695-DF8F79B6B8AE}|ExcelVoiceAssistant\\ExcelVoiceAssistant.csproj|solutionrelative:excelvoiceassistant\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\WebAppAssistantV2\\index.htm||{40D31677-CBC0-4297-A9EF-89D907823A98}"
@@ -57,7 +57,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -81,13 +81,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\Program.cs",
               "RelativeDocumentMoniker": "ExcelVoiceAssistant\\Program.cs",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\Program.cs",
               "RelativeToolTip": "ExcelVoiceAssistant\\Program.cs",
-              "ViewState": "AgIAALgAAAAAAAAAAAAswNYAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-08T23:38:07.649Z",
               "EditorCaption": ""
@@ -106,13 +106,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "nlu.yml",
               "DocumentMoniker": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml",
               "RelativeDocumentMoniker": "..\\rasaDemo\\data\\nlu.yml",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\data\\nlu.yml",
               "RelativeToolTip": "..\\rasaDemo\\data\\nlu.yml",
-              "ViewState": "AgIAAPcBAAAAAAAAAAAAAN4BAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAANkBAAAAAAAAAAAAAN4BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2025-11-26T17:01:33.808Z",
               "EditorCaption": ""
@@ -174,7 +174,7 @@
               "RelativeDocumentMoniker": "ExcelVoiceAssistant\\ExcelController.cs",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs",
               "RelativeToolTip": "ExcelVoiceAssistant\\ExcelController.cs",
-              "ViewState": "AgIAAGAHAAAAAAAAAAAswGsHAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAF4FAAAAAAAAAAAYwLMGAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-09T00:16:38.167Z",
               "EditorCaption": ""
