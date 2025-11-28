@@ -52,7 +52,7 @@
               "RelativeDocumentMoniker": "ExcelVoice\\rasaDemo\\domain.yml",
               "ToolTip": "C:\\Users\\trmbr\\OneDrive\\Desktop\\IM_EXCEL_Projects\\ExcelVoice\\rasaDemo\\domain.yml",
               "RelativeToolTip": "ExcelVoice\\rasaDemo\\domain.yml",
-              "ViewState": "AgIAALsAAAAAAAAAAAAwwNkAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAALsAAAAAAAAAAAAwwNkAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2025-11-27T22:59:35.926Z",
               "EditorCaption": ""
@@ -79,8 +79,7 @@
               "RelativeToolTip": "ExcelVoice\\ExcelVoiceAssistant\\ExcelVoiceAssistant\\ExcelController.cs",
               "ViewState": "AgIAAFMBAAAAAAAAAAAAABIAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T12:39:52.331Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-26T12:39:52.331Z"
             },
             {
               "$type": "Document",
@@ -92,8 +91,7 @@
               "RelativeToolTip": "ExcelVoice\\rasaDemo\\data\\stories.yml",
               "ViewState": "AgIAAB4AAAAAAAAAAAAUwF0AAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-11-26T12:38:59.535Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-26T12:38:59.535Z"
             },
             {
               "$type": "Document",
@@ -105,8 +103,7 @@
               "RelativeToolTip": "ExcelVoice\\rasaDemo\\data\\rules.yml",
               "ViewState": "AgIAADgAAAAAAAAAAAAUwHcAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-11-26T12:38:56.821Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-26T12:38:56.821Z"
             },
             {
               "$type": "Document",
@@ -118,8 +115,7 @@
               "RelativeToolTip": "ExcelVoice\\rasaDemo\\data\\nlu.yml",
               "ViewState": "AgIAAHYBAAAAAAAAAAAYwKEBAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-11-26T12:38:42.754Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-26T12:38:42.754Z"
             }
           ]
         }

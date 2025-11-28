@@ -68,7 +68,7 @@ namespace ExcelVoiceAssistant
                 _excelApp = new Application();
                 _excelApp.Visible = true;
 
-                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
+                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
                 excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
                 //excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\ETP.xlsx";
                 //excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_NODEPENDENCIES\Relatorio_Final.xlsx";
@@ -167,7 +167,8 @@ namespace ExcelVoiceAssistant
 
                     case "atualizar_notas":
                         return ExcelController.AtualizarNotas(json);
-
+                    case "criar_pivot_table":
+                        return ExcelController.CriarPivotTable(json);
                     default:
                         Console.WriteLine("Intent não reconhecida:", intent);
                         return "Comando não reconhecido.";

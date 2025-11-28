@@ -15,7 +15,7 @@ namespace ExcelVoiceAssistant
         private static Excel.Workbook workbook;
         private static Excel.Worksheet sheet;
 
-        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
+        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
         private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
 
         //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
@@ -28,6 +28,18 @@ namespace ExcelVoiceAssistant
         {
             app = excelApp;
             workbook = wb;
+
+            // Procurar folha correta automaticamente
+            foreach (Excel.Worksheet sh in workbook.Worksheets)
+            {
+                if (sh.Cells[1, 1].Value?.ToString() == "Número mecanográfico")
+                {
+                    sheet = sh;
+                    return;
+                }
+            }
+
+            // fallback: usa a enviada
             sheet = ws;
         }
 
@@ -1535,6 +1547,206 @@ namespace ExcelVoiceAssistant
             catch (Exception ex)
             {
                 return "Erro em Operações Matemáticas: " + ex.Message;
+            }
+        }
+
+        public static void ImprimirCabecalhosComUnicode()
+        {
+            Excel.Range used = sheet.UsedRange;
+            int headerRow = used.Row;   // normalmente é 1
+
+            Console.WriteLine("=== DEBUG: A imprimir cabeçalhos ===");
+            ImprimirCabecalhosComUnicode();
+
+            for (int c = used.Column; c < used.Column + used.Columns.Count; c++)
+            {
+                var valor = sheet.Cells[headerRow, c].Value;
+
+                if (valor == null)
+                {
+                    Console.WriteLine($"{ColunaParaLetra(c)}: (vazio)");
+                    continue;
+                }
+
+                string texto = valor.ToString();
+                Console.WriteLine($"{ColunaParaLetra(c)}: \"{texto}\"  (len={texto.Length})");
+
+                // imprimir cada carácter com o seu código Unicode
+                for (int i = 0; i < texto.Length; i++)
+                {
+                    char ch = texto[i];
+                    Console.WriteLine($"   [{i}] '{ch}'  U+{((int)ch).ToString("X4")}");
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("=================================");
+        }
+
+        public static void DebugCabecalhos()
+        {
+            Excel.Range used = sheet.UsedRange;
+            int headerRow = 1;
+
+            Console.WriteLine("=== CABEÇALHOS ENCONTRADOS ===");
+
+            for (int c = 1; c <= used.Columns.Count; c++)
+            {
+                var v = sheet.Cells[headerRow, c].Value?.ToString() ?? "(vazio)";
+
+                Console.Write($"{c}: \"{v}\"   |   ");
+
+                // mostrar cada caracter
+                foreach (char ch in v)
+                    Console.Write($"[{ch} U+{((int)ch).ToString("X4")}] ");
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("===============================");
+        }
+
+        public static string CriarPivotTable(dynamic json)
+        {
+            try
+            {
+                // 1) A folha dos dados já está no "sheet"
+                Excel.Range used = sheet.UsedRange;
+
+                int firstRow = used.Row;
+                int lastRow = used.Row + used.Rows.Count - 1;
+                int firstCol = used.Column;
+                int lastCol = used.Column + used.Columns.Count - 1;
+
+                Excel.Range dataRange =
+                    sheet.Range[sheet.Cells[firstRow, firstCol], sheet.Cells[lastRow, lastCol]];
+
+                // 2) Criar nova folha Pivot
+                Excel.Worksheet pivotSheet = (Excel.Worksheet)workbook.Worksheets.Add();
+                pivotSheet.Name = "Pivot_" + DateTime.Now.Ticks;
+
+                Excel.PivotCache cache = workbook.PivotCaches().Create(
+                    Excel.XlPivotTableSourceType.xlDatabase,
+                    dataRange
+                );
+
+                Excel.PivotTable pivot = cache.CreatePivotTable(
+                    pivotSheet.Cells[1, 1],
+                    "TabelaDinamica"
+                );
+
+                // 3) Ler pedidos vindos do Rasa
+                string rowField = json?.nlu?.coluna_excel_row?.ToString();
+                string valueField = json?.nlu?.coluna_excel_value?.ToString();
+                string filterRegime = json?.nlu?.regime?.ToString();
+
+                // --- 3B) DETETAR SE É UM COMANDO BÁSICO ---
+                bool comandoBasico = (rowField == null && valueField == null);
+
+                // Campos que queremos usar por defeito
+                List<string> defaultRows = new List<string>
+        {
+            "nome",
+            "numero mecanografico",
+            "regime"
+        };
+
+                if (comandoBasico)
+                {
+                    rowField = null;       // vai ser ignorado
+                    valueField = "média";  // sempre média
+                }
+
+                // 4) Mapa RASA → Cabeçalhos Excel
+                Dictionary<string, string> map = new Dictionary<string, string>
+        {
+            { "regime",               "REGIME" },
+            { "média",                "Média" },
+            { "media",                "Média" },
+            { "teste 1",              "Teste 1" },
+            { "teste 2",              "Teste 2" },
+            { "tp",                   "TP" },
+            { "p",                    "P" },
+            { "nome",                 "Nome" },
+            { "numero mecanografico", "Número mecanográfico" }
+        };
+
+                string Resolve(string key)
+                {
+                    if (key == null) return null;
+                    key = key.ToLower().Trim();
+                    return map.ContainsKey(key) ? map[key] : null;
+                }
+
+                rowField = Resolve(rowField);
+                valueField = Resolve(valueField);
+
+                // 5) Adicionar campos às linhas
+                if (comandoBasico)
+                {
+                    foreach (var campo in defaultRows)
+                    {
+                        string real = Resolve(campo);
+                        if (real != null)
+                        {
+                            Excel.PivotField pf = pivot.PivotFields(real);
+                            pf.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+                        }
+                    }
+                }
+                else
+                {
+                    if (rowField != null)
+                    {
+                        pivot.PivotFields(rowField).Orientation =
+                            Excel.XlPivotFieldOrientation.xlRowField;
+                    }
+                }
+
+                // 6) Campo de valores (média)
+                if (valueField != null)
+                {
+                    Excel.PivotField pf = pivot.PivotFields(valueField);
+                    pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
+                    pf.Function = Excel.XlConsolidationFunction.xlAverage;
+                    pf.Name = "Média de " + valueField;
+                }
+
+                // 7) Filtro por regime (corrigido)
+                if (!string.IsNullOrEmpty(filterRegime))
+                {
+                    Excel.PivotField filtro = pivot.PivotFields("REGIME");
+
+                    // 🔥 tem de ser PageField antes de mexer no filtro
+                    filtro.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
+
+                    // 🔥 Esperar que a pivot carregue items
+                    app.Calculate();
+
+                    // 🔥 Verificar se o valor existe
+                    bool existe = false;
+                    foreach (Excel.PivotItem item in filtro.PivotItems())
+                    {
+                        if (item.Name.Equals(filterRegime, StringComparison.OrdinalIgnoreCase))
+                        {
+                            existe = true;
+                            break;
+                        }
+                    }
+
+                    if (existe)
+                        filtro.CurrentPage = filterRegime;   // aplica filtro
+                    else
+                        filtro.ClearAllFilters();            // evita crash
+                }
+
+
+                return "Tabela dinâmica criada com sucesso!";
+            }
+            catch (Exception ex)
+            {
+                return "Erro ao criar tabela dinâmica: " + ex.Message;
             }
         }
 

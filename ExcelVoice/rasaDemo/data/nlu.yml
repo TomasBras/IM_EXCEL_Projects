@@ -13,6 +13,10 @@ entities:
   - teste_numero
   - coluna_nome
   - coluna_teste
+  - coluna_excel
+  - regime
+  - coluna_excel_row
+  - coluna_excel_value
 
 
 ##############################################
@@ -46,6 +50,99 @@ lookup:
     - Catarina Sousa
     - Bruno Fernandes
     - Miguel Costa
+  coluna_excel:
+    - mecano
+    - leço de
+    - tgo de
+    - TP
+    - P
+    - Teste 1
+    - T2_P1
+    - T2_P2
+    - T2_P3
+    - T2_P4
+    - T2_P5
+    - Teste 2
+    - Teste 3
+    - Média
+    - Situação MP
+    - Nota Nec
+    - Melhoria Real
+  regime:
+    - O
+    - o
+    - ordinário
+    - Ordinário
+    - ORDINARIO
+    - ordinario
+    - TP
+    - tp
+    - tempo parcial
+    - Tempo Parcial
+    - TEMPO PARCIAL
+    - T
+    - t
+    - trabalhador
+    - Trabalhador
+    - TRABALHADOR
+  coluna_excel_row:
+    - REGIME
+    - Nome
+    - Situação MP
+    - Melhoria Real
+    - Teste 1
+    - Teste 2
+    - Teste 3
+  coluna_excel_value:
+    - Média
+    - Teste 1
+    - Teste 2
+    - Teste 3
+    - Nota Nec
+    - Situação MP
+    - Melhoria Real
+    - REGIME 
+    - Nome
+
+synonyms:
+  Nome:
+    - nome
+    - o nome
+    - nome do aluno
+    - nomes
+
+  REGIME:
+    - regime
+    - o regime
+    - tipo de regime
+    - o tipo de regime
+
+  Teste 1:
+    - teste um
+    - teste 1
+    - teste nº1
+    - t1
+    - t 1
+    - test 1
+
+  Teste 2:
+    - teste dois
+    - teste 2
+    - teste nº2
+    - t2
+    - t 2
+
+  Teste 3:
+    - teste três
+    - teste 3
+    - teste nº3
+    - t3
+    - t 3
+
+  Média:
+    - media
+    - a media
+    - média
 
 
 ##############################################
@@ -56,16 +153,12 @@ regex:
   aluno_numero: "[0-9]{4,12}"
   valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
   grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
-
   # PERGUNTAS (P1, pergunta 1, q1, questao 2, p12)
   pergunta: "(p|pergunta|questao|q)[ ]?([1-9][0-9]?)"
-
   # TESTES (teste 1, teste 12)
   teste_numero: "teste ?([0-9]{1,2})"
-
   # COLUNA TESTE
   coluna_teste: "coluna (do|de) teste"
-
   # NOMES DE COLUNA FLEXÍVEIS
   coluna_nome: "[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9 _-]{1,39}"
 
@@ -74,8 +167,6 @@ regex:
 # INTENTS
 ##############################################
 nlu:
-
-
 
 # ----------------------------------------------------
 - intent: greet
@@ -88,8 +179,6 @@ nlu:
     - Olá, tudo bem?
     - Olá, pronto para trabalhar no Excel?
     - Como estás hoje?
-
-
 
 # ----------------------------------------------------
 - intent: calcular_media
@@ -125,9 +214,6 @@ nlu:
     - Média do aluno número [987654](aluno_numero)
     - Calcula a média do aluno número [456123](aluno_numero)
 
-
-
-
 # ----------------------------------------------------
 - intent: destacar_aprovados_reprovados
   examples: |
@@ -138,8 +224,6 @@ nlu:
     - Aplica formatação condicional para notas
     - Marca em verde os alunos com média acima de 10
     - Realça os reprovados com vermelho
-
-
 
 # ----------------------------------------------------
 - intent: melhoria_real
@@ -174,8 +258,6 @@ nlu:
     - Alunos que ainda podem passar
     - Quem ainda tem hipótese?
 
-
-
 # ----------------------------------------------------
 - intent: inserir_colunas
   examples: |
@@ -194,7 +276,7 @@ nlu:
     - Inserir uma coluna nova
     - Inserir uma coluna no fim
     - Inserir coluna antes da média
-    - Adicionar coluna depois das notas 
+    - Adicionar coluna depois das notas
     - Criar coluna referente ao teste [1](teste_numero)
     - Criar coluna referente ao teste [2](teste_numero)
     - Adicionar coluna de nota do teste [3](teste_numero)
@@ -207,7 +289,6 @@ nlu:
     - Cria a [coluna de teste](coluna_teste) para o [teste 2](teste_numero)
     - Quero adicionar a [coluna do teste](coluna_teste) [3](teste_numero)
     - Adiciona uma [coluna de teste](coluna_teste) para o [teste 4](teste_numero)
-
 
 # ----------------------------------------------------
 - intent: inserir_perguntas
@@ -223,8 +304,6 @@ nlu:
     - Adiciona perguntas no teste [9](teste_numero)
     - Criar P1 até P5 do teste [10](teste_numero)
 
-
-
 # ----------------------------------------------------
 - intent: gerar_grafico_turma
   examples: |
@@ -235,8 +314,6 @@ nlu:
     - Gera gráfico de evolução entre testes
     - Mostra evolução das médias
     - Cria gráfico com as médias
-
-
 
 # ----------------------------------------------------
 - intent: gerar_grafico_barras_aluno
@@ -259,8 +336,6 @@ nlu:
     - Mostra o desempenho em barras do aluno número [888111](aluno_numero)
     - Cria o gráfico em barras do aluno chamado [Tiago](aluno_nome)
 
-
-
 # ----------------------------------------------------
 - intent: gerar_grafico_perguntas_t2
   examples: |
@@ -272,8 +347,6 @@ nlu:
     - Mostra o gráfico com a média das perguntas do teste 2
     - Média das perguntas do teste 2
 
-
-
 # ----------------------------------------------------
 - intent: apagar_todos_graficos
   examples: |
@@ -281,8 +354,6 @@ nlu:
     - Limpa os gráficos
     - Remove todos os gráficos da folha
     - Elimina todos os gráficos
-
-
 
 # ----------------------------------------------------
 - intent: atualizar_notas
@@ -292,9 +363,7 @@ nlu:
     - Atualiza a nota do [teste 1](teste_numero) do aluno [94716](aluno_numero) para [12](valores)
     - Define a nota do [teste 2](teste_numero) do aluno número [108522](aluno_numero) como [15](valores)
     - Atualiza todas as notas do teste 2 do aluno [107447](aluno_numero) para [2 3 4 5 1](valores)
-    - Altera a nota da [questão 4](pergunta) do aluno [109830](aluno_numero) para [2.5](valores)
-
-
+    - - Altera a nota da [questão 4](pergunta) do aluno [109830](aluno_numero) para [2.5](valores)
 
 # ----------------------------------------------------
 - intent: guardar_ficheiro
@@ -305,13 +374,9 @@ nlu:
     - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
     - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
 
-
-
-# ----------------------------------------------------
 # ----------------------------------------------------
 - intent: operacoes_matematicas
   examples: |
-    # Perguntas simples
     - Conta o número de alunos aprovados
     - Conta os aprovados
     - Quantos aprovados existem?
@@ -337,9 +402,6 @@ nlu:
     - Quero o relatório estatístico da turma
     - Estatísticas globais
 
-
-
-
 # ----------------------------------------------------
 - intent: atualizar_valores
   examples: |
@@ -352,9 +414,9 @@ nlu:
     - Modifica o valor máximo da [pergunta 4](pergunta)
     - Alterar valor das perguntas do teste
 
-
 - intent: criar_pivot_table
   examples: |
+    # --- Comandos gerais ---
     - Cria uma tabela dinâmica
     - Gera uma pivot table
     - Adiciona uma tabela dinâmica
@@ -369,6 +431,46 @@ nlu:
     - Adicionar pivot table
     - Preciso de uma tabela dinâmica dos resultados
 
+    # --- Escolha de colunas (com entidades separadas ROW/VALUES) ---
+    - Cria uma pivot com [REGIME](coluna_excel_row) nas linhas e [Média](coluna_excel_value) nos valores
+    - Quero [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) nos valores
+    - Faz pivot com [Nome](coluna_excel_row) nas linhas e [Teste 1](coluna_excel_value) como valor
+    - Pivot das notas com [Teste 1](coluna_excel_value) e [Teste 2](coluna_excel_value) como valores
+    - Pivot com [Situação MP](coluna_excel_row) por [REGIME](coluna_excel_row)
+    - Gera pivot com colunas [REGIME](coluna_excel_row) e valores [Média](coluna_excel_value)
+    - Cria uma pivot com linhas por [Melhoria Real](coluna_excel_row)
+    - Quero pivot com linhas [Nome](coluna_excel_row) e valores [Média](coluna_excel_value)
+    - Pivot onde as linhas são [REGIME](coluna_excel_row) e os valores são [Teste 3](coluna_excel_value)
+    - Tabela dinâmica com linhas [Situação MP](coluna_excel_row) e valores [Nota Nec](coluna_excel_value)
+    - Quero [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) nos valores
+    - [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) como valor
+    - Rows por [Nome](coluna_excel_row) e valores por [REGIME](coluna_excel_value)
+    # --- Pivot filtrada ---
+    - Cria pivot filtrada pelo regime [O](regime)
+    - Pivot só para o regime [TP](regime)
+    - Fazer pivot apenas para os trabalhadores [T](regime)
+    - Pivot filtrada para tempo parcial [TP](regime)
+    - Mostra pivot apenas do regime [O](regime)
+    - Fazer pivot apenas dos alunos trabalhadores
+
+    # --- Combinação: rows + values + filtros ---
+    - Faz uma pivot com linhas [REGIME](coluna_excel_row), valores [Média](coluna_excel_value) filtrada por [TP](regime)
+    - Cria pivot por [REGIME](coluna_excel_row) mostrando [Situação MP](coluna_excel_value)
+    - Tabela dinâmica com linhas [Nome](coluna_excel_row), valores [Teste 3](coluna_excel_value)
+    - Faz pivot com [REGIME](coluna_excel_row) como coluna e [Nota Nec](coluna_excel_value) como valor
+    - Monta pivot com [Teste 3](coluna_excel_row), [Média](coluna_excel_value) e [Situação MP](coluna_excel_value)
+    - Quero uma pivot com nome e regime
+    - Faz uma pivot onde as linhas são [Nome](coluna_excel_row) e os valores são [Melhoria Real](coluna_excel_value)
+
+    # --- Linguagem natural ---
+    - Pivot por regime
+    - Pivot por alunos
+    - Pivot das médias por regime
+    - Quero pivot das notas
+    - Faz pivot dos testes
+    - Cria pivot geral dos resultados
+    - Pivot com tudo
+
 
 # ----------------------------------------------------
 - intent: helper
@@ -381,8 +483,6 @@ nlu:
     - Quais são as tuas funcionalidades?
     - Diz-me o que sabes fazer
 
-
-
 # ----------------------------------------------------
 - intent: ask_how_are_you
   examples: |
@@ -391,8 +491,6 @@ nlu:
     - Estás bem?
     - Como vai?
     - Está tudo bem?
-
-
 
 # ----------------------------------------------------
 - intent: respond_how_am_i
@@ -404,8 +502,6 @@ nlu:
     - Estou mais ou menos
     - Estou excelente
     - Tudo ótimo comigo
-
-
 
 # ----------------------------------------------------
 - intent: fallback

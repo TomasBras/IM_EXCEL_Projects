@@ -753,6 +753,16 @@
                         message = { intent: 'apagar_todos_graficos' };
                         break;
 
+                    case 'criar_pivot_table':
+                        message = {
+                            intent: 'criar_pivot_table',
+                            coluna_excel_row: data.entities.find(e => e.entity === "coluna_excel_row")?.value || null,
+                            coluna_excel_value: data.entities.find(e => e.entity === "coluna_excel_value")?.value || null,
+                            regime: data.entities.find(e => e.entity === "regime")?.value || null
+                        };
+                        break;
+
+
                     // -------------------------
                     case 'greet':
                     case 'ask_how_are_you':

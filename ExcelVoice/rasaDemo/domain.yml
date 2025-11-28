@@ -1,7 +1,7 @@
 version: "3.1"
 
 ############################################
-#                 INTENTS                    
+#               INTENTS                    #
 ############################################
 intents:
   - greet
@@ -27,7 +27,7 @@ intents:
 
 
 ############################################
-#                 ENTIDADES                  
+#               ENTIDADES                  #
 ############################################
 entities:
   - aluno_nome
@@ -39,10 +39,14 @@ entities:
   - teste_numero
   - coluna_nome
   - coluna_teste
+  - coluna_excel
+  - regime
+  - coluna_excel_row
+  - coluna_excel_value
 
 
 ############################################
-#                   SLOTS                    
+#                 SLOTS                    #
 ############################################
 slots:
 
@@ -102,94 +106,114 @@ slots:
       - type: from_entity
         entity: coluna_teste
 
+  coluna_excel:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_excel
+
+  regime:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: regime
+
+  coluna_excel_row:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_excel_row
+
+  coluna_excel_value:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_excel_value
+
 
 ############################################
-#                 RESPONSES                  
+#               RESPONSES                  #
 ############################################
 responses:
 
   utter_greet:
-    - text: "Olá! Pronto para trabalhar no Excel?"
-    - text: "Bom dia! O que deseja fazer na folha de cálculo?"
-    - text: "Olá! Vamos manipular alguns dados?"
+    - text: "Olá! Pronto para trabalhar no **Excel**? 📊"
+    - text: "Bom dia! O que deseja fazer na folha de cálculo? 📝"
+    - text: "Olá! Vamos manipular alguns dados? Estou à disposição."
 
   utter_ask_how_are_you:
     - text: "Estou ótimo e pronto para organizar dados! E você?"
     - text: "Tudo bem comigo! Como posso ajudar hoje?"
 
   utter_respond_how_am_i:
-    - text: "Perfeito! Vamos continuar com o trabalho."
+    - text: "Perfeito! Vamos continuar com o trabalho. 🚀"
     - text: "Ótimo saber disso! O que quer fazer a seguir?"
 
   utter_helper:
     - text: |
-        Aqui estão os comandos que pode usar:
-        • Calcular média 
-        • Destacar aprovados 
-        • Identificar melhoria 
-        • Inserir colunas 
-        • Inserir perguntas 
-        • Criar gráfico da turma 
-        • Criar gráfico de barras de um aluno 
-        • Criar gráfico do teste 2 
-        • Criar tabela dinâmica (Pivot Table) 
-        • Atualizar notas 
-        • Atualizar valores 
-        • Operações matemáticas 
-        • Guardar ficheiro 
-        • Apagar todos os gráficos 
+        Aqui estão os **comandos** que pode usar no Excel:
+        
+        * **Cálculos & Formatação:** Calcular média, Destacar aprovados/reprovados, Operações matemáticas.
+        * **Análise de Desempenho:** Melhoria real, Melhoria possível (MP).
+        * **Estrutura da Folha:** Inserir colunas, Inserir perguntas, Atualizar notas/valores.
+        * **Visualização:** Criar gráfico da turma, Criar gráfico de barras de um aluno, Criar gráfico do teste 2, Criar tabela dinâmica (Pivot Table), Apagar todos os gráficos.
+        * **Ficheiro:** Guardar ficheiro.
 
   utter_calcular_media:
-    - text: "A calcular a média..."
+    - text: "A calcular a **média** da turma ou do aluno {aluno_nome}{aluno_numero}..."
 
   utter_destacar_aprovados_reprovados:
-    - text: "Destacando aprovados e reprovados..."
- 
+    - text: "Destacando **aprovados** (verde) e **reprovados** (vermelho) com formatação condicional..."
+  
   utter_melhoria_real:
-    - text: "A identificar os alunos que melhoraram..."
+    - text: "A identificar os alunos que tiveram **melhoria real** (progresso) entre os testes..."
 
   utter_melhoria_possivel:
-    - text: "A verificar quem tem possibilidade de melhoria (MP)..."
+    - text: "A verificar quem ainda tem **possibilidade de melhoria** (MP) para obter positiva..."
 
   utter_inserir_colunas:
-    - text: "A inserir colunas solicitadas..."
+    - text: "A inserir a(s) coluna(s) solicitada(s) (e.g., '{coluna_nome}') na folha."
 
   utter_inserir_perguntas:
-    - text: "A inserir perguntas no teste..."
+    - text: "A adicionar a estrutura de **perguntas** ao teste {teste_numero}."
 
   utter_gerar_grafico_turma:
-    - text: "A gerar o gráfico da turma..."
+    - text: "A gerar o **gráfico de evolução da turma** (média) entre os testes. "
 
   utter_gerar_grafico_barras_aluno:
-    - text: "A gerar o gráfico de barras do aluno {aluno_numero}..."
+    - text: "A gerar o **gráfico de barras** com as notas do aluno {aluno_nome}{aluno_numero} nos testes. "
 
   utter_gerar_grafico_perguntas_t2:
-    - text: "A gerar o gráfico das perguntas do teste 2..."
+    - text: "A gerar o gráfico de **desempenho médio por pergunta** no Teste 2."
 
   utter_atualizar_notas:
-    - text: "A atualizar as notas do aluno {aluno_numero}..."
+    - text: "A **atualizar as notas** do aluno {aluno_nome}{aluno_numero} (e.g., nota da {pergunta} para {valores})."
 
   utter_guardar_ficheiro:
-    - text: "A guardar o ficheiro como {nome_ficheiro}..."
+    - text: "A **guardar** o ficheiro atual como **{nome_ficheiro}**."
 
   utter_operacoes_matematicas:
-    - text: "A executar a operação solicitada..."
+    - text: "A executar a **operação/estatística** solicitada (e.g., contagem de aprovados, percentagem de aprovação, média geral)."
 
   utter_atualizar_valores:
-    - text: "A atualizar os valores das perguntas..."
+    - text: "A **atualizar a cotação/pontuação máxima** (valores: {valores}) para a(s) pergunta(s) do teste."
 
   utter_apagar_todos_graficos:
-    - text: "A apagar todos os gráficos da folha..."
+    - text: "A **apagar todos os gráficos** da folha de cálculo."
 
   utter_criar_pivot_table:
-    - text: "A criar a tabela dinâmica (Pivot Table)..."
-
+    - text: "A criar a **Tabela Dinâmica (Pivot Table)** com os dados solicitados (e.g., linhas por {coluna_excel_row}, valores por {coluna_excel_value}). "
+  
   utter_fallback:
-    - text: "Não percebi, pode repetir por favor?"
+    - text: "Não percebi o comando relacionado com o Excel. Pode repetir ou pedir 'Ajuda' por favor? 🧐"
 
 
 ############################################
-#                 ACTIONS                    
+#                 ACTIONS                  #
 ############################################
 actions:
   - action_calcular_media
@@ -211,7 +235,7 @@ actions:
 
 
 ############################################
-#              SESSION CONFIG                
+#             SESSION CONFIG               #
 ############################################
 session_config:
   session_expiration_time: 60
