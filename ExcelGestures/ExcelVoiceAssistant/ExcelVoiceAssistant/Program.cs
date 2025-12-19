@@ -57,13 +57,10 @@ namespace ExcelVoiceAssistant
 
 			InicializarExcel();
 
-			Console.WriteLine("💬 Aguardando mensagens do IM...");
+			Console.WriteLine("Aguardando mensagens do IM...");
 			await Task.Delay(-1);
 		}
 
-		// =========================================================
-		// INICIALIZAR EXCEL
-		// =========================================================
 		private static void InicializarExcel()
 		{
 			try
@@ -81,7 +78,7 @@ namespace ExcelVoiceAssistant
 
 				if (!File.Exists(excelPathBase))
 				{
-					Console.WriteLine("❌ Ficheiro Excel não encontrado!");
+					Console.WriteLine("Ficheiro Excel não encontrado!");
 					return;
 				}
 
@@ -90,11 +87,11 @@ namespace ExcelVoiceAssistant
 
 				ExcelController.SetExcel(_excelApp, _workbook, _sheet);
 
-				Console.WriteLine("✅ Excel inicializado com sucesso!");
+				Console.WriteLine("Excel inicializado com sucesso!");
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("❌ Erro ao abrir Excel: " + ex.Message);
+				Console.WriteLine("Erro ao abrir Excel: " + ex.Message);
 			}
 		}
 
@@ -109,17 +106,14 @@ namespace ExcelVoiceAssistant
 				var com = doc.Descendants("command").FirstOrDefault()?.Value;
 				if (string.IsNullOrWhiteSpace(com)) return;
 
-				Console.WriteLine("📥 Command recebido: " + com);
+				Console.WriteLine("Command recebido: " + com);
 
 				dynamic json = JsonConvert.DeserializeObject(com);
 
-				// =====================================================
-				// 🖐️ GESTOS
-				// =====================================================
 				if (json.recognized != null && json.recognized.Count > 1)
 				{
 					string gesture = json.recognized[1].ToString().ToLower();
-					Console.WriteLine($"🖐 GESTO RECEBIDO: {gesture}");
+					Console.WriteLine($"GESTO RECEBIDO: {gesture}");
 
 					string resposta = ExecutarGesto(gesture);
 
@@ -133,7 +127,7 @@ namespace ExcelVoiceAssistant
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("❌ Erro ao processar mensagem: " + ex.Message);
+				Console.WriteLine("Erro ao processar mensagem: " + ex.Message);
 			}
 		}
 
@@ -143,7 +137,6 @@ namespace ExcelVoiceAssistant
 			if (string.IsNullOrWhiteSpace(gesture))
 				return null;
 
-			// 🔹 Normalização (remove .a, underscores, etc.)
 			gesture = gesture
 				.ToLower()
 				.Replace(".a", "")
@@ -151,13 +144,10 @@ namespace ExcelVoiceAssistant
 				.Replace("-", "")
 				.Trim();
 
-			Console.WriteLine("🎯 Gesto normalizado: " + gesture);
+			Console.WriteLine("Gesto normalizado: " + gesture);
 
 			switch (gesture)
 			{
-				// =========================
-				// 📊 OPERAÇÕES EXCEL
-				// =========================
 
 				case "calculateaverage":
 					return ExcelController.CalcularMediaTurma();
@@ -182,10 +172,10 @@ namespace ExcelVoiceAssistant
 				case "closeexcel":
 					try
 					{
-						_excelApp.DisplayAlerts = false;   // ⛔ desativa popups
+						_excelApp.DisplayAlerts = false;   
 
 						_workbook?.SaveAs(excelPathFinal);
-						_workbook?.Close(false);           // false = não perguntar nada
+						_workbook?.Close(false);           
 						_excelApp?.Quit();
 
 						return "Excel fechado.";
@@ -193,13 +183,9 @@ namespace ExcelVoiceAssistant
 					finally
 					{
 						if (_excelApp != null)
-							_excelApp.DisplayAlerts = true; // (opcional) reativa alertas
+							_excelApp.DisplayAlerts = true; 
 					}
 
-
-				// =========================
-				// 🔍 NAVEGAÇÃO / MOVIMENTO
-				// =========================
 
 				case "swipeleft":
 					_excelApp.ActiveCell?.Offset[0, -1].Select();
@@ -217,9 +203,6 @@ namespace ExcelVoiceAssistant
 					_excelApp.ActiveCell?.Offset[1, 0].Select();
 					return "Mover para baixo.";
 
-				// =========================
-				// 🔎 ZOOM
-				// =========================
 
 				case "zoomin":
 					_excelApp.ActiveWindow.Zoom += 10;
@@ -229,28 +212,18 @@ namespace ExcelVoiceAssistant
 					_excelApp.ActiveWindow.Zoom -= 10;
 					return "Zoom reduzido.";
 
-				// =========================
-				// ⚠ FALLBACK
-				// =========================
-
 				default:
 					Console.WriteLine("⚠ Gesto não reconhecido: " + gesture);
 					return null;
 			}
 		}
 
-		// =========================================================
-		// ENVIAR MENSAGEM MMI
-		// =========================================================
 		private static void SendMessage(string message)
 		{
 			_client.Send(message);
 			Console.WriteLine("📤 Enviada resposta MMI.");
 		}
 
-		// =========================================================
-		// FORMATA MENSAGEM MMI PARA TTS
-		// =========================================================
 		public static string messageMMI(string msg)
 		{
 			return "<mmi:mmi xmlns:mmi=\"http://www.w3.org/2008/04/mmi-arch\" mmi:version=\"1.0\">" +
