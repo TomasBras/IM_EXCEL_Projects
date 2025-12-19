@@ -1,0 +1,557 @@
+version: "3.1"
+
+##############################################
+# ENTIDADES
+##############################################
+entities:
+  - aluno_nome
+  - aluno_numero
+  - valores
+  - pergunta
+  - grafico
+  - nome_ficheiro
+  - teste_numero
+  - coluna_nome
+  - coluna_teste
+  - coluna_excel
+  - regime
+  - coluna_excel_row
+  - coluna_excel_value
+
+
+##############################################
+# LOOKUP: ALUNOS MAIS COMUNS
+##############################################
+lookup:
+  aluno_nome:
+    - João
+    - Maria
+    - Pedro
+    - Ana
+    - Rita
+    - Tiago
+    - Sofia
+    - Beatriz
+    - Carlos
+    - Miguel
+    - Bruno
+    - Mariana
+    - Daniela
+    - Paulo
+    - Inês
+    - Catarina
+    - Vasco
+    - Hugo
+    - Sandra
+    - João Silva
+    - Maria de Fátima
+    - Pedro Miguel
+    - Ana Rita
+    - Catarina Sousa
+    - Bruno Fernandes
+    - Miguel Costa
+  coluna_excel:
+    - mecano
+    - leço de
+    - tgo de
+    - TP
+    - P
+    - Teste 1
+    - T2_P1
+    - T2_P2
+    - T2_P3
+    - T2_P4
+    - T2_P5
+    - Teste 2
+    - Teste 3
+    - Média
+    - Situação MP
+    - Nota Nec
+    - Melhoria Real
+  regime:
+    - O
+    - o
+    - ordinário
+    - Ordinário
+    - ORDINARIO
+    - ordinario
+    - TP
+    - tp
+    - tempo parcial
+    - Tempo Parcial
+    - TEMPO PARCIAL
+    - T
+    - t
+    - trabalhador
+    - Trabalhador
+    - TRABALHADOR
+  coluna_excel_row:
+    - REGIME
+    - Nome
+    - Situação MP
+    - Melhoria Real
+    - Teste 1
+    - Teste 2
+    - Teste 3
+  coluna_excel_value:
+    - Média
+    - Teste 1
+    - Teste 2
+    - Teste 3
+    - Nota Nec
+    - Situação MP
+    - Melhoria Real
+    - REGIME 
+    - Nome
+
+synonyms:
+  Nome:
+    - nome
+    - o nome
+    - nome do aluno
+    - nomes
+
+  REGIME:
+    - regime
+    - o regime
+    - tipo de regime
+    - o tipo de regime
+
+  Teste 1:
+    - teste um
+    - teste 1
+    - teste nº1
+    - t1
+    - t 1
+    - test 1
+
+  Teste 2:
+    - teste dois
+    - teste 2
+    - teste nº2
+    - t2
+    - t 2
+
+  Teste 3:
+    - teste três
+    - teste 3
+    - teste nº3
+    - t3
+    - t 3
+
+  Média:
+    - media
+    - a media
+    - média
+
+
+##############################################
+# REGEX ENTIDADES
+##############################################
+regex:
+  aluno_nome: "\\b([A-ZÀ-Ý][a-zà-ÿ]+(?: [A-ZÀ-Ý][a-zà-ÿ]+){0,5})\\b"
+  aluno_numero: "[0-9]{4,12}"
+  valores: "[0-9]+([\\.,][0-9]+)?([ \\:,;e][0-9]+([\\.,][0-9]+)?)*"
+  grafico: "(linha|linhas|barra|barras|média|medias|media|evolução|desempenho)"
+  # PERGUNTAS (P1, pergunta 1, q1, questao 2, p12)
+  pergunta: "(?:p|pergunta|questao|questão|q)[ ]?(?:n(ú|u)mero)?[ ]?([0-9]{1,2})(?:[ ]?(?:a|à|até|-)[ ]?([0-9]{1,2}))?"
+
+  # TESTES (teste 1, teste 12)
+  teste_numero: "(?:teste|t)[ ]?(?:n(ú|u)mero)?[ ]?([0-9]{1,2})"
+
+  # COLUNA TESTE
+  coluna_teste: "coluna (do|de) teste"
+  # NOMES DE COLUNA FLEXÍVEIS
+  coluna_nome: "[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9 _-]{1,39}"
+
+
+##############################################
+# INTENTS
+##############################################
+nlu:
+
+# ----------------------------------------------------
+- intent: greet
+  examples: |
+    - Olá Assistente
+    - Oi Assistente
+    - Bom dia
+    - Boa tarde
+    - Boa noite
+    - Olá, tudo bem?
+    - Olá, pronto para trabalhar no Excel?
+    - Como estás hoje?
+
+# ----------------------------------------------------
+- intent: calcular_media
+  examples: |
+    - Calcula a média da turma
+    - Faz a média de todos os alunos
+    - Cria a fórmula de média
+    - Atualiza as médias da turma
+    - Faz o cálculo das médias
+    - Adiciona a fórmula de média à folha
+    - Calcula a média do aluno [João](aluno_nome)
+    - Calcula a média da aluna [Maria](aluno_nome)
+    - Quero saber a média da [Ana](aluno_nome)
+    - Média da aluna [Daniela](aluno_nome)
+    - Calcula a média da aluna [MARIA INÊS OLIVEIRA SILVA](aluno_nome)
+    - Faz a média da aluna [ANA CATARINA FONSECA MARQUES](aluno_nome)
+    - Média da aluna [MARIANA FIGUEIREDO MARQUES](aluno_nome)
+    - Calcula a média da aluna [MARIA JOÃO MATOS FORTE](aluno_nome)
+    - Quero saber a média da aluna [DANIELA INÊS FERREIRA TELES](aluno_nome)
+    - Média da aluna [JOANA MONTEIRO MOREIRA DA SILVA](aluno_nome)
+    - Faz a média da aluna [JOANA GOMES INÁCIO](aluno_nome)
+    - Calcula a média do aluno [JOSÉ PEDRO ALMEIDA ABREU](aluno_nome)
+    - Média do aluno [JOSÉ PEDRO GASPAR BARBOSA](aluno_nome)
+    - Média da aluna [EDUARDA VILAS BOAS CASTRO](aluno_nome)
+    - Média da aluna [ELIANA PERES BETTENCOURT](aluno_nome)
+    - Calcula a média do aluno [DIOGO GABRIEL ANTUNES CANHOTO](aluno_nome)
+    - Qual é a média da aluna [MARIA INÊS OLIVEIRA SILVA](aluno_nome)?
+    - Diz-me a média do aluno [JOSÉ PEDRO ALMEIDA ABREU](aluno_nome)
+    - Media do aluno [DIOGO GABRIEL ANTUNES CANHOTO](aluno_nome)
+    - Quero calcular a média da aluna [JOANA GOMES INÁCIO](aluno_nome)
+    - Podes calcular a média da aluna [ANA CATARINA FONSECA MARQUES](aluno_nome)?
+    - Qual a média do aluno número [123456](aluno_numero)
+    - Média do aluno número [987654](aluno_numero)
+    - Calcula a média do aluno número [456123](aluno_numero)
+
+# ----------------------------------------------------
+- intent: destacar_aprovados_reprovados
+  examples: |
+    - Destaca os alunos aprovados e reprovados
+    - Mostra quem passou e quem reprovou
+    - Pinta os aprovados a verde e os reprovados a vermelho
+    - Formata a coluna da média com cores
+    - Aplica formatação condicional para notas
+    - Marca em verde os alunos com média acima de 10
+    - Realça os reprovados com vermelho
+
+# ----------------------------------------------------
+- intent: melhoria_real
+  examples: |
+    - Quem melhorou?
+    - Mostra quem melhorou
+    - Quem melhorou mais de 20%
+    - Mostra quem evoluiu
+    - Quem teve maior progresso?
+    - Quem evoluiu mais?
+    - Analisa a evolução entre os testes
+    - Melhoria significativa
+    - Mostrar alunos com evolução
+    - Quem teve evolução positiva?
+    - Qual aluno melhorou?
+
+- intent: melhoria_possivel
+  examples: |
+    - Ver MP
+    - Mostrar MP
+    - Quem tem MP?
+    - Quem está em MP?
+    - Quem pode recuperar?
+    - Quem ainda pode recuperar?
+    - Quem ainda consegue obter positiva?
+    - Mostra melhoria possível
+    - Melhoria possível
+    - Melhoria posivel
+    - Melhoria prosivel
+    - Melhoria pocivel
+    - Ver quem consegue recuperar
+    - Alunos que ainda podem passar
+    - Quem ainda tem hipótese?
+
+# ----------------------------------------------------
+- intent: inserir_colunas
+  examples: |
+    - Insere a coluna Situação
+    - Cria uma nova coluna chamada Situação
+    - Adiciona uma coluna para Aprovado ou Reprovado
+    - Cria coluna com o estado de cada aluno
+    - Insere coluna extra com resultados finais
+    - Adiciona a coluna Observações
+    - Criar coluna Comentários
+    - Cria uma coluna chamada Faltas
+    - Adiciona a coluna Nota Final
+    - Adiciona uma coluna com o nome [Estado](coluna_nome)
+    - Criar coluna chamada [Feedback](coluna_nome)
+    - Quero criar a coluna [Descrição](coluna_nome)
+    - Inserir uma coluna nova
+    - Inserir uma coluna no fim
+    - Inserir coluna antes da média
+    - Adicionar coluna depois das notas
+    - Criar coluna referente ao teste [1](teste_numero)
+    - Criar coluna referente ao teste [2](teste_numero)
+    - Adicionar coluna de nota do teste [3](teste_numero)
+    - Adicionar uma coluna do teste [4](teste_numero)
+    - Adiciona a coluna [Observações](coluna_nome)
+    - Insere a coluna [Comentários](coluna_nome)
+    - Cria a coluna [Situação Final](coluna_nome)
+    - Quero criar a coluna [Desempenho](coluna_nome)
+    - Insere a [coluna do teste](coluna_teste) [1](teste_numero)
+    - Cria a [coluna de teste](coluna_teste) para o [teste 2](teste_numero)
+    - Quero adicionar a [coluna do teste](coluna_teste) [3](teste_numero)
+    - Adiciona uma [coluna de teste](coluna_teste) para o [teste 4](teste_numero)
+
+# ----------------------------------------------------
+- intent: inserir_perguntas
+  examples: |
+    - Adiciona perguntas ao teste [1](teste_numero)
+    - Criar perguntas do teste [2](teste_numero)
+    - Adicionar perguntas para o teste [3](teste_numero)
+    - Cria as perguntas do teste [4](teste_numero)
+    - Adiciona perguntas no teste [9](teste_numero)
+    - Criar questões para o teste [8](teste_numero)
+    - Adiciona a pergunta [P1](pergunta) ao teste [1](teste_numero)
+    - Adiciona a questão [P3](pergunta) no teste [2](teste_numero)
+    - Cria a pergunta [P7](pergunta) do teste [5](teste_numero)
+    - Quero criar a pergunta [P10](pergunta) no teste [6](teste_numero)
+    - Adiciona a P4 ao teste [7](teste_numero)
+    - Quero adicionar apenas a pergunta [5](pergunta) ao teste [3](teste_numero)
+    - Criar a questão [3](pergunta) no teste [4](teste_numero)
+    - Adicionar [P1](pergunta) a [P5](pergunta) para o teste [5](teste_numero)
+    - Criar [P1](pergunta) até [P5](pergunta) do teste [10](teste_numero)
+    - Adiciona da [P2](pergunta) à [P7](pergunta) no teste [3](teste_numero)
+    - Quero perguntas de [P1](pergunta) até [P4](pergunta) para o teste [6](teste_numero)
+    - Adicionar questões de [P3](pergunta) a [P8](pergunta) no teste [12](teste_numero)
+    - Cria perguntas entre [P1](pergunta) e [P10](pergunta) para o teste [9](teste_numero)
+    - Cria perguntas da 1 à 5 para o teste [2](teste_numero)
+    - Adiciona as perguntas da pergunta 2 até à 6 no teste [4](teste_numero)
+    - Meter perguntas de 1 a 3 para o teste [5](teste_numero)
+    - Quero adicionar perguntas da pergunta 4 à 9 para o teste [1](teste_numero)
+
+
+# ----------------------------------------------------
+- intent: gerar_grafico_turma
+  examples: |
+    - Gera gráfico da turma
+    - Faz um gráfico da turma
+    - Mostra a evolução da turma
+    - Cria gráfico de desempenho da turma
+    - Gera gráfico de evolução entre testes
+    - Mostra evolução das médias
+    - Cria gráfico com as médias
+
+# ----------------------------------------------------
+- intent: gerar_grafico_barras_aluno
+  examples: |
+    - Faz gráfico de barras para o aluno número [113475](aluno_numero)
+    - Cria gráfico para o número mecanográfico [298451](aluno_numero)
+    - Mostra gráfico do aluno com número [140233](aluno_numero)
+    - Gera gráfico de barras do aluno [256789](aluno_numero)
+    - Mostra as notas do aluno [123456](aluno_numero) em barras
+    - Gráfico de barras do aluno número [778899](aluno_numero)
+    - Faz gráfico de barras para o aluno [João Silva](aluno_nome)
+    - Cria gráfico de barras para a aluna [Maria de Fátima](aluno_nome)
+    - Quero o gráfico do aluno [Ana Rita](aluno_nome)
+    - Mostra o gráfico das notas da aluna [Catarina Sousa](aluno_nome)
+    - Gera gráfico de barras para o aluno chamado [Miguel Costa](aluno_nome)
+    - Mostra gráfico do aluno [João Silva](aluno_nome) número [123456](aluno_numero)
+    - Quero o gráfico da aluna [Maria de Fátima](aluno_nome) com número [987654](aluno_numero)
+    - Gera gráfico para o aluno [Pedro Miguel](aluno_nome) número [111222](aluno_numero)
+    - Quero ver as notas do aluno [João](aluno_nome) em barras
+    - Mostra o desempenho em barras do aluno número [888111](aluno_numero)
+    - Cria o gráfico em barras do aluno chamado [Tiago](aluno_nome)
+
+# ----------------------------------------------------
+- intent: gerar_grafico_perguntas_t2
+  examples: |
+    - Gera gráfico das perguntas do teste 2
+    - Faz um gráfico das perguntas do T2
+    - Cria gráfico das questões do teste dois
+    - Quero comparar as perguntas do teste 2
+    - Mostra gráfico das perguntas T2_P1 a T2_P5
+    - Mostra o gráfico com a média das perguntas do teste 2
+    - Média das perguntas do teste 2
+
+# ----------------------------------------------------
+- intent: apagar_todos_graficos
+  examples: |
+    - Apaga todos os gráficos
+    - Limpa os gráficos
+    - Remove todos os gráficos da folha
+    - Elimina todos os gráficos
+
+
+
+- intent: atualizar_notas
+  examples: |
+    # --- Atualizar 1 pergunta (SEMPRE COM TESTE) ---
+    - Atualiza a nota da pergunta [1](pergunta) do teste [1](teste_numero) do aluno número [107447](aluno_numero) para [3](valores)
+    - Muda a nota da pergunta [3](pergunta) do teste [2](teste_numero) do aluno número [108370](aluno_numero) para [4.5](valores)
+    - Define a pergunta [2](pergunta) do teste [1](teste_numero) para [2](valores) no aluno número [456789](aluno_numero)
+    - Atualiza a pergunta [4](pergunta) do teste [3](teste_numero) do aluno número [123456](aluno_numero) para [5](valores)
+    - Atualiza a pergunta [1](pergunta) do teste [2](teste_numero) da aluna [Maria Silva](aluno_nome) para [4](valores)
+    - Muda o valor da pergunta [4](pergunta) do teste [2](teste_numero) para o aluno [João Pereira](aluno_nome)
+
+    # --- Atualizar várias perguntas de um teste ---
+    - Define todas as perguntas do teste [2](teste_numero) do aluno número [97876](aluno_numero) com [1 2 3 4 5](valores)
+    - Atualiza as perguntas do teste [3](teste_numero) do aluno número [107447](aluno_numero) com [2 3 4 5 1](valores)
+    - Quero atualizar todas as perguntas do teste [5](teste_numero) do aluno número [223344](aluno_numero) com valores [3 3 3 3]
+
+    # --- Nota final do teste ---
+    - Atualiza a nota do teste [1](teste_numero) do aluno número [94716](aluno_numero) para [12](valores)
+    - Define o teste [2](teste_numero) do aluno número [108522](aluno_numero) como [15](valores)
+
+    # --- Definir ZERO ---
+    - Mete a zero todas as perguntas do teste [4](teste_numero) do aluno número [12345](aluno_numero)
+    - Coloca zero nas perguntas do teste [2](teste_numero) do aluno número [111222](aluno_numero)
+    - Mete zero em todas as perguntas do teste [3](teste_numero) da aluna [Ana Santos](aluno_nome)
+
+    # --- RANDOM ---
+    - Mete valores aleatórios no teste [3](teste_numero) para o aluno número [777777](aluno_numero)
+    - Define valores random para todas as perguntas do teste [1](teste_numero) do aluno número [888999](aluno_numero)
+    - Mete valores random no teste [3](teste_numero) para a aluna [Ana Santos](aluno_nome)
+
+    # --- RANDOM para toda a turma ---
+    - Mete valores aleatórios para todas as perguntas do teste [1](teste_numero) em toda a turma
+    - Preenche o teste [2](teste_numero) com valores aleatórios para toda a turma
+    - Coloca valores random no teste [3](teste_numero) para todos os alunos
+
+    # --- RANDOM apenas em perguntas vazias ---
+    - Preenche as perguntas vazias do teste [2](teste_numero) com valores aleatórios
+    - Mete valores random apenas nas perguntas vazias do teste [4](teste_numero)
+    - Preenche com random as perguntas vazias do teste [1](teste_numero)
+
+    # --- Cotação máxima ---
+    - Mete a cotação máxima na pergunta [3](pergunta) do teste [1](teste_numero) para todos os alunos
+    - Coloca a nota máxima na pergunta [2](pergunta) do teste [4](teste_numero) para toda a turma
+    - Atribui nota máxima à pergunta [1](pergunta) do teste [2](teste_numero)
+
+# ----------------------------------------------------
+- intent: guardar_ficheiro
+  examples: |
+    - Guarda o ficheiro como [Relatório_Final.xlsx](nome_ficheiro)
+    - Salva o documento com o nome [Relatório_Final.xlsx](nome_ficheiro)
+    - Grava o ficheiro como [Notas_Turma.xlsx](nome_ficheiro)
+    - Guarda a folha atual com o nome [Resultados.xlsx](nome_ficheiro)
+    - Quero guardar o ficheiro como [Relatorio2025.xlsx](nome_ficheiro)
+
+
+
+# ----------------------------------------------------
+- intent: operacoes_matematicas
+  examples: |
+    - Conta o número de alunos aprovados
+    - Conta os aprovados
+    - Quantos aprovados existem?
+    - Quantos alunos passaram?
+    - Conta os reprovados
+    - Quantos reprovaram?
+    - Quantos ficaram abaixo de 10?
+    - Quantos alunos têm nota acima de 16?
+    - Quantos têm média superior a 18?
+    - Quantos tiraram mais de 18 valores?
+    - Percentagem de alunos com média positiva
+    - Qual é a percentagem de aprovação?
+    - Qual a média geral da turma?
+    - Faz a soma das médias
+    - Dá-me estatísticas gerais da turma
+    - Mostra estatísticas gerais
+    - Estatísticas da turma
+    - Quais são as estatísticas da turma?
+    - Mostra o resumo da turma
+    - Faz o resumo estatístico da turma
+    - Resumo geral das notas
+    - Gera estatísticas da turma
+    - Quero o relatório estatístico da turma
+    - Estatísticas globais
+
+
+- intent: criar_pivot_table
+  examples: |
+    # --- Comandos gerais ---
+    - Cria uma tabela dinâmica
+    - Gera uma pivot table
+    - Adiciona uma tabela dinâmica
+    - Quero uma pivot table
+    - Cria uma pivot com os dados da turma
+    - Faz uma tabela dinâmica das médias
+    - Gera uma pivot das notas
+    - Monta uma tabela dinâmica com os testes
+    - Cria uma tabela dinâmica por aluno
+    - Fazer pivot table
+    - Criar pivot table das perguntas
+    - Adicionar pivot table
+    - Preciso de uma tabela dinâmica dos resultados
+
+    # --- Escolha de colunas (com entidades separadas ROW/VALUES) ---
+    - Cria uma pivot com [REGIME](coluna_excel_row) nas linhas e [Média](coluna_excel_value) nos valores
+    - Quero [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) nos valores
+    - Faz pivot com [Nome](coluna_excel_row) nas linhas e [Teste 1](coluna_excel_value) como valor
+    - Pivot das notas com [Teste 1](coluna_excel_value) e [Teste 2](coluna_excel_value) como valores
+    - Pivot com [Situação MP](coluna_excel_row) por [REGIME](coluna_excel_row)
+    - Gera pivot com colunas [REGIME](coluna_excel_row) e valores [Média](coluna_excel_value)
+    - Cria uma pivot com linhas por [Melhoria Real](coluna_excel_row)
+    - Quero pivot com linhas [Nome](coluna_excel_row) e valores [Média](coluna_excel_value)
+    - Pivot onde as linhas são [REGIME](coluna_excel_row) e os valores são [Teste 3](coluna_excel_value)
+    - Tabela dinâmica com linhas [Situação MP](coluna_excel_row) e valores [Nota Nec](coluna_excel_value)
+    - Quero [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) nos valores
+    - [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) como valor
+    - Rows por [Nome](coluna_excel_row) e valores por [REGIME](coluna_excel_value)
+    # --- Pivot filtrada ---
+    - Cria pivot filtrada pelo regime [O](regime)
+    - Pivot só para o regime [TP](regime)
+    - Fazer pivot apenas para os trabalhadores [T](regime)
+    - Pivot filtrada para tempo parcial [TP](regime)
+    - Mostra pivot apenas do regime [O](regime)
+    - Fazer pivot apenas dos alunos trabalhadores
+
+    # --- Combinação: rows + values + filtros ---
+    - Faz uma pivot com linhas [REGIME](coluna_excel_row), valores [Média](coluna_excel_value) filtrada por [TP](regime)
+    - Cria pivot por [REGIME](coluna_excel_row) mostrando [Situação MP](coluna_excel_value)
+    - Tabela dinâmica com linhas [Nome](coluna_excel_row), valores [Teste 3](coluna_excel_value)
+    - Faz pivot com [REGIME](coluna_excel_row) como coluna e [Nota Nec](coluna_excel_value) como valor
+    - Monta pivot com [Teste 3](coluna_excel_row), [Média](coluna_excel_value) e [Situação MP](coluna_excel_value)
+    - Quero uma pivot com nome e regime
+    - Faz uma pivot onde as linhas são [Nome](coluna_excel_row) e os valores são [Melhoria Real](coluna_excel_value)
+
+    # --- Linguagem natural ---
+    - Pivot por regime
+    - Pivot por alunos
+    - Pivot das médias por regime
+    - Quero pivot das notas
+    - Faz pivot dos testes
+    - Cria pivot geral dos resultados
+    - Pivot com tudo
+
+
+# ----------------------------------------------------
+- intent: helper
+  examples: |
+    - Que comandos posso usar?
+    - Mostra-me as opções disponíveis
+    - O que posso pedir?
+    - Ajuda-me
+    - Mostra a lista de comandos
+    - Quais são as tuas funcionalidades?
+    - Diz-me o que sabes fazer
+
+# ----------------------------------------------------
+- intent: ask_how_are_you
+  examples: |
+    - Como estás?
+    - Tudo bem contigo?
+    - Estás bem?
+    - Como vai?
+    - Está tudo bem?
+
+# ----------------------------------------------------
+- intent: respond_how_am_i
+  examples: |
+    - Estou bem
+    - Estou ótimo
+    - Estou cansado
+    - Estou feliz
+    - Estou mais ou menos
+    - Estou excelente
+    - Tudo ótimo comigo
+
+# ----------------------------------------------------
+- intent: fallback
+  examples: |
+    - Não entendi
+    - Repete por favor
+    - O que disseste?
+    - Não percebi
+    - Podes repetir?
+    - Não faz sentido o que disseste

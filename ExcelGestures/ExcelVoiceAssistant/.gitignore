@@ -1,0 +1,132 @@
+FusionEngine/
+mmiframeworkV2/
+
+###############################################
+# GERAL
+###############################################
+*.log
+*.tmp
+*.temp
+*.bak
+*.old
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+###############################################
+# PYTHON
+###############################################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv/
+venv/
+ENV/
+build/
+dist/
+
+python/
+Java/
+.vs/
+# -------------------------
+# RASA CACHE & MODELS
+# -------------------------
+/cache.db
+/.rasa/cache/
+/.cache/
+/.rasa/cache
+.rasa/cache/*
+.cache/*
+**/cache.db
+
+# Modelos treinados
+/models/
+/models/*
+**/models/*
+**/DIETClassifier.*
+**/oov_words.json
+**/metadata.json
+**/vocabularies.json
+**/embeddings.pkl
+**/feature_to_idx_dict.json
+**/patterns.json
+**/checkpoint
+**/tokenizers.json
+**/*.pkl
+
+# -------------------------
+# LOGS
+# -------------------------
+*.log
+
+# -------------------------
+# PYTHON
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# -------------------------
+# VENV
+# -------------------------
+venv/
+env/
+.rasa_env/
+rasa-env/
+rasaDemo/.rasa\cache/
+.rasa\cache/
+# RASA cache
+.rasa/
+.rasa/*
+.rasa\cache/cache.db
+
+
+
+###############################################
+# NODE / JAVASCRIPT
+###############################################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+###############################################
+# JAVA
+###############################################
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+###############################################
+# VISUAL STUDIO / .NET
+###############################################
+.vs/
+*.user
+*.suo
+bin/
+obj/
+
+###############################################
+# RASA
+###############################################
+models/
+results/
+*.db
+
+###############################################
+# DRAW.IO
+###############################################
+*.drawio.bkp
+
+###############################################
+# WINDOWS BATCH
+###############################################
+*.bat~

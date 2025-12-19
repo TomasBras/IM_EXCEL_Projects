@@ -1,0 +1,120 @@
+﻿version: "3.1"
+
+rules:
+
+  - rule: Calcular média
+    steps:
+      - intent: calcular_media
+      - action: utter_calcular_media
+      - action: action_calcular_media
+
+  - rule: Destacar aprovados e reprovados
+    steps:
+      - intent: destacar_aprovados_reprovados
+      - action: utter_destacar_aprovados_reprovados
+      - action: action_destacar_aprovados_reprovados
+
+  - rule: Melhoria real
+    steps:
+    - intent: melhoria_real
+    - action: utter_melhoria_real
+    - action: action_melhoria_real
+
+  - rule: Melhoria possível
+    steps:
+    - intent: melhoria_possivel
+    - action: utter_melhoria_possivel
+    - action: action_melhoria_possivel
+
+
+  - rule: Inserir colunas
+    steps:
+      - intent: inserir_colunas
+      - action: utter_inserir_colunas
+      - action: action_inserir_colunas
+
+  - rule: Inserir perguntas
+    steps:
+      - intent: inserir_perguntas
+      - action: utter_inserir_perguntas
+      - action: action_inserir_perguntas
+
+  - rule: Gerar gráfico da turma
+    steps:
+      - intent: gerar_grafico_turma
+      - action: utter_gerar_grafico_turma
+      - action: action_gerar_grafico_turma
+
+  - rule: Gerar gráfico de barras de aluno
+    steps:
+      - intent: gerar_grafico_barras_aluno
+      - action: utter_gerar_grafico_barras_aluno
+      - action: action_gerar_grafico_barras_aluno
+
+  - rule: Gerar gráfico das perguntas do Teste 2
+    steps:
+      - intent: gerar_grafico_perguntas_t2
+      - action: utter_gerar_grafico_perguntas_t2
+      - action: action_gerar_grafico_perguntas_t2
+
+  - rule: Criar tabela dinâmica (Pivot Table)
+    steps:
+      - intent: criar_pivot_table
+      - action: utter_criar_pivot_table
+      - action: action_criar_pivot_table
+
+  - rule: Atualizar notas
+    steps:
+      - intent: atualizar_notas
+      - action: utter_atualizar_notas
+      - action: action_atualizar_notas
+
+  - rule: Guardar ficheiro
+    steps:
+      - intent: guardar_ficheiro
+      - action: utter_guardar_ficheiro
+      - action: action_guardar_ficheiro
+
+  - rule: Operações matemáticas
+    steps:
+      - intent: operacoes_matematicas
+      - action: utter_operacoes_matematicas
+      - action: action_operacoes_matematicas
+
+  - rule: Atualizar valores
+    steps:
+      - intent: atualizar_valores
+      - action: utter_atualizar_valores
+      - action: action_atualizar_valores
+
+  - rule: Apagar todos os gráficos
+    steps:
+      - intent: apagar_todos_graficos
+      - action: utter_apagar_todos_graficos
+      - action: action_apagar_todos_graficos
+
+  - rule: Saudação
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: Perguntar como estou
+    steps:
+      - intent: ask_how_are_you
+      - action: utter_ask_how_are_you
+
+  - rule: Responder como estou
+    steps:
+      - intent: respond_how_am_i
+      - action: utter_respond_how_am_i
+
+  - rule: Ajuda
+    steps:
+      - intent: helper
+      - action: utter_helper
+
+  - rule: Fallback
+    steps:
+      - intent: fallback
+      - action: utter_fallback
+      - action: action_default_fallback
