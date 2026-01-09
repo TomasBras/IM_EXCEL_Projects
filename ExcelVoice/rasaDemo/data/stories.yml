@@ -81,14 +81,59 @@ stories:
       - action: utter_operacoes_matematicas
       - action: action_operacoes_matematicas
 
-  - story: Atualizar valores
-    steps:
-      - intent: atualizar_valores
-      - action: utter_atualizar_valores
-      - action: action_atualizar_valores
 
   - story: Apagar todos os gráficos
     steps:
       - intent: apagar_todos_graficos
       - action: utter_apagar_todos_graficos
       - action: action_apagar_todos_graficos
+
+  - story: Fallback
+    steps:
+      - intent: fallback
+      - action: utter_fallback
+    
+  - story: Desfazer última ação
+    steps:
+      - intent: undolastaction
+      - action: utter_undolastaction
+  
+  - story: Fechar Excel
+    steps:
+      - intent: closeexcel
+      - action: utter_closeexcel
+
+  - story: Swipe Left
+    steps:       
+      - intent: swipeleft
+      - action: utter_swipeleft
+  
+  - story: Swipe Right
+    steps:       
+      - intent: swiperight
+      - action: utter_swiperight
+
+  - story: Swipe Up
+    steps:       
+      - intent: swipeup
+      - action: utter_swipeup
+
+  - story: Swipe Down
+    steps:       
+      - intent: swipedown
+      - action: utter_swipedown
+  
+  - story: Confirmar ação
+    steps:     
+      - intent: confirmar
+      - action: utter_confirmar
+
+  - story: Cancelar ação
+    steps:     
+      - intent: cancelar
+      - action: utter_cancelar
+
+  - story: Ajudar utilizador
+    steps:     
+      - intent: helper
+      - action: utter_helper

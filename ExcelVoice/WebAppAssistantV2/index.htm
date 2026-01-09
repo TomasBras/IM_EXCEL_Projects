@@ -765,15 +765,50 @@
                         break;
 
                     case 'criar_pivot_table':
-                        message = {
-                            intent: 'criar_pivot_table',
-                            coluna_excel_row: data.entities.find(e => e.entity === "coluna_excel_row")?.value || null,
-                            coluna_excel_value: data.entities.find(e => e.entity === "coluna_excel_value")?.value || null,
-                            regime: data.entities.find(e => e.entity === "regime")?.value || null
-                        };
+                            message = {
+                                intent: 'criar_pivot_table',
+                                coluna_excel: data.entities
+                                    .filter(e => e.entity === "coluna_excel")
+                                    .map(e => e.value),
+                                regime: data.entities.find(e => e.entity === "regime")?.value || null
+                            };
+                            break;
+ 
+                    // -------------------------
+                    case 'confirmar':
+                        message = { intent: 'confirmar' };
                         break;
 
+                    case 'cancelar':
+                        message = { intent: 'cancelar' };
+                        break;
+                    
+                    // -------------------------
+                    case 'undolastaction':
+                        message = { intent: 'undolastaction' };
+                        break;
 
+                    // -------------------------
+                    case 'closeexcel':
+                        message = { intent: 'closeexcel' };
+                        break;
+                    
+                    // -------------------------
+                    case 'swipeleft':
+                        message = { intent: 'swipeleft' };
+                        break;
+
+                    case 'swiperight':
+                        message = { intent: 'swiperight' };
+                        break;
+
+                    case 'swipeup':
+                        message = { intent: 'swipeup' };
+                        break;
+
+                    case 'swipedown':
+                        message = { intent: 'swipedown' };
+                        break;
                     // -------------------------
                     case 'greet':
                     case 'ask_how_are_you':
@@ -782,10 +817,11 @@
                         message = { intent: data.intent.name };
                         break;
 
-                    // -------------------------
                     default:
                         console.warn("Intent não reconhecida:", data.intent.name);
-                        return;
+                        message = { intent: 'fallback' };
+                        break;
+
                 }
 
 

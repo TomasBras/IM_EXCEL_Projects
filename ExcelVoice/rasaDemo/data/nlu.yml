@@ -375,44 +375,29 @@ nlu:
 
 - intent: atualizar_notas
   examples: |
-    # --- Atualizar 1 pergunta (SEMPRE COM TESTE) ---
     - Atualiza a nota da pergunta [1](pergunta) do teste [1](teste_numero) do aluno número [107447](aluno_numero) para [3](valores)
     - Muda a nota da pergunta [3](pergunta) do teste [2](teste_numero) do aluno número [108370](aluno_numero) para [4.5](valores)
     - Define a pergunta [2](pergunta) do teste [1](teste_numero) para [2](valores) no aluno número [456789](aluno_numero)
     - Atualiza a pergunta [4](pergunta) do teste [3](teste_numero) do aluno número [123456](aluno_numero) para [5](valores)
     - Atualiza a pergunta [1](pergunta) do teste [2](teste_numero) da aluna [Maria Silva](aluno_nome) para [4](valores)
     - Muda o valor da pergunta [4](pergunta) do teste [2](teste_numero) para o aluno [João Pereira](aluno_nome)
-
-    # --- Atualizar várias perguntas de um teste ---
     - Define todas as perguntas do teste [2](teste_numero) do aluno número [97876](aluno_numero) com [1 2 3 4 5](valores)
     - Atualiza as perguntas do teste [3](teste_numero) do aluno número [107447](aluno_numero) com [2 3 4 5 1](valores)
     - Quero atualizar todas as perguntas do teste [5](teste_numero) do aluno número [223344](aluno_numero) com valores [3 3 3 3]
-
-    # --- Nota final do teste ---
     - Atualiza a nota do teste [1](teste_numero) do aluno número [94716](aluno_numero) para [12](valores)
     - Define o teste [2](teste_numero) do aluno número [108522](aluno_numero) como [15](valores)
-
-    # --- Definir ZERO ---
     - Mete a zero todas as perguntas do teste [4](teste_numero) do aluno número [12345](aluno_numero)
     - Coloca zero nas perguntas do teste [2](teste_numero) do aluno número [111222](aluno_numero)
     - Mete zero em todas as perguntas do teste [3](teste_numero) da aluna [Ana Santos](aluno_nome)
-
-    # --- RANDOM ---
     - Mete valores aleatórios no teste [3](teste_numero) para o aluno número [777777](aluno_numero)
     - Define valores random para todas as perguntas do teste [1](teste_numero) do aluno número [888999](aluno_numero)
     - Mete valores random no teste [3](teste_numero) para a aluna [Ana Santos](aluno_nome)
-
-    # --- RANDOM para toda a turma ---
     - Mete valores aleatórios para todas as perguntas do teste [1](teste_numero) em toda a turma
     - Preenche o teste [2](teste_numero) com valores aleatórios para toda a turma
     - Coloca valores random no teste [3](teste_numero) para todos os alunos
-
-    # --- RANDOM apenas em perguntas vazias ---
     - Preenche as perguntas vazias do teste [2](teste_numero) com valores aleatórios
     - Mete valores random apenas nas perguntas vazias do teste [4](teste_numero)
     - Preenche com random as perguntas vazias do teste [1](teste_numero)
-
-    # --- Cotação máxima ---
     - Mete a cotação máxima na pergunta [3](pergunta) do teste [1](teste_numero) para todos os alunos
     - Coloca a nota máxima na pergunta [2](pergunta) do teste [4](teste_numero) para toda a turma
     - Atribui nota máxima à pergunta [1](pergunta) do teste [2](teste_numero)
@@ -459,62 +444,30 @@ nlu:
 
 - intent: criar_pivot_table
   examples: |
-    # --- Comandos gerais ---
     - Cria uma tabela dinâmica
-    - Gera uma pivot table
-    - Adiciona uma tabela dinâmica
-    - Quero uma pivot table
-    - Cria uma pivot com os dados da turma
-    - Faz uma tabela dinâmica das médias
-    - Gera uma pivot das notas
-    - Monta uma tabela dinâmica com os testes
-    - Cria uma tabela dinâmica por aluno
-    - Fazer pivot table
-    - Criar pivot table das perguntas
-    - Adicionar pivot table
-    - Preciso de uma tabela dinâmica dos resultados
-
-    # --- Escolha de colunas (com entidades separadas ROW/VALUES) ---
-    - Cria uma pivot com [REGIME](coluna_excel_row) nas linhas e [Média](coluna_excel_value) nos valores
-    - Quero [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) nos valores
-    - Faz pivot com [Nome](coluna_excel_row) nas linhas e [Teste 1](coluna_excel_value) como valor
-    - Pivot das notas com [Teste 1](coluna_excel_value) e [Teste 2](coluna_excel_value) como valores
-    - Pivot com [Situação MP](coluna_excel_row) por [REGIME](coluna_excel_row)
-    - Gera pivot com colunas [REGIME](coluna_excel_row) e valores [Média](coluna_excel_value)
-    - Cria uma pivot com linhas por [Melhoria Real](coluna_excel_row)
-    - Quero pivot com linhas [Nome](coluna_excel_row) e valores [Média](coluna_excel_value)
-    - Pivot onde as linhas são [REGIME](coluna_excel_row) e os valores são [Teste 3](coluna_excel_value)
-    - Tabela dinâmica com linhas [Situação MP](coluna_excel_row) e valores [Nota Nec](coluna_excel_value)
-    - Quero [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) nos valores
-    - [Nome](coluna_excel_row) nas linhas e [REGIME](coluna_excel_value) como valor
-    - Rows por [Nome](coluna_excel_row) e valores por [REGIME](coluna_excel_value)
-    # --- Pivot filtrada ---
-    - Cria pivot filtrada pelo regime [O](regime)
-    - Pivot só para o regime [TP](regime)
-    - Fazer pivot apenas para os trabalhadores [T](regime)
-    - Pivot filtrada para tempo parcial [TP](regime)
-    - Mostra pivot apenas do regime [O](regime)
-    - Fazer pivot apenas dos alunos trabalhadores
-
-    # --- Combinação: rows + values + filtros ---
-    - Faz uma pivot com linhas [REGIME](coluna_excel_row), valores [Média](coluna_excel_value) filtrada por [TP](regime)
-    - Cria pivot por [REGIME](coluna_excel_row) mostrando [Situação MP](coluna_excel_value)
-    - Tabela dinâmica com linhas [Nome](coluna_excel_row), valores [Teste 3](coluna_excel_value)
-    - Faz pivot com [REGIME](coluna_excel_row) como coluna e [Nota Nec](coluna_excel_value) como valor
-    - Monta pivot com [Teste 3](coluna_excel_row), [Média](coluna_excel_value) e [Situação MP](coluna_excel_value)
-    - Quero uma pivot com nome e regime
-    - Faz uma pivot onde as linhas são [Nome](coluna_excel_row) e os valores são [Melhoria Real](coluna_excel_value)
-
-    # --- Linguagem natural ---
-    - Pivot por regime
-    - Pivot por alunos
-    - Pivot das médias por regime
-    - Quero pivot das notas
-    - Faz pivot dos testes
-    - Cria pivot geral dos resultados
-    - Pivot com tudo
-
-
+    - Quero uma pivot
+    - Faz uma pivot dos resultados
+    - Cria uma pivot geral
+    - Gera uma tabela dinâmica da turma
+    - Faz uma pivot para nome
+    - Pivot para regime
+    - Tabela dinâmica para situação
+    - Tabela dinâmica para regime
+    - Tabela dinamica para situação
+    - Pivot para média
+    - Pivot para nome e média
+    - Pivot para teste 1
+    - Pivot para teste 2
+    - Pivot para nome e teste 1
+    - Pivot para nome teste 1 teste 2
+    - Pivot para regime e média
+    - Pivot para regime média teste 1
+    - Quero uma pivot por aluno com todas as notas
+    - Pivot para nome média teste 1 teste 2
+    - Pivot para nome média só regime TP
+    - Pivot para regime média apenas TP
+    - Quero pivot para aluno média para trabalhadores
+    - Pivot para nome média regime ordinário
 # ----------------------------------------------------
 - intent: helper
   examples: |
@@ -555,3 +508,67 @@ nlu:
     - Não percebi
     - Podes repetir?
     - Não faz sentido o que disseste
+
+- intent: undolastaction
+  examples: |
+    - desfaz
+    - anular última ação
+    - voltar atrás
+    - undo
+    - desfazer última operação
+
+- intent: closeexcel
+  examples: |
+    - fechar excel
+    - fecha o excel
+    - sair do excel
+    - encerrar folha
+    - fechar aplicação
+
+- intent: swipeleft
+  examples: |
+    - deslizar para a esquerda
+    - swipe left
+    - ir para a esquerda
+    - andar para a esquerda
+
+- intent: swiperight
+  examples: |
+    - deslizar para a direita
+    - swipe right
+    - ir para a direita
+    - andar para a direita
+
+- intent: swipeup
+  examples: |
+    - deslizar para cima
+    - swipe up
+    - subir
+    - ir para cima
+    - andar para cima
+
+- intent: swipedown
+  examples: |
+    - deslizar para baixo
+    - swipe down
+    - descer
+    - ir para baixo
+    - andar para baixo
+
+- intent: confirmar
+  examples: |
+    - sim
+    - confirmar
+    - confirma
+    - ok
+    - prosseguir
+    - pode ser
+
+- intent: cancelar
+  examples: |
+    - não
+    - cancelar
+    - anular
+    - deixa estar
+    - abortar
+

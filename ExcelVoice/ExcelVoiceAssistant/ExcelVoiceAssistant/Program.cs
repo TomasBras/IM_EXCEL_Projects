@@ -1,24 +1,34 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using ExcelApp = Microsoft.Office.Interop.Excel.Application;
+using ExcelWorkbook = Microsoft.Office.Interop.Excel.Workbook;
+using ExcelWorksheet = Microsoft.Office.Interop.Excel.Worksheet;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using WebSocketSharp;
+
 
 namespace ExcelVoiceAssistant
 {
     class Program
     {
         private static WebSocket _client;
-        private static Application _excelApp;
-        private static Workbook _workbook;
-        private static Worksheet _sheet;
+        private static ExcelApp _excelApp;
+        private static ExcelWorkbook _workbook;
+        private static ExcelWorksheet _sheet;
 
         private static string excelPathBase;
         private static string excelPathFinal;
+
+        private static string _acaoPendente = null;
+
+        private static Form _confirmacaoForm;
+        private static Thread _popupThread;
 
         static async Task Main(string[] args)
         {
@@ -27,6 +37,8 @@ namespace ExcelVoiceAssistant
             string uri = $"wss://{host}:8005{path}";
 
             Console.WriteLine(" Conectando ao IM via WebSocket...");
+            Console.WriteLine("🔥🔥🔥 VERSÃO NOVA DO CÓDIGO 🔥🔥🔥");
+
 
             _client = new WebSocket(uri);
 
@@ -58,6 +70,70 @@ namespace ExcelVoiceAssistant
             await Task.Delay(-1);
         }
 
+        private static string PedirConfirmacao(string acao, string mensagem)
+        {
+            _acaoPendente = acao;
+            Console.WriteLine($" Ação pendente: {_acaoPendente}");
+
+            MostrarConfirmacaoPopup(mensagem);
+
+            return mensagem;
+        }
+
+        private static void MostrarConfirmacaoPopup(string mensagem)
+        {
+            // evita múltiplos popups
+            if (_confirmacaoForm != null)
+                return;
+
+            _popupThread = new Thread(() =>
+            {
+                _confirmacaoForm = new Form
+                {
+                    Text = "Confirmação",
+                    Width = 420,
+                    Height = 160,
+                    StartPosition = FormStartPosition.CenterScreen,
+                    TopMost = true
+                };
+
+                var label = new Label
+                {
+                    Text = mensagem + "\n\nDiga 'Confirmar' ou 'Cancelar'.",
+                    Dock = DockStyle.Fill,
+                    TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+                };
+
+                _confirmacaoForm.Controls.Add(label);
+                Application.Run(_confirmacaoForm);
+            });
+
+            _popupThread.SetApartmentState(ApartmentState.STA);
+            _popupThread.IsBackground = true;
+            _popupThread.Start();
+        }
+
+        private static void FecharConfirmacaoPopup()
+        {
+            if (_confirmacaoForm == null)
+                return;
+
+            try
+            {
+                _confirmacaoForm.Invoke(new Action(() =>
+                {
+                    _confirmacaoForm.Close();
+                    _confirmacaoForm = null;
+                }));
+            }
+            catch
+            {
+                // ignore (thread já terminou)
+            }
+        }
+
+
+
         // =========================================================
         // INICIALIZAR EXCEL
         // =========================================================
@@ -65,13 +141,13 @@ namespace ExcelVoiceAssistant
         {
             try
             {
-                _excelApp = new Application();
+                _excelApp = new ExcelApp();
                 _excelApp.Visible = true;
 
-                excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
-                excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
-                //excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
-                //excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
+                //excelPathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP3.xlsx";
+                //excelPathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_ExcelS\Relatorio_Final.xlsx";
+                excelPathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+                excelPathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
                 if (!File.Exists(excelPathBase))
                 {
@@ -92,6 +168,7 @@ namespace ExcelVoiceAssistant
             }
         }
 
+        
 
         private static void ProcessMessage(string message)
         {
@@ -119,8 +196,48 @@ namespace ExcelVoiceAssistant
             }
         }
 
+
+        private static string ExecutarAcaoConfirmada()
+        {
+            if (_acaoPendente == null)
+                return "Não há nenhuma ação para confirmar.";
+
+            string acao = _acaoPendente;
+            _acaoPendente = null;
+
+            switch (acao)
+            {
+                case "undolastaction":
+                    _excelApp.ActiveCell.ClearContents();
+                    return "Conteúdo da célula apagado.";
+
+                case "closeexcel":
+                    try
+                    {
+                        _excelApp.DisplayAlerts = false;
+                        _workbook?.SaveAs(excelPathFinal);
+                        _workbook?.Close(false);
+                        _excelApp?.Quit();
+                        return "Excel guardado e fechado.";
+                    }
+                    finally
+                    {
+                        if (_excelApp != null)
+                            _excelApp.DisplayAlerts = true;
+                    }
+
+                case "apagar_todos_graficos":
+                    return ExcelController.ApagarTodosGraficos();
+
+                default:
+                    return "Ação desconhecida.";
+            }
+        }
+
+
         private static string ExecutarComando(string intent, dynamic json)
         {
+            
             try
             {
                 switch (intent)
@@ -155,19 +272,79 @@ namespace ExcelVoiceAssistant
                         return ExcelController.GerarGraficoPerguntasT2();
 
                     case "apagar_todos_graficos":
-                        return ExcelController.ApagarTodosGraficos();
+                        return PedirConfirmacao(
+                            "apagar_todos_graficos",
+                            "Tem a certeza que quer apagar TODOS os gráficos da folha?"
+                        );
+
 
                     case "guardar_ficheiro":
                         return ExcelController.GuardarRelatorio();
 
                     case "atualizar_notas":
                         return ExcelController.AtualizarNotas(json);
+                    case "undolastaction":
+                        if (_excelApp?.ActiveCell == null)
+                            return "Nenhuma célula ativa.";
+
+                        return PedirConfirmacao(
+                            "undolastaction",
+                            "Tem a certeza que quer apagar o conteúdo da célula?"
+                        );
+
+
+                    case "closeexcel":
+                        return PedirConfirmacao(
+                            "closeexcel",
+                            "Tem a certeza que quer guardar e fechar o Excel?"
+                        );
+
+                    case "confirmar":
+                        if (_acaoPendente == null)
+                            return "Não há nenhuma ação pendente para confirmar.";
+
+                        FecharConfirmacaoPopup();
+                        return ExecutarAcaoConfirmada();
+
+                    case "cancelar":
+                        _acaoPendente = null;
+                        FecharConfirmacaoPopup();
+                        return "Ação cancelada.";
+
+                    case "swipeleft":
+                        _excelApp.ActiveCell?.Offset[0, -1].Select();
+                        return "Mover para a esquerda.";
+
+                    case "swiperight":
+                        _excelApp.ActiveCell?.Offset[0, 1].Select();
+                        return "Mover para a direita.";
+
+                    case "swipeup":
+                        _excelApp.ActiveCell?.Offset[-1, 0].Select();
+                        return "Mover para cima.";
+
+                    case "swipedown":
+                        _excelApp.ActiveCell?.Offset[1, 0].Select();
+                        return "Mover para baixo.";
                     case "criar_pivot_table":
                         return ExcelController.CriarPivotTable(json);
+                    case "greet":
+                        return "Olá! Estou pronto para ajudar no Excel.";
+
+                    case "ask_how_are_you":
+                        return "Estou ótimo e pronto para trabalhar com dados!";
+
+                    case "respond_how_am_i":
+                        return "Ainda bem! O que queres fazer a seguir?";
+
                     case "helper":
                         return ExcelController.Helper();
+
+                    case "fallback":
+                        return "Não percebi o comando. Podes repetir ou pedir ajuda?";
+
                     default:
-                        Console.WriteLine("Intent não reconhecida:", intent);
+                        Console.WriteLine($"Intent não reconhecida: {intent}");
                         return "Comando não reconhecido.";
                 }
             }

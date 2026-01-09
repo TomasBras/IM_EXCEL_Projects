@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Windows.Forms;
+
 
 namespace ExcelVoiceAssistant
 {
@@ -15,11 +17,11 @@ namespace ExcelVoiceAssistant
         private static Excel.Workbook workbook;
         private static Excel.Worksheet sheet;
 
-        private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
-        private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
+        //private static string pathBase = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\ETP.xlsx";
+        //private static string pathFinal = @"C:\Users\trmbr\OneDrive\Desktop\IM_EXCEL_Projects\ExcelVoice\IM_Excel\Relatorio_Final.xlsx";
 
-        //private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
-        //private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
+        private static string pathBase = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\ETP.xlsx";
+        private static string pathFinal = @"C:\Users\carol\Desktop\IM\IM_EXCEL_Projects\ExcelVoice\Relatorio_Final.xlsx";
 
         public static void SetExcel(Excel.Application excelApp, Excel.Workbook wb, Excel.Worksheet ws)
         {
@@ -1619,26 +1621,49 @@ namespace ExcelVoiceAssistant
             Console.WriteLine("===============================");
         }
 
+        static readonly string[] COLUNAS_EXCEL =
+        {
+            "Nome",
+            "REGIME",
+            "Média",
+            "Teste 1",
+            "Teste 2",
+            "Teste 3",
+            "Situação MP",
+            "Nota Nec",
+            "Melhoria Real"
+        };
+
+        static List<string> ExtrairColunasDoTexto(string texto)
+        {
+            var resultado = new List<string>();
+            if (string.IsNullOrEmpty(texto)) return resultado;
+
+            texto = texto.ToLower();
+
+            foreach (var col in COLUNAS_EXCEL)
+            {
+                if (texto.Contains(col.ToLower()))
+                    resultado.Add(col);
+            }
+
+            return resultado;
+        }
+
+
         public static string CriarPivotTable(dynamic json)
         {
             try
             {
                 Excel.Range used = sheet.UsedRange;
 
-                int firstRow = used.Row;
-                int lastRow = used.Row + used.Rows.Count - 1;
-                int firstCol = used.Column;
-                int lastCol = used.Column + used.Columns.Count - 1;
-
-                Excel.Range dataRange =
-                    sheet.Range[sheet.Cells[firstRow, firstCol], sheet.Cells[lastRow, lastCol]];
-
-                Excel.Worksheet pivotSheet = (Excel.Worksheet)workbook.Worksheets.Add();
-                pivotSheet.Name = "Pivot_" + DateTime.Now.Ticks;
+                Excel.Worksheet pivotSheet =
+                    (Excel.Worksheet)workbook.Worksheets.Add();
+                pivotSheet.Name = "Pivot_" + DateTime.Now.ToString("HHmmss");
 
                 Excel.PivotCache cache = workbook.PivotCaches().Create(
                     Excel.XlPivotTableSourceType.xlDatabase,
-                    dataRange
+                    used
                 );
 
                 Excel.PivotTable pivot = cache.CreatePivotTable(
@@ -1646,99 +1671,77 @@ namespace ExcelVoiceAssistant
                     "TabelaDinamica"
                 );
 
-                string rowField = json?.nlu?.coluna_excel_row?.ToString();
-                string valueField = json?.nlu?.coluna_excel_value?.ToString();
-                string filterRegime = json?.nlu?.regime?.ToString();
+                /* =====================================================
+                 * 1️⃣ Texto original reconhecido
+                 * ===================================================== */
+                string texto = json?.nlu?.text?.ToString();
 
-                bool comandoBasico = (rowField == null && valueField == null);
+                /* =====================================================
+                 * 2️⃣ Extrair colunas pelo texto
+                 * ===================================================== */
+                List<string> colunasFaladas = ExtrairColunasDoTexto(texto);
 
-                Dictionary<string, string> map = new Dictionary<string, string>
-        {
-            { "regime", "REGIME" },
-            { "média", "Média" },
-            { "media", "Média" },
-            { "teste 1", "Teste 1" },
-            { "teste 2", "Teste 2" },
-            { "nome", "Nome" },
-            { "numero mecanografico", "Número mecanográfico" }
-        };
-
-                string Resolve(string key)
+                /* =====================================================
+                 * 3️⃣ Default → Nome + Média
+                 * ===================================================== */
+                if (colunasFaladas.Count == 0)
                 {
-                    if (key == null) return null;
-                    key = key.ToLower().Trim();
-                    return map.ContainsKey(key) ? map[key] : null;
+                    colunasFaladas.Add("Nome");
+                    colunasFaladas.Add("Média");
                 }
 
-                rowField = Resolve(rowField);
-                valueField = Resolve(valueField);
+                Console.WriteLine("DEBUG colunas:");
+                foreach (var c in colunasFaladas)
+                    Console.WriteLine(" - " + c);
 
-                if (comandoBasico)
+                /* =====================================================
+                 * 4️⃣ PRIMEIRA → LINHAS
+                 * ===================================================== */
+                string primeira = colunasFaladas[0];
+                pivot.PivotFields(primeira).Orientation =
+                    Excel.XlPivotFieldOrientation.xlRowField;
+
+                /* =====================================================
+                 * 5️⃣ RESTANTES → VALORES ou LINHAS
+                 * ===================================================== */
+                for (int i = 1; i < colunasFaladas.Count; i++)
                 {
-                    Excel.PivotField pfNome = pivot.PivotFields("Nome");
-                    pfNome.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+                    string col = colunasFaladas[i];
+                    Excel.PivotField pf = pivot.PivotFields(col);
 
-                    Excel.PivotField pfRegime = pivot.PivotFields("REGIME");
-                    pfRegime.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
-
-                    Excel.PivotField pf = pivot.PivotFields("Média");
-                    pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
-                    pf.Function = Excel.XlConsolidationFunction.xlAverage;
-                    pf.Name = "Média";
-
-                    return "Tabela dinâmica criada com campos padrão.";
-                }
-
-                if (rowField != null)
-                {
-                    Excel.PivotField row = pivot.PivotFields(rowField);
-                    row.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
-                }
-
-                if (valueField != null)
-                {
-                    if (!ColunaEhNumerica(valueField))
+                    if (ColunaEhNumerica(col))
                     {
-                        Excel.PivotField pf = pivot.PivotFields(valueField);
-                        pf.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
-
-                        return $"O campo '{valueField}' não é numérico e foi movido automaticamente para as linhas.";
+                        pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
+                        pf.Function = Excel.XlConsolidationFunction.xlAverage;
+                        pf.Name = "Média de " + col;
                     }
                     else
                     {
-                        Excel.PivotField pf = pivot.PivotFields(valueField);
-                        pf.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
-                        pf.Function = Excel.XlConsolidationFunction.xlAverage;
-                        pf.Name = "Média de " + valueField;
+                        pf.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
                     }
                 }
 
-                if (!string.IsNullOrEmpty(filterRegime))
+                /* =====================================================
+                 * 6️⃣ Filtro por regime (opcional)
+                 * ===================================================== */
+                if (json?.nlu?.regime != null)
                 {
+                    string regime = json.nlu.regime.ToString().ToUpper();
+
                     Excel.PivotField filtro = pivot.PivotFields("REGIME");
-                    filtro.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
-
-                    app.Calculate();
-
-                    foreach (Excel.PivotItem item in filtro.PivotItems())
-                    {
-                        if (item.Name.Equals(filterRegime, StringComparison.OrdinalIgnoreCase))
-                        {
-                            filtro.CurrentPage = filterRegime;
-                            return "Tabela dinâmica criada com filtro aplicado.";
-                        }
-                    }
-
-                    filtro.ClearAllFilters();
+                    filtro.Orientation =
+                        Excel.XlPivotFieldOrientation.xlPageField;
+                    filtro.CurrentPage = regime;
                 }
 
-                return "Tabela dinâmica criada com sucesso!";
+                return "Tabela dinâmica criada automaticamente numa nova folha.";
             }
             catch (Exception ex)
             {
-                return "Erro ao criar tabela dinâmica: " + ex.Message;
+                return "Erro ao criar a tabela dinâmica: " + ex.Message;
             }
         }
+
 
 
         public static string Helper()

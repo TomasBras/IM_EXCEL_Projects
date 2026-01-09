@@ -81,17 +81,52 @@ rules:
       - action: utter_operacoes_matematicas
       - action: action_operacoes_matematicas
 
-  - rule: Atualizar valores
-    steps:
-      - intent: atualizar_valores
-      - action: utter_atualizar_valores
-      - action: action_atualizar_valores
 
   - rule: Apagar todos os gráficos
     steps:
       - intent: apagar_todos_graficos
       - action: utter_apagar_todos_graficos
       - action: action_apagar_todos_graficos
+
+  - rule: Undo última ação
+    steps:
+      - intent: undolastaction
+      - action: utter_undolastaction
+
+  - rule: Fechar Excel
+    steps:
+      - intent: closeexcel
+      - action: utter_closeexcel
+
+  - rule: Swipe Left
+    steps:
+      - intent: swipeleft
+      - action: utter_swipeleft
+
+  - rule: Swipe Right
+    steps:
+      - intent: swiperight
+      - action: utter_swiperight
+
+  - rule: Swipe Up
+    steps:
+      - intent: swipeup
+      - action: utter_swipeup
+
+  - rule: Swipe Down
+    steps:
+      - intent: swipedown
+      - action: utter_swipedown
+
+  - rule: Confirmar ação
+    steps:
+      - intent: confirmar
+      - action: utter_confirmar
+
+  - rule: Cancelar ação
+    steps:
+      - intent: cancelar
+      - action: utter_cancelar
 
   - rule: Saudação
     steps:
@@ -117,4 +152,3 @@ rules:
     steps:
       - intent: fallback
       - action: utter_fallback
-      - action: action_default_fallback

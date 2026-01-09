@@ -20,10 +20,17 @@ intents:
   - atualizar_notas
   - guardar_ficheiro
   - operacoes_matematicas
-  - atualizar_valores
   - apagar_todos_graficos
   - criar_pivot_table
   - fallback
+  - undolastaction
+  - closeexcel
+  - swipeleft
+  - swiperight
+  - swipeup
+  - swipedown
+  - confirmar
+  - cancelar
 
 
 ############################################
@@ -199,14 +206,35 @@ responses:
   utter_operacoes_matematicas:
     - text: "A executar a **operação/estatística** solicitada (e.g., contagem de aprovados, percentagem de aprovação, média geral)."
 
-  utter_atualizar_valores:
-    - text: "A **atualizar a cotação/pontuação máxima** (valores: {valores}) para a(s) pergunta(s) do teste."
-
   utter_apagar_todos_graficos:
     - text: "A **apagar todos os gráficos** da folha de cálculo."
 
   utter_criar_pivot_table:
     - text: "A criar a **Tabela Dinâmica (Pivot Table)** com os dados solicitados (e.g., linhas por {coluna_excel_row}, valores por {coluna_excel_value}). "
+
+  utter_undolastaction:
+    - text: "A última ação realizada no Excel foi desfeita com sucesso."
+
+  utter_closeexcel:
+    - text: "Tem a certeza que quer guardar e fechar o Excel?"
+  
+  utter_swipeleft:
+    - text: "A navegar para a célula à esquerda."
+  
+  utter_swiperight:
+    - text: "A navegar para a célula à direita."
+  
+  utter_swipeup:
+    - text: "A navegar para a célula acima."
+  
+  utter_swipedown:
+    - text: "A navegar para a célula abaixo."
+
+  utter_confirmar:
+    - text: "Ação confirmada. A proceder com a operação no Excel."
+  
+  utter_cancelar:
+    - text: "Ação cancelada. Nenhuma alteração foi feita no Excel."
   
   utter_fallback:
     - text: "Não percebi o comando relacionado com o Excel. Pode repetir ou pedir 'Ajuda' por favor? 🧐"
@@ -228,10 +256,19 @@ actions:
   - action_atualizar_notas
   - action_guardar_ficheiro
   - action_operacoes_matematicas
-  - action_atualizar_valores
   - action_criar_pivot_table
   - action_apagar_todos_graficos
   - action_default_fallback
+  - action_undolastaction
+  - action_closeexcel
+  - action_swipeleft
+  - action_swiperight
+  - action_swipeup
+  - action_swipedown
+  - action_confirmar
+  - action_cancelar
+  - action_helper
+  - action_ask_how_are_you
 
 
 ############################################
