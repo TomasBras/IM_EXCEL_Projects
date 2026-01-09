@@ -1,0 +1,139 @@
+﻿version: "3.1"
+
+stories:
+
+  - story: Calcular média da turma
+    steps:
+      - intent: calcular_media
+      - action: utter_calcular_media
+      - action: action_calcular_media
+
+  - story: Destacar aprovados e reprovados
+    steps:
+      - intent: destacar_aprovados_reprovados
+      - action: utter_destacar_aprovados_reprovados
+      - action: action_destacar_aprovados_reprovados
+
+  - story: Melhoria Real
+    steps:
+      - intent: melhoria_real
+      - action: utter_melhoria_real
+      - action: action_melhoria_real
+
+  - story: Melhoria Possivel
+    steps:
+      - intent: melhoria_possivel
+      - action: utter_melhoria_possivel
+      - action: action_melhoria_possivel
+
+
+  - story: Inserir colunas
+    steps:
+      - intent: inserir_colunas
+      - action: utter_inserir_colunas
+      - action: action_inserir_colunas
+
+  - story: Inserir perguntas num teste
+    steps:
+      - intent: inserir_perguntas
+      - action: utter_inserir_perguntas
+      - action: action_inserir_perguntas
+
+  - story: Gerar gráfico da turma
+    steps:
+      - intent: gerar_grafico_turma
+      - action: utter_gerar_grafico_turma
+      - action: action_gerar_grafico_turma
+
+  - story: Gerar gráfico de barras de um aluno
+    steps:
+      - intent: gerar_grafico_barras_aluno
+      - action: utter_gerar_grafico_barras_aluno
+      - action: action_gerar_grafico_barras_aluno
+
+  - story: Gerar gráfico das perguntas do Teste 2
+    steps:
+      - intent: gerar_grafico_perguntas_t2
+      - action: utter_gerar_grafico_perguntas_t2
+      - action: action_gerar_grafico_perguntas_t2
+
+  - story: Criar tabela dinâmica
+    steps:
+      - intent: criar_pivot_table
+      - action: utter_criar_pivot_table
+      - action: action_criar_pivot_table
+
+  - story: Atualizar notas de um aluno
+    steps:
+      - intent: atualizar_notas
+      - action: utter_atualizar_notas
+      - action: action_atualizar_notas
+
+  - story: Guardar ficheiro Excel
+    steps:
+      - intent: guardar_ficheiro
+      - action: utter_guardar_ficheiro
+      - action: action_guardar_ficheiro
+
+  - story: Realizar operações matemáticas
+    steps:
+      - intent: operacoes_matematicas
+      - action: utter_operacoes_matematicas
+      - action: action_operacoes_matematicas
+
+
+  - story: Apagar todos os gráficos
+    steps:
+      - intent: apagar_todos_graficos
+      - action: utter_apagar_todos_graficos
+      - action: action_apagar_todos_graficos
+
+  - story: Fallback
+    steps:
+      - intent: fallback
+      - action: utter_fallback
+    
+  - story: Desfazer última ação
+    steps:
+      - intent: undolastaction
+      - action: utter_undolastaction
+  
+  - story: Fechar Excel
+    steps:
+      - intent: closeexcel
+      - action: utter_closeexcel
+
+  - story: Swipe Left
+    steps:       
+      - intent: swipeleft
+      - action: utter_swipeleft
+  
+  - story: Swipe Right
+    steps:       
+      - intent: swiperight
+      - action: utter_swiperight
+
+  - story: Swipe Up
+    steps:       
+      - intent: swipeup
+      - action: utter_swipeup
+
+  - story: Swipe Down
+    steps:       
+      - intent: swipedown
+      - action: utter_swipedown
+  
+  - story: Confirmar ação
+    steps:     
+      - intent: confirmar
+      - action: utter_confirmar
+
+  - story: Cancelar ação
+    steps:     
+      - intent: cancelar
+      - action: utter_cancelar
+
+  - story: Ajudar utilizador
+    steps:     
+      - intent: helper
+      - action: utter_helper

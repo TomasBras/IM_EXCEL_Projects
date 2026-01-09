@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ExcelVoiceAssistant",
+    "\\ExcelVoiceAssistant\\ExcelVoiceAssistant",
+    "\\GenFusionSCXML",
+    "\\GenFusionSCXML\\src",
+    "\\GenFusionSCXML\\src\\genfusionscxml",
+    "\\GenFusionSCXML\\src\\scxmlgen",
+    "\\GenFusionSCXML\\src\\scxmlgen\\Modalities",
+    "\\rasaDemo",
+    "\\rasaDemo\\data",
+    "\\WebAppAssistantV2"
+  ],
+  "SelectedNode": "\\ExcelVoiceAssistant\\ExcelVoiceAssistant.sln",
+  "PreviewInSolutionExplorer": false
+}

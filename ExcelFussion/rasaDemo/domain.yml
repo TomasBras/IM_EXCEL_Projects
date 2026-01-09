@@ -1,0 +1,279 @@
+version: "3.1"
+
+############################################
+#               INTENTS                    #
+############################################
+intents:
+  - greet
+  - ask_how_are_you
+  - respond_how_am_i
+  - helper
+  - calcular_media
+  - destacar_aprovados_reprovados
+  - melhoria_real
+  - melhoria_possivel
+  - inserir_colunas
+  - inserir_perguntas
+  - gerar_grafico_turma
+  - gerar_grafico_barras_aluno
+  - gerar_grafico_perguntas_t2
+  - atualizar_notas
+  - guardar_ficheiro
+  - operacoes_matematicas
+  - apagar_todos_graficos
+  - criar_pivot_table
+  - fallback
+  - undolastaction
+  - closeexcel
+  - swipeleft
+  - swiperight
+  - swipeup
+  - swipedown
+  - confirmar
+  - cancelar
+
+
+############################################
+#               ENTIDADES                  #
+############################################
+entities:
+  - aluno_nome
+  - aluno_numero
+  - valores
+  - pergunta
+  - grafico
+  - nome_ficheiro
+  - teste_numero
+  - coluna_nome
+  - coluna_teste
+  - coluna_excel
+  - regime
+  - coluna_excel_row
+  - coluna_excel_value
+
+
+############################################
+#                 SLOTS                    #
+############################################
+slots:
+
+  aluno_nome:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: aluno_nome
+
+  aluno_numero:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: aluno_numero
+
+  valores:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: valores
+
+  nome_ficheiro:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: nome_ficheiro
+
+  pergunta:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: pergunta
+
+  teste_numero:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: teste_numero
+
+  coluna_nome:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_nome
+
+  coluna_teste:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_teste
+
+  coluna_excel:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_excel
+
+  regime:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: regime
+
+  coluna_excel_row:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_excel_row
+
+  coluna_excel_value:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: coluna_excel_value
+
+
+############################################
+#               RESPONSES                  #
+############################################
+responses:
+
+  utter_greet:
+    - text: "Olá! Pronto para trabalhar no **Excel**? 📊"
+    - text: "Bom dia! O que deseja fazer na folha de cálculo? 📝"
+    - text: "Olá! Vamos manipular alguns dados? Estou à disposição."
+
+  utter_ask_how_are_you:
+    - text: "Estou ótimo e pronto para organizar dados! E você?"
+    - text: "Tudo bem comigo! Como posso ajudar hoje?"
+
+  utter_respond_how_am_i:
+    - text: "Perfeito! Vamos continuar com o trabalho. 🚀"
+    - text: "Ótimo saber disso! O que quer fazer a seguir?"
+
+  utter_helper:
+    - text: |
+        Aqui estão os **comandos** que pode usar no Excel:
+        
+        * **Cálculos & Formatação:** Calcular média, Destacar aprovados/reprovados, Operações matemáticas.
+        * **Análise de Desempenho:** Melhoria real, Melhoria possível (MP).
+        * **Estrutura da Folha:** Inserir colunas, Inserir perguntas, Atualizar notas/valores.
+        * **Visualização:** Criar gráfico da turma, Criar gráfico de barras de um aluno, Criar gráfico do teste 2, Criar tabela dinâmica (Pivot Table), Apagar todos os gráficos.
+        * **Ficheiro:** Guardar ficheiro.
+
+  utter_calcular_media:
+    - text: "A calcular a **média** da turma ou do aluno {aluno_nome}{aluno_numero}..."
+
+  utter_destacar_aprovados_reprovados:
+    - text: "Destacando **aprovados** (verde) e **reprovados** (vermelho) com formatação condicional..."
+  
+  utter_melhoria_real:
+    - text: "A identificar os alunos que tiveram **melhoria real** (progresso) entre os testes..."
+
+  utter_melhoria_possivel:
+    - text: "A verificar quem ainda tem **possibilidade de melhoria** (MP) para obter positiva..."
+
+  utter_inserir_colunas:
+    - text: "A inserir a(s) coluna(s) solicitada(s) (e.g., '{coluna_nome}') na folha."
+
+  utter_inserir_perguntas:
+    - text: "A adicionar a estrutura de **perguntas** ao teste {teste_numero}."
+
+  utter_gerar_grafico_turma:
+    - text: "A gerar o **gráfico de evolução da turma** (média) entre os testes. "
+
+  utter_gerar_grafico_barras_aluno:
+    - text: "A gerar o **gráfico de barras** com as notas do aluno {aluno_nome}{aluno_numero} nos testes. "
+
+  utter_gerar_grafico_perguntas_t2:
+    - text: "A gerar o gráfico de **desempenho médio por pergunta** no Teste 2."
+
+  utter_atualizar_notas:
+    - text: "A **atualizar as notas** do aluno {aluno_nome}{aluno_numero} (e.g., nota da {pergunta} para {valores})."
+
+  utter_guardar_ficheiro:
+    - text: "A **guardar** o ficheiro atual como **{nome_ficheiro}**."
+
+  utter_operacoes_matematicas:
+    - text: "A executar a **operação/estatística** solicitada (e.g., contagem de aprovados, percentagem de aprovação, média geral)."
+
+  utter_apagar_todos_graficos:
+    - text: "A **apagar todos os gráficos** da folha de cálculo."
+
+  utter_criar_pivot_table:
+    - text: "A criar a **Tabela Dinâmica (Pivot Table)** com os dados solicitados (e.g., linhas por {coluna_excel_row}, valores por {coluna_excel_value}). "
+
+  utter_undolastaction:
+    - text: "A última ação realizada no Excel foi desfeita com sucesso."
+
+  utter_closeexcel:
+    - text: "A fechar o Excel. Até à próxima! 👋"
+  
+  utter_swipeleft:
+    - text: "A navegar para a célula à esquerda."
+  
+  utter_swiperight:
+    - text: "A navegar para a célula à direita."
+  
+  utter_swipeup:
+    - text: "A navegar para a célula acima."
+  
+  utter_swipedown:
+    - text: "A navegar para a célula abaixo."
+
+  utter_confirmar:
+    - text: "Ação confirmada. A proceder com a operação no Excel."
+  
+  utter_cancelar:
+    - text: "Ação cancelada. Nenhuma alteração foi feita no Excel."
+  
+  utter_fallback:
+    - text: "Não percebi o comando relacionado com o Excel. Pode repetir ou pedir 'Ajuda' por favor? 🧐"
+
+
+############################################
+#                 ACTIONS                  #
+############################################
+actions:
+  - action_calcular_media
+  - action_destacar_aprovados_reprovados
+  - action_melhoria_real
+  - action_melhoria_possivel
+  - action_inserir_colunas
+  - action_inserir_perguntas
+  - action_gerar_grafico_turma
+  - action_gerar_grafico_barras_aluno
+  - action_gerar_grafico_perguntas_t2
+  - action_atualizar_notas
+  - action_guardar_ficheiro
+  - action_operacoes_matematicas
+  - action_criar_pivot_table
+  - action_apagar_todos_graficos
+  - action_default_fallback
+  - action_undolastaction
+  - action_closeexcel
+  - action_swipeleft
+  - action_swiperight
+  - action_swipeup
+  - action_swipedown
+  - action_confirmar
+  - action_cancelar
+  - action_helper
+  - action_ask_how_are_you
+
+
+############################################
+#             SESSION CONFIG               #
+############################################
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
